@@ -1,38 +1,355 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
+  
+  <title>Web Scrapping and Regular Expression - 1 | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Web Scrapping and Regular Expression - 1">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/20/Web-Scrapping/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-20T22:29:49.000Z">
+<meta property="article:modified_time" content="2020-09-20T22:33:29.201Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Regular Expression">
+<meta property="article:tag" content="BeautifulSoup">
+<meta property="article:tag" content="Web Scrapping">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block page_class %}page-post-detail{% endblock %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Web-Scrapping" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/20/Web-Scrapping/" class="article-date">
+  <time datetime="2020-09-20T22:29:49.000Z" itemprop="datePublished">2020-09-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Collection/">Data Collection</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Web Scrapping and Regular Expression - 1
+    </h1>
+  
 
-{% block content %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://nocodewebscraping.com/wp-content/uploads/2016/01/best-free-web-scraping-tool.jpg>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<a id="more"></a>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This <strong>Quick</strong> tutorial is to use an web scrapping example to introduce how to use BeautifulSoup and Regular expression to mine the web data <strong>quickly and easily</strong>. For details, Please refer to the BeautifulSoup document.</p>
+<h2 id="BeautifulSoup"><a href="#BeautifulSoup" class="headerlink" title="BeautifulSoup"></a>BeautifulSoup</h2><h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><ol>
+<li><strong>Requests</strong></li>
+</ol>
+<ul>
+<li><p><em>Import requests package</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br></pre></td></tr></table></figure>
+<br>
+</li>
+<li><p><em>requests.get():</em><br>using <strong>get(url)</strong>  function from requests package, it allows us to send a request to the url webstite.<br>It returns the response from that website, but this response is not HTML file, but a response packet from server</p>
+<br>
+</li>
+<li><p><em>response.content:</em><br>By calling <em>content</em> after we get the response packet from get(), we can extract the HTML page from the packet and analyze it.</p>
+<br>
+</li>
+</ul>
+<ol start="2">
+<li><strong>BeautifulSoup</strong></li>
+</ol>
+<ul>
+<li><p><em>soup = BeautifulSoup(html …)</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">soup = BeautifulSoup(html, <span class="string">&#x27;html.parser&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>This creates beautifulsoup object and parse the HTML text with a html parser to store html content to the beautifulsoup object.</p>
+<br>
+</li>
+<li><p><em>.tag_name</em><br>After obtaining a beautiful soup object of a html file, we can use <em>soup.tag_name</em>  to get name of current tag.<br>Example: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">body = soup.b</span><br><span class="line">print(body.name)</span><br></pre></td></tr></table></figure>
+<p>This extracts the tag <em>&lt;b&gt;</em></p>
+<br>
+</li>
+<li><p><em>t.get_text() / t.text</em><br>After extracting a tag, we can use .text or .get_text() function to extract all texts value under current tag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">soup = BeautifulSoup(<span class="string">&quot;&lt;html&gt;&lt;h1&gt;Head 1&lt;/h1&gt; &lt;h2&gt;Head 2&lt;/h2&gt;&lt;html&gt;&quot;</span>)</span><br><span class="line">soup.get_text() </span><br><span class="line"><span class="comment">#or </span></span><br><span class="line">soup.text</span><br></pre></td></tr></table></figure>
+<p>It returns “Head 1 Head 2” directly</p>
+<br>
+</li>
+<li><p><em>t.attrs[“href”]  or t[“href”]:</em><br>In HTML, every tag could have its attributes inside the tag. We can simply use tag.[“attribute-name”] or tag.attr[“attribute-name”] to extract the attributes<br>This example extracts the href link from tag <em>&lt;a href=…&gt;&lt;/a&gt;</em><br>Example:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">html = <span class="string">&quot;https://www.baidu.com&quot;</span></span><br><span class="line">soup = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="comment"># find a tag call &quot;a&quot;, &lt;a href= ....&gt;</span></span><br><span class="line">tag= soup.find(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">print(tag[<span class="string">&quot;href&quot;</span>])</span><br><span class="line"><span class="comment">#or</span></span><br><span class="line">print(tag.attrs[<span class="string">&quot;href&quot;</span>])</span><br></pre></td></tr></table></figure>
+<br>
+</li>
+<li><p><em>t.contents and t.children:</em><br>A tag’s children are available in a list called .contents</p>
+<ul>
+<li><strong>.contents:</strong><br>it stores all children into a <strong>list</strong></li>
+<li><strong>.children:</strong><br>it is a <strong>list_generator type object</strong>, we can not get child directly. We should <strong>use iteration method to get child from childrens</strong><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">head_tag</span><br><span class="line"><span class="comment"># &lt;head&gt;&lt;title&gt;The Dormouse&#x27;s story&lt;/title&gt;&lt;/head&gt;</span></span><br><span class="line">head_tag.contents</span><br><span class="line"><span class="comment">#[&lt;title&gt;The Dormouse&#x27;s story&lt;/title&gt;]</span></span><br><span class="line">title_tag = head_tag.contents[<span class="number">0</span>]</span><br><span class="line">title_tag</span><br><span class="line"><span class="comment"># &lt;title&gt;The Dormouse&#x27;s story&lt;/title&gt;</span></span><br><span class="line">title_tag.contents</span><br><span class="line"><span class="comment"># [u&#x27;The Dormouse&#x27;s story&#x27;]</span></span><br></pre></td></tr></table></figure>
+<br>
+</li>
+</ul>
+</li>
+<li><p><em>.string:</em><br>If current tag doesn’t have children tags, but just have a string, then we can call .string<br>If current tag doesn’t have text, but have children tags, we can not call .string (it returns nothing)<br>Example:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">head_tag</span><br><span class="line"><span class="comment"># &lt;head&gt;&lt;title&gt;The Dormouse&#x27;s story&lt;/title&gt;&lt;/head&gt;</span></span><br><span class="line">head_tag.string</span><br><span class="line"><span class="comment"># Nothing</span></span><br><span class="line">head_tag.title.string</span><br><span class="line"><span class="comment">#The Dormouse&#x27;s story</span></span><br></pre></td></tr></table></figure>
+<br>
+</li>
+<li><p><em>find(…):</em><br>It returns the first <strong>tag or string</strong> that satisfies the requirements in input<br>Example:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tag  = BeautifulSoup(<span class="string">&quot;&lt;html&gt; &lt;a&gt;text&lt;/a&gt;  &lt;a&gt;text2&lt;/a&gt;&lt;html&gt;&quot;</span>)</span><br><span class="line">tag.find(<span class="string">&#x27;a&#x27;</span>, string=<span class="string">&quot;text&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>It returns the first tag with type of &lt;a&gt; which contains string “text”.<br>soup.find()</p>
+<br>
+</li>
+<li><p><em>find_all()</em><br>Similar to find(), but return <strong>a list of all tags</strong> that satisfy requirements</p>
+<br>
+</li>
+<li><p><em>find().find_next()</em><br>Find the first tag and then find the next tag that satisfies the requirements inside current tag</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">soup = BeautifulSoup(<span class="string">&quot;&lt;html&gt;&lt;h1&gt;Head 1 &lt;a href=www.baidu.com&gt;&lt;/h1&gt; &lt;h2&gt;Head 2&lt;/h2&gt;&lt;html&gt;&quot;</span>)</span><br><span class="line">soup.find(<span class="string">&#x27;h1&#x27;</span>).find_next(attrs=&#123;<span class="string">&#x27;href&#x27;</span>:<span class="string">&quot;www.baidu.com&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>it returns: &lt;a href=”<a target="_blank" rel="noopener" href="http://www.baidu.com&quot;/&gt;/">www.baidu.com&quot;\&gt;\</a>&lt;/a&gt;</p>
+<br>
+
+</li>
+</ul>
+<h4 id="Example-Capture-roster-of-football-team-in-ESPN-website"><a href="#Example-Capture-roster-of-football-team-in-ESPN-website" class="headerlink" title="Example: Capture roster of football team in ESPN website"></a>Example: Capture roster of football team in ESPN website</h4>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">team_url = <span class="string">&#x27;https://www.espn.com/college-football/team/roster/_/id/228/clemson-tigers&#x27;</span></span><br><span class="line"></span><br><span class="line">response = requests.get(team_url)</span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">tags= soup.find_all(<span class="string">&#x27;h1&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>It finds all h1 tags in the HTML page and return them in a list<br><br></p>
+<h2 id="Regular-Expression"><a href="#Regular-Expression" class="headerlink" title="Regular Expression"></a>Regular Expression</h2><p>regular expression is a way to find any string pattern that match the expression we design. It helps us find the string pattern easier.</p>
+<h4 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h4><ul>
+<li><p>Import Regular expression package</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br></pre></td></tr></table></figure></li>
+<li><p>*<br>Causes the resulting RE to match 0 or more repetitions.<strong>Example:</strong>  ab*: match when 0 or more <em>b</em>  follows <em>a</em></p>
+</li>
+<li><p>+<br>Causes the resulting RE to match <strong>1</strong> or more repetitions.<strong>Example:</strong>  ab+: match when 1 or more <em>b</em>  follows <em>a</em></p>
+</li>
+<li><p>?<br>Causes the resulting RE to match <strong>0 or 1</strong> repetitions</p>
+</li>
+<li><p> (…)<br>Matches whatever regular expression is inside the parentheses, and indicates the <strong>start and end</strong> of <strong>a group</strong></p>
+</li>
+<li><p>[…]<br>Used to indicate a set of characters<br>[a-z]: characters from a to z<br>[a-zA-Z]: characters from a to z and from A to Z<br>[a-zA-Z0-9]: characters from a to z and from A to Z and from 0 to 9</p>
+</li>
+<li><p>A|B<br>Match either A and B pattern</p>
+</li>
+<li><p>(?=…):<br>Matches if … matches next, but doesn’t consume any of the string</p>
+</li>
+<li><p>(?!…):<br>Matches if … doesn’t match next.</p>
+</li>
+<li><p>(?&lt;=…), (?&gt;…)<br>Matches if the current position in the string is <strong>preceded (the first one)</strong> or <strong>after (second one)</strong> by a match for … that ends at the current position</p>
+</li>
+<li><p><em>re.search(“(text)”, input):</em><br>Search a “text” pattern from input. The first input is regular expression<br>It return a re object</p>
+</li>
+<li><p>*re.compile(“([a-z]<em>text)”):</em><br>compile the regular expression object. <em>This regular expression object can use match(), search() without inputing regular expression parameters</em></p>
+</li>
+<li><p><em>re.group(0):</em><br>It extracts matched string from re object and return the first pattern.</p>
+</li>
+</ul>
+<p><strong>Example:</strong><br>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">s = <span class="string">&quot;Hello World. Hello Everyone&quot;</span></span><br><span class="line"><span class="comment"># match a set of character a-z or A-Z that repeat 0 or more before pattern &quot;one&quot;.</span></span><br><span class="line">obj = re.search(<span class="string">&quot;([a-zA-Z]*one)&quot;</span>,s)</span><br><span class="line"><span class="keyword">if</span> obj:</span><br><span class="line">  print(obj.group(<span class="number">0</span>))</span><br></pre></td></tr></table></figure><br>This example return pattern “Everyone”</p>
+<h4 id="Example-to-Find-Specific-pattern-from-HTML-file"><a href="#Example-to-Find-Specific-pattern-from-HTML-file" class="headerlink" title="Example to Find Specific pattern from HTML file"></a>Example to Find Specific pattern from HTML file</h4><p>Search for all strings that contain pattern “SC” and end with “SC”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">team_url =  <span class="string">&#x27;https://www.espn.com/college-football/team/roster/_/id/228/clemson-tigers&#x27;</span></span><br><span class="line"></span><br><span class="line">response = requests.get(team_url)</span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">tags= soup.find_all(string= re.<span class="built_in">compile</span>(<span class="string">&quot;[a-zA-Z ]*SC&quot;</span>))</span><br><span class="line">tags</span><br></pre></td></tr></table></figure>
+<br>
+
+<h4 id="Further-work"><a href="#Further-work" class="headerlink" title="Further work"></a><strong>Further work</strong></h4><p>We can mine more information from any websites. However, we also need to know the architecture and tag names or even some functions in webpage in the website we want to mine. </p>
+<p>To get to know how to know what functions or tags we have in the BeautifulSoup object, we can use a package called <strong>inspect</strong>  in python to explore the structure of beautiful soup object<br><br></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup">BeautifulSoup</a><br>[2] <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/re.html">Regular Expression</a><br>[3] <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/inspect.html">Inspect package in Python</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/20/Web-Scrapping/" data-id="cklak06yv002s6stybihy8a59" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/22/Data-Structure-BuckSort-Parallel-Computing/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Data Structure - BuckSort with Parallel Computing
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/20/Distributed-Computing-note-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Distributed Computing Basic Note - 1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

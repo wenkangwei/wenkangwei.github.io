@@ -1,38 +1,398 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
+  
+  <title>Accuracy Improvement-Ensemble Methods | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Accuracy Improvement-Ensemble Methods">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/23/Model-Acc-Improvement/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-07-23T21:19:24.000Z">
+<meta property="article:modified_time" content="2020-08-24T22:30:23.585Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Bagging">
+<meta property="article:tag" content="Boosting">
+<meta property="article:tag" content="Stacking">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block page_class %}page-post-detail{% endblock %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Model-Acc-Improvement" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/23/Model-Acc-Improvement/" class="article-date">
+  <time datetime="2020-07-23T21:19:24.000Z" itemprop="datePublished">2020-07-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>►<a class="article-category-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a>►<a class="article-category-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Accuracy Improvement-Ensemble Methods
+    </h1>
+  
 
-{% block content %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src= "https://miro.medium.com/max/497/0*Bbf8eeslDtVKog7U.png">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<a id="more"></a>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>In our life, we know that the powerful of a single person is much weaker than a group of people. One simple example is tug-of-war. A group of people  have stronger power than a single person and much easier to win the competition. Similarly, when making a decision about if a person should be punished, the judgement from a group of jurors is less biased than that from a single juror, since they consider different aspects of the case.<br>In machine learning, ensemble method applies such idea to combine decisions from different models and improve the accuracy. Three common ensemble methods are: <strong>bagging, boosting and stacking</strong>.</p>
+<h3 id="Bagging-bootstrap-aggregation"><a href="#Bagging-bootstrap-aggregation" class="headerlink" title="Bagging (bootstrap aggregation)"></a><strong>Bagging (bootstrap aggregation)</strong></h3><ul>
+<li><p><strong>Main Idea:</strong><br>  <strong>Its goal is to reduce variance</strong> by using multiple classifiers, like decision tree. It uses boostrap method to sample data and train multiple classifiers and then average the prediction over a collection of classifiers (for <strong>continuous value prediction, regression</strong>), or return the prediction with maximum votes (for<br>  <strong>classification</strong>)<br>  <strong>Random forest is a bagging approach, which bags a set of decision trees together.</strong> </p>
+  <br>
+</li>
+<li><p><strong>Assumptions</strong><br>  we have training set with size of <strong>D</strong> and a set of models with size of <strong>K</strong></p>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>Similar to Bootstrap, at each iteration i, a training set Di of d tuples is sampled with replacement from training set.</li>
+<li>A classifier model Mi is learned for each training set Di</li>
+</ol>
+</li>
+<li><p><strong>Prediction:</strong></p>
+<ol>
+<li>Each Classifier Mi returns prediction for input X. </li>
+<li>Discrete value output: The bagged classifier counts the votes and assigns the class with the most votes to X</li>
+<li>Continous value output:<br> take the average value of each prediction for a given test sample.</li>
+</ol>
+</li>
+<li><p><strong>Advantages:</strong></p>
+<ol>
+<li>Better than a single classifier from the classifier set. </li>
+<li>More robust in noisy data and hence <strong>smaller variance</strong></li>
+</ol>
+</li>
+<li><p><strong>Disadvantages:</strong><br>  1.<strong>Its training depends on sampling techniques</strong>, which could affect the accuracy</p>
+<ol start="2">
+<li><p><strong>The prediction may be not precise</strong>, since it uses average value of classifiers’ predictions.</p>
+<p>For example, if valid prediction values are 1,2,or 3, then the average of predictions from different model could lead to a floating point number.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Features of Random Forest</strong></p>
+<ol>
+<li><p>Comparable in accuracy to Adaboost, but more robust to errors and outliers.</p>
+</li>
+<li><p>Insensitive to the number of attributes selected for consideration at each split, and faster than boosting</p>
+<br>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a><strong>Boosting</strong></h3><ul>
+<li><p><strong>Main Idea:</strong><br>  <strong>Its goal is to improve accuracy, let models better fit training set.</strong> It uses weighted votes from a collection of classifiers</p>
+<br>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>Each training sample/tuple is given a weight, eg $w_i$ for the $i^{th}$ tuple. Then we have training set {(X0,y0, w0), … ,(Xi,yi, wi)}<br>where $X_i$ and $y_i$ are training sample and target</li>
+<li>We have k classifiers {M0, M1,…Mk}. Each classifier is learned from the whole training set <strong>iteratively</strong>. That is, if we have k classifiers, then we need to iterate the training set at least k times (at $i^{th}$ iteration, we train the $i^{th}$ classifier),  so that each classifier can learn the training set.</li>
+<li>After classifier $M_i$ is learned on training set, classifier $M_{i+1}$ pays more attention to the training samples that are misclassified by $M_i$ <br>   
+</li>
+</ol>
+</li>
+<li><p><strong>Prediction:</strong><br>  The final Model combines the votes of each individual classifier. Either find the prediction with largest sum of weights (<strong>Classification</strong>), or find the average of all prediction values (<strong>Regression</strong>)</p>
+<pre><code>  The weight of each classifier&#39;s vote is a function of its accuracy
+</code></pre>
+  <br>
+</li>
+<li><p><strong>Advantages</strong></p>
+<ol>
+<li>Boosting can be extended to numeric prediction</li>
+<li>Better fit the training set since it adjusts the weights of training set and gives more attention to the misclassified sample.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Disadvantages</strong></p>
+<ol>
+<li>Easy to overfit. Need Additional techniques to avoid overfitting. (I will discuss the methods dealing with Overfitting ). <br>
+</li>
+</ol>
+</li>
+<li><p><strong>Questions:</strong></p>
+<ol>
+<li>How to <strong>pay more attention</strong> to misclassified samples?  give Higher weights? But How to compute weights?<br><strong>Answer:</strong> This depends on the actual boosting algorithm, like GradientBoosting, AdaBoosting<br>
+</li>
+</ol>
+</li>
+<li><p><strong>AdaBoosting</strong></p>
+<ol>
+<li><p><strong>Assumption:</strong><br> Assume we have training set with size of <strong>D</strong> and a set of classifier models with size of <strong>T</strong></p>
+</li>
+<li><p>__Error of model $M_i$__</p>
+<p> Error($M_i$) = $\sum_i^D (w_i \times err(X_i))$</p>
+<p> if using normalized weight (weight in range [0,1]), then<br> Error($M_i$) = $\frac{\sum_i^D (w_i \times err(X_i))}{(\sum_j^D w_j)} $</p>
+ <br>
+
+<p> <strong>Note:</strong><br> In classification, $err(X_i)= 1(C_i(X_i) !=Y_i)$, $C_i(X_I)$ means the prediction of model $M_i$ on sample $X_i$. If the prediction is correction $error(X_i) =0$, otherwise 1.</p>
+ <br>
+</li>
+<li><p><strong>Weight of model $M_i$’s voting: $\alpha_i$</strong><br> $\alpha_i = log\frac{1-error(M_i)}{error(M_i)} + log(K-1)$.</p>
+<p> Note:<br> K =  the number of classes in dataset. When K=1, log(K-1) term can be ignored</p>
+ <br>
+</li>
+<li><p><strong>Update of weight</strong><br> $w_i = w_i \cdot exp(\alpha_i \cdot 1(M_j(X_i) != Y_i))$</p>
+ <br>
+
+<p> The weight $w_i$ of the $i^{th}$ training tuple $X_i$  is updated by timing exponential value of weight of model <strong>only when this model $M_j$ misclassifies the $X_i$ ( That is $M_j(X_i) !=Y_i$ and hence  $1(M_j(X_i) !=Y_i) =1 $)</strong>. </p>
+ <br>
+</li>
+<li><p><strong>Prediction</strong><br> $C(X_i) = argmax_{k} \sum_{j=1}^T \alpha_{m}\cdot 1(M_j(X_i)== Y_i)$<br> where $1(M_j(X_i)== Y_i)$  is equal to 1 if prediction is correct, otherwise, 0.<br> <strong>The prediction of the whole model has the largest sum of weight of models, NOT the weight of training tuple!</strong></p>
+<br>
+</li>
+<li><p>More detail for AdaBoosting, Read <a target="_blank" rel="noopener" href="https://web.stanford.edu/~hastie/Papers/samme.pdf">this paper</a></p>
+<br>
+
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Stacking"><a href="#Stacking" class="headerlink" title="Stacking"></a><strong>Stacking</strong></h3><ul>
+<li><p><strong>Main Idea:</strong><br>  It combines and trains a set of <strong>heterogeneous</strong> classifiers in parallel.<br>  It consists of 2-level models:<br>  <strong>level-0: base model</strong><br>  Models fit on the training data and whose predictions are compiled.<br>  <strong>level-1: Meta-Model</strong><br>  It learns <strong>how to best combine the predictions</strong> of the base models. </p>
+  <br>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>split the training data into K-folds </li>
+<li>one of base models is fitted on the K-1 parts and predictions are made for Kth part.</li>
+<li>Repeat step 2 for each fold</li>
+<li>Fit the base model on the whole train data set to calculate its performance on the test set.</li>
+<li>repeat step 2~4 for each base model</li>
+<li>Predictions from the train set are used as features for the second level model.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Classification:</strong><br>  Second level model is used to make a prediction on the test set.</p>
+  <br>
+</li>
+<li><p><strong>Advantage:</strong></p>
+<ol>
+<li>It harness the capabilities of a range of well-performing models on a classification or regression task and make predictions that have better performance than any single model in the ensemble.        <br>
+</li>
+</ol>
+</li>
+<li><p><strong>Disadvantage:</strong></p>
+<ol>
+<li>It could be computational expensive since it uses k-fold method and use multiple level models.<br>
+
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Comparison-among-Ensembling-boosting-and-bagging"><a href="#Comparison-among-Ensembling-boosting-and-bagging" class="headerlink" title="Comparison among Ensembling, boosting and bagging"></a><strong>Comparison among Ensembling, boosting and bagging</strong></h3><ol>
+<li>Goal of bagging is to reduce variance and noise while boosting is to improve accuracy using weighted models. Stacking is to improve accuracy of model using hetergenerous models.<br></li>
+<li>Adaboost let classifiers pay more attention to the misclassified samples, but if those misclassified samples are outlier or noisy data, it will affect a lot and lead to larger variance.<br> However, bagging and ensemble uses averaging and voting methods and each classifier has equal weight, which is less sensitive to the noise data and outlier.</li>
+</ol>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_37352167/article/details/85028835">https://blog.csdn.net/weixin_37352167/article/details/85028835</a><br>[2] <a target="_blank" rel="noopener" href="https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/">https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/</a><br>[3] <a target="_blank" rel="noopener" href="https://miro.medium.com/max/497/0*Bbf8eeslDtVKog7U.png">https://miro.medium.com/max/497/0*Bbf8eeslDtVKog7U.png</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/23/Model-Acc-Improvement/" data-id="cklak06yj002b6sty1i8wfvpb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/29/NLP-Word2Vec-Improvement/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          NLP Improvement on Word2Vector
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/19/Data-Structure-binary-search/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Data Structure 1 - Binary Search</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

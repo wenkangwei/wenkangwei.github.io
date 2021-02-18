@@ -1,38 +1,559 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
+  
+  <title>Recommendation-System-1- Collaborative Filtering and Content-based Filtering | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Recommendation-System-1- Collaborative Filtering and Content-based Filtering">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/15/Recommendation-System-1/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-16T00:48:52.000Z">
+<meta property="article:modified_time" content="2020-12-18T18:54:13.188Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Collaborative Filtering">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block page_class %}page-post-detail{% endblock %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Recommendation-System-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/12/15/Recommendation-System-1/" class="article-date">
+  <time datetime="2020-12-16T00:48:52.000Z" itemprop="datePublished">2020-12-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Recommendation-System/">Recommendation System</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Recommendation-System-1- Collaborative Filtering and Content-based Filtering
+    </h1>
+  
 
-{% block content %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<a id="more"></a>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<h2 id="Introduction-to-Recommendation-system"><a href="#Introduction-to-Recommendation-system" class="headerlink" title="Introduction to Recommendation system"></a>Introduction to Recommendation system</h2><p>In recommendation system, we want to let it give recommendations of items to users based on users’ visit history or other data.<br>if we represent the items and users in a table, it would be something like this:</p>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>-</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>In this table, each row represent a user and column represent an item. The cell with value 1 means that user buys the corresponding item. For example, the cell of user1 - item 1 =1 means user 1 buys item 1.</p>
+<p>Then recommendation system is to predict if the empty cells in the table will become 1 or not. Or predict if that user will buy the item or not. Building such recommendation system can help encourage users to consume items by recommending somethings attracting them and let companies make profits</p>
+<p>Collaborative Filtering is one type of common methods in constructing recommendation system. Its main idea is to find the similarity between users or between items to rank the items and then pick and recommend the top K items to users.<br>In content-based filtering, it utilizes the content features of items and the contents users may like to compute similarity between item and user and make recommendation.</p>
+<p>There are three common ways to do recommendation</p>
+<ul>
+<li><strong>user-based</strong><br>  It first computes similarity between users, then pick top K items that the most similar user like to the current user </li>
+<li><strong>Item-based</strong><br>  It recommends new items to current user based on the similarity between new items and items that user has brought before</li>
+<li><strong>content-based</strong><br>  It computes the similarity between user and item based on the tags/topics the user like and the tags/topics that item contains. Then it recommends the most similar item to the user.</li>
+</ul>
+<h2 id="Cold-Start-Problem"><a href="#Cold-Start-Problem" class="headerlink" title="Cold Start Problem"></a>Cold Start Problem</h2><p>In recommendation system, we also face a problem that when a new user or a new item  comes to the platform, we don’t have enough information (like the preference of new users, tags/contents of new items) about them to make recommendation.</p>
+<p>Hence Cold start problem mainly can be divided into two types:</p>
+<ul>
+<li>Cold start of user:<br>  We don’t have enough information about new users and can not determine the preference of users to do recommendation</li>
+<li>Cold start of item:<br>  We don’t have enough information of new items and don’t know the tags and contents those items may have</li>
+</ul>
+<h2 id="User-based-filtering-similarity-between-users"><a href="#User-based-filtering-similarity-between-users" class="headerlink" title="User-based filtering (similarity between users)"></a>User-based filtering (similarity between users)</h2><p>The main idea in user-based filtering is that we first find the similarity between each two users based on the item vectors of the two users.Then pick the user who is most similar to the current user.</p>
+<p>In the item list of the selected user,  we pick the K top frequent visited items to the current user.</p>
+<h4 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h4><ul>
+<li>Assumption<br>Assume we have a user-item table</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+<th>item 4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>where 1 represent the ratign from the user to the item the user purchase, -  mean the user doesn’t buy the item. </p>
+<p>Denote the $i^{th}$ user and the $j^{th}$ user as ui, uj, respectively and  N(ui), N(uj) are the set of items the $i^{th}$ user purchased and the set of items $j^{th}$ user purchased respectively. |N(ui)| is the number of items the $i^{th}$ user purchased.</p>
+<ul>
+<li><strong>Step 1: Compute Similarity between a pair of users</strong><br>In order to compute the similarity between a pair of users, we need a way to measure the distance between users.<br>One common way is cosine distance, denoted as cos(ui, uj):</li>
+</ul>
+<p>$$<br>cos(ui, uj) = \frac{ |N(ui) \cap N(uj) |}{\sqrt{|N(ui)| \times|N(uj)|} }<br>$$</p>
+<p>where $|N(ui) \cap N(uj)|$ means the size of the intersection set between the set of items purchased by ui and the set of items purchased by uj.</p>
+<p>Example:<br>In the table above, we want to compute cos(u1, u2), then we can see the intersection of the items from u1 and items from u2 is [item1, item3], so $|N(ui) \cap N(uj)|=2$. Both u1 and u2 users purchase 3 items, so $|N(u1)|=|N(u2)|=3$</p>
+<p>Then similarity between user 1 and user 2 is:<br>$$<br>cos(u1, u2) = \frac{ 2}{\sqrt{3 \times 3} }<br>$$</p>
+<p>Based on this, we can compute similarity between every pair of users in table.<br>There are other choices to compute similarity, such as Euclidean distance, dot product, Pearson’s Correlation.</p>
+<ul>
+<li><strong>Step 2: Predict the interest of the $i^{th}$ user, ui, on the $x^{th}$ item, ix</strong></li>
+</ul>
+<p>In this step, we first pick the top K users who are most similar to ui. Then We pick the users who rated the item ix from the K users.<br>Finally we compute the estimated rating of ui on item ix using user similarity and ratings from those users. Estimated rating of ui on item ix is </p>
+<p>$$<br>R(ui, ix) = \sum_{v\in M} { cos(ui, v) \times R(v, ix)}<br>$$</p>
+<p>where M is the intersection between the set of the top K similar users and users who rated the item ix.  The $R(v, ix)$ is the rating of user v on item ix.</p>
+<p>Note that we can also use K-Nearest Neighbor method, rather than cosine similarity to find the top K simiar users as well. In this case, we may use Euclidean distance or other distance to measure similarity.</p>
+<h4 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li><p>Advantages</p>
+<ul>
+<li>Easy to implement</li>
+<li>It is good to explore <strong>group interests</strong> on items, since it measures similarity between users in a group</li>
+<li>Good to use this method when the update of incoming new items is faster than the update of incoming new users<br>(Computing similarity between new user and other existing users is time expensive when there is millions of users. But updating similarity after adding new items is much easy, we just need to update N(ui))</li>
+</ul>
+</li>
+<li><p>Disadvantages</p>
+<ul>
+<li><strong>Sparsity</strong>. The percentage of rating from users is low</li>
+<li>User-based collaborative filtering is also a memory-based mehtod, since it requires memory to store similarity between users. </li>
+<li>when update frequency of user is faster than the update frequency of items, it is time-expensive, especially there are millions of users</li>
+<li><strong>Cold start problem.</strong> When there is no sufficient information about users or item, it is hard to estimate similarity efficiently</li>
+<li>update is slow when there are large amount of users or items</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use"><a href="#When-to-use" class="headerlink" title="When to use"></a>When to use</h4><ul>
+<li>when we want to explore group interests or similarity between users in a group</li>
+<li>The number of users is smaller than the number of items. Or Incoming new users amount is smaller than incoming new items amount.</li>
+</ul>
+<h2 id="Item-based-filtering-similarity-between-items"><a href="#Item-based-filtering-similarity-between-items" class="headerlink" title="Item-based filtering  (similarity between items)"></a>Item-based filtering  (similarity between items)</h2><p>The main idea in Item-based is to compute the similarity between new item and the items purchased by users to predict if users will buy the new item.</p>
+<h4 id="How-it-works-1"><a href="#How-it-works-1" class="headerlink" title="How it works"></a>How it works</h4><p>Using the user-item table above</p>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+<th>item 4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Denote the $i^{th}$ item as xi. M(xi) is the set of users who purchased item xi and |M(xi)| is the size of this set</p>
+<ul>
+<li><strong>Step 1: Compute similarity between a pair of items</strong><br>The cosine similarity of item xi and item xj is similarity to the similarity between users: </li>
+</ul>
+<p>$$<br>cos(xi, xj) = \frac{ |M(xi) \cap M(xj) |}{\sqrt{|M(xi)| \times|M(xj)|} }<br>$$</p>
+<p>In this example, $cos(x1, x2) = \frac{ |M(x1) \cap M(x2) |}{\sqrt{|M(x1)| \times|M(x2)|} } = \frac{2}{\sqrt{3\times 2} } $</p>
+<ul>
+<li><strong>Step 2: Predict Rating of user ui on item xi</strong><br>We pick the K items which are most similar to item xi based on computed item similarity. Then find the intersection Q between these K items and the set of items user ui purchased.<br>Then estimated rating of user ui on item xi is</li>
+</ul>
+<p>$$<br>R(ui, xi) = \sum_{y \in Q} { cos(xi, y) \times R(ui, y)}<br>$$</p>
+<p>where Q is the intersection set between K items and the set of items user ui purchased. y is item from Q. $R(ui, y)$ is rating of user ui on item y.</p>
+<h4 id="Properties-1"><a href="#Properties-1" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li>Advantages<ul>
+<li>Item-based Collaborative filtering is good for personalized recommendation, since it is based on similarity of items user purchased, which shows user’s preference information.</li>
+<li>Good to use this method when there are a large amount of users.</li>
+<li>Easy to compute as well</li>
+<li>Good Explainability</li>
+</ul>
+</li>
+<li>Disadvantages<ul>
+<li>It is memory-based model as well. Hence it needs to store information of items, users. If there are millions of items, the computation is expensive</li>
+<li>Cold Start problem. For new item, it is hard for us to compute similarity between items since there is lack of users using the new item</li>
+<li>Sparsity. The number of users using new items could be small and it is hard to compute similarity</li>
+<li>Time complexity is high when there are millions of items and users</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use-1"><a href="#When-to-use-1" class="headerlink" title="When to use"></a>When to use</h4><ul>
+<li>when we want to make personalized recommendations to users</li>
+<li>when the amount of items is not pretty large. Or the update frequency of items is smaller than update frequency of users’ information.</li>
+<li>When we have enough information about items and cold start effect is small.</li>
+</ul>
+<h2 id="Content-based-filtering-based-on-tags-content-of-items"><a href="#Content-based-filtering-based-on-tags-content-of-items" class="headerlink" title="Content-based filtering (based on tags/content of items)"></a>Content-based filtering (based on tags/content of items)</h2><p>Let’s consider that there are some tags/contents in items and users may prefer some tags/contents and hence like the items that contain such tags/contents. </p>
+<p>Based on this setting, we can construct an item vector $v_i$ and an user vector $u_i$. $v_i$ and $u_i$ have the same shape</p>
+<p>Each entry in the vector represents whether this item contains the corresponding tags/contents,  or whether this user like or dislike the corresponding content / tag. </p>
+<p>The user  vector is given by this formula:<br>$$<br>u_i = \frac{1}{n}\sum_i^nu_i - \frac{1}{m}\sum_j^mu_j<br>$$</p>
+<p>where $u_i$ is the item vector that user likes and $u_j$ is the item vector that user dislikes. </p>
+<p>Each entry in user vector is the difference between the level of prefering this contents and the level of disliking this contents. If entry is negative, then user may dislike that content.</p>
+<p>After computing the user vector, we can compute the similarity between user vector and item vectors to see which item is most likely to be purchased by user based on user’s interests.</p>
+<p>The similarity can be computed by dot product similarity:</p>
+<p>$$<br>similarity(ui, vi) = &lt;ui, vi&gt;<br>$$</p>
+<p>where &lt;ui, vi&gt; is dot product of ui, vi.</p>
+<p>Note that for ui, vi, we don’t use normalization here, since when there are large amount of contents but item has only a few contents, the vector will be very sparse. <strong>Normalization in a sparse vector will make the non-zero values pretty small and even close to 0, which make computation difficult and may loss precision.</strong></p>
+<p><strong>Steps in content-based filtering are as follow:</strong></p>
+<ol>
+<li>Compute item-content vectors and user vectors</li>
+<li>Compute similarity between user and items</li>
+<li>Rank items to recommend</li>
+</ol>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a><strong>Example</strong></h3><p>in a item-content table:</p>
+<table>
+<thead>
+<tr>
+<th>item</th>
+<th>tag1</th>
+<th>tag2</th>
+<th>tag3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v4</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>in a user-item table:</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item1</th>
+<th>item2</th>
+<th>item3</th>
+<th>item4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody></table>
+<ol>
+<li>Step1: compute item vectors and user vector<br>in item-content table, 1 represents item vi contains this tag/content, otherwise, it doesnt. In user-item table,  1 indicates this user like this item and -1 means user dislike this item.<br>Hence item vectors are v1 = [1, 0, 1], v2 = [1, 0, 0], v3= [0, 1, 0], v4=[0, 1, 1]<br>Then user vector u1 = $\frac{v1+v2}{2} - \frac{v3+v4}{2}$ = [1, 0, 0.5] - [0, 1, 0.5] = [1, -1, 0]. </li>
+</ol>
+<p>In this case, we can see user1 like tag1 and dislike tag2 and be neutral about tag3.</p>
+<ol start="2">
+<li><p>Step2: compute similarity between user and items<br>Sim(u1, v1) = &lt;u1, v1&gt; = 1 * 1 + 0 * (-1) + 1 * 0 = 1<br>Sim(u1, v2) = &lt;u1, v2&gt; = 1 * 1 + 0 * (-1) + 0 * 0 = 1<br>Sim(u1, v3) = &lt;u1, v3&gt; = 0 * 1 + 1 * (-1) + 0 * 0 = -1<br>Sim(u1, v4) = &lt;u1, v4&gt; = 0 * 1 + 1 * (-1) + 1 * 0 = -1</p>
+</li>
+<li><p>Step3: ranking and recommend<br>user likes v1, v2 and dislikes v3, v4.</p>
+</li>
+</ol>
+<h3 id="Update-of-user-vector"><a href="#Update-of-user-vector" class="headerlink" title="Update of user vector"></a>Update of user vector</h3><p>Since user vector is just the difference between the average of like item vectors and the average of dislike item vectors. When the $k^{th}$ item comes, we can update  either  the like vector or dislike vector to update the user vector.</p>
+<p>Let the average of K1 item vectors that user likes as</p>
+<p>$$<br>u^+_{k-1}= \frac{1}{k1-1}\sum^{k1-1}_iv_i<br>$$</p>
+<p>the average of K2 item vectors that user dislikes as</p>
+<p>$$<br>u^-_{k-1} = \frac{1}{k2-1}\sum^{k2-1}_jv_j<br>$$</p>
+<p>and K1 + K2 = k-1</p>
+<p>user vector for k-1 items is</p>
+<p>$$<br>u_{k-1} = u_{k-1}^+ -u_{k-1}^-<br>$$</p>
+<p>When the $K^{th}$ item comes, if user like this item, then we update like vector</p>
+<p>$$<br>u_{k}^+ = \frac{(k1-1)u_{k-1}^+ + v_k }{k1} , u_{k}^- = u_{k-1}^-<br>$$</p>
+<p>if user dislikes the item, just update dislike vector</p>
+<p>$$<br>u_{k}^- = \frac{(k2-1)u_{k-1}^- + v_k }{k2}  , u_{k}^+ = u_{k-1}^+<br>$$</p>
+<p>This enable us to update the user vector on the fly.</p>
+<h4 id="Properties-2"><a href="#Properties-2" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li><p>Advantages</p>
+<ul>
+<li>Easy and very fast to compute similarity even when there are large amount of items or users.</li>
+<li>Utilize the content information to explore potential contents that user likes</li>
+<li>Compared with Item-based and user-based method, it is less sensitive to Cold Start problem, since contents of item can be defined easily.</li>
+</ul>
+</li>
+<li><p>Disadvantages</p>
+<ul>
+<li><strong>Sparsity of item vectors</strong>. Item vector could be sparse when there are a lot of contents and content follow long-tail distribution (Note long-tail distribution of feature/item can also lead to the sparsity)</li>
+<li><strong>Very easy to converge to certain scope.</strong> Since content/tag could be long-tail distribution and most of items have similar content, then a small change in the item vector will lead to large change of similarity.<br>For example, a user vector u= [100, 0, 1, -100], due to long-tail distribution of contents, the values between contents are quick different. For item vectors v1 = [1, 0, 0, 0 ] and v2= [0, 0, 1, 0], sim(u1,v1) and sim(u1,v2) would be very different.</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use-2"><a href="#When-to-use-2" class="headerlink" title="When to use"></a>When to use</h4><p>When we have more information about items and want to use those contents in recommendation.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://medium.com/@cfpinela/recommender-systems-user-based-and-item-based-collaborative-filtering-5d5f375a127f">https://medium.com/@cfpinela/recommender-systems-user-based-and-item-based-collaborative-filtering-5d5f375a127f</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8D%94%E5%90%8C%E9%81%8E%E6%BF%BE">https://zh.wikipedia.org/wiki/%E5%8D%94%E5%90%8C%E9%81%8E%E6%BF%BE</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg">https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://towardsdatascience.com/introduction-to-recommender-systems-1-971bd274f421">https://towardsdatascience.com/introduction-to-recommender-systems-1-971bd274f421</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/15/Recommendation-System-1/" data-id="cklak06ys002o6sty6pqjbgdw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/12/08/report/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CPSC 6300 Final Report</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

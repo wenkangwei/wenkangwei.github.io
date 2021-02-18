@@ -1,23 +1,662 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
-{% block title %} {{ config.title }} {% endblock %}
+  
+  <title>Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="second-year master student &#x2F; Computer engineering &#x2F; deep learning &#x2F; machine learning &#x2F; data science">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wenkang&#39;s Blog">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:description" content="second-year master student &#x2F; Computer engineering &#x2F; deep learning &#x2F; machine learning &#x2F; data science">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Computer engineering, machine learning, data science">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block page_class %}
-  {% if is_home() %} page-home {% endif %}
-{% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block content %}
-  <section id="posts" class="posts-expand">
-    {% for post in page.posts %}
-      {{ post_template.render(post, true) }}
-    {% endfor %}
-  </section>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Recommendation-System-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/12/15/Recommendation-System-1/" class="article-date">
+  <time datetime="2020-12-16T00:48:52.000Z" itemprop="datePublished">2020-12-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Recommendation-System/">Recommendation System</a>
+  </div>
 
-  {% include '_partials/pagination.swig' %}
-{% endblock %}
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+    </h1>
+  
 
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg>
+        
+          <p class="article-more-link">
+            <a href="/2020/12/15/Recommendation-System-1/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/15/Recommendation-System-1/" data-id="cklak06ys002o6sty6pqjbgdw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-report" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/12/08/report/" class="article-date">
+  <time datetime="2020-12-08T05:18:39.000Z" itemprop="datePublished">2020-12-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Report/">Report</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://miro.medium.com/max/2560/1*GMikfjbGYyPGDTYdJuMwhg.png>
+        
+          <p class="article-more-link">
+            <a href="/2020/12/08/report/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/08/report/" data-id="cklak070b005r6styf90k2a4k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kkboxmusicrecommendation-notebook-v4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/" class="article-date">
+  <time datetime="2020-12-01T20:13:14.000Z" itemprop="datePublished">2020-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Recommendation-System/">Recommendation System</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://miro.medium.com/max/2560/1*GMikfjbGYyPGDTYdJuMwhg.png>
+        
+          <p class="article-more-link">
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/01/kkboxmusicrecommendation-notebook-v4/" data-id="cklak070z006u6sty08z469fe" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ML-K-mean-Cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/23/ML-K-mean-Cluster/" class="article-date">
+  <time datetime="2020-11-23T05:04:34.000Z" itemprop="datePublished">2020-11-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src= https://i.ytimg.com/vi/_aWzGGNrcic/hqdefault.jpg>
+        
+          <p class="article-more-link">
+            <a href="/2020/11/23/ML-K-mean-Cluster/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/23/ML-K-mean-Cluster/" data-id="cklak06yd00266sty6l8l7jik" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Statistic-P-value" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/22/Statistic-P-value/" class="article-date">
+  <time datetime="2020-11-23T03:17:39.000Z" itemprop="datePublished">2020-11-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Statistic/">Statistic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://www.statisticshowto.com/wp-content/uploads/2014/01/p-value1.jpg>
+        
+          <p class="article-more-link">
+            <a href="/2020/11/22/Statistic-P-value/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/22/Statistic-P-value/" data-id="cklak06yu002r6sty4jkngy5i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-DL-DropOut" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/13/DL-DropOut/" class="article-date">
+  <time datetime="2020-11-13T05:32:03.000Z" itemprop="datePublished">2020-11-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/13/DL-DropOut/">DeepLearning -2 DropOut</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=/images/DL/dropout.jpg>
+        
+          <p class="article-more-link">
+            <a href="/2020/11/13/DL-DropOut/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/13/DL-DropOut/" data-id="cklak06xm001h6sty7o2zfjhp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Linux-commands" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/12/Linux-commands/" class="article-date">
+  <time datetime="2020-11-13T04:00:06.000Z" itemprop="datePublished">2020-11-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/12/Linux-commands/">Some Useful Linux-commands</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://blogs.unity3d.com/wp-content/uploads/2019/05/image1-11.png>
+        
+          <p class="article-more-link">
+            <a href="/2020/11/12/Linux-commands/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/12/Linux-commands/" data-id="cklak06ya00236styesgihmzv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/commands/" rel="tag">commands</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-DL-ConvolutionNetwork" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/02/DL-ConvolutionNetwork/" class="article-date">
+  <time datetime="2020-11-02T23:44:53.000Z" itemprop="datePublished">2020-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/02/DL-ConvolutionNetwork/">DeepLearning-1 ConvolutionNetwork</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://www.mdpi.com/sensors/sensors-19-04933/article_deploy/html/images/sensors-19-04933-g001.png>
+        
+          <p class="article-more-link">
+            <a href="/2020/11/02/DL-ConvolutionNetwork/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/02/DL-ConvolutionNetwork/" data-id="cklak06xk001e6sty00xu3ucg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-PySpark-Note-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/12/PySpark-Note-1/" class="article-date">
+  <time datetime="2020-10-12T21:37:41.000Z" itemprop="datePublished">2020-10-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/PySpark/">PySpark</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/12/PySpark-Note-1/">PySpark-Note-1</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://miro.medium.com/max/800/1*nPcdyVwgcuEZiEZiRqApug.jpeg>
+        
+          <p class="article-more-link">
+            <a href="/2020/10/12/PySpark-Note-1/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/10/12/PySpark-Note-1/" data-id="cklak06yr002m6stya9edcvxi" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-ML-Model-LR" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/30/ML-Model-LR/" class="article-date">
+  <time datetime="2020-09-30T20:01:27.000Z" itemprop="datePublished">2020-09-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/09/30/ML-Model-LR/">ML Model - Regression models</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=/images/ML-model/regression.png>
+        
+          <p class="article-more-link">
+            <a href="/2020/09/30/ML-Model-LR/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/30/ML-Model-LR/" data-id="cklak0708005n6styedi9h9qr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

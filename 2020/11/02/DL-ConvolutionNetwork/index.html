@@ -1,38 +1,348 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
+  
+  <title>DeepLearning-1 ConvolutionNetwork | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="DeepLearning-1 ConvolutionNetwork">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/02/DL-ConvolutionNetwork/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-02T23:44:53.000Z">
+<meta property="article:modified_time" content="2020-11-13T04:02:44.952Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Convolution Neural Network">
+<meta property="article:tag" content="Backpropagation">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block page_class %}page-post-detail{% endblock %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-DL-ConvolutionNetwork" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/02/DL-ConvolutionNetwork/" class="article-date">
+  <time datetime="2020-11-02T23:44:53.000Z" itemprop="datePublished">2020-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Deep-Learning/">Deep Learning</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      DeepLearning-1 ConvolutionNetwork
+    </h1>
+  
 
-{% block content %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://www.mdpi.com/sensors/sensors-19-04933/article_deploy/html/images/sensors-19-04933-g001.png>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<a id="more"></a>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Convolution neural network has been applied to different domains widely  for feature extractor / filter. One of the most successful area is computer vision, in which convolution network is trained and used to extract the general feature we are interested in.</p>
+<p>This article summarizes how forward passing and backpropagation works in CNN to train the CNN filters. Then some properties of CNN are mentioned.</p>
+<h2 id="Terms-in-CNN"><a href="#Terms-in-CNN" class="headerlink" title="Terms in CNN"></a>Terms in CNN</h2><ul>
+<li><p><strong>N</strong>: number of data points/ samples in dataset</p>
+</li>
+<li><p><strong>C</strong>: number of channel in one sample. Example: in RGB image, it has 3 channels: Red, Green, Blue</p>
+</li>
+<li><p><strong>H</strong>: height of one data point matrix / amount of rows in one sample</p>
+</li>
+<li><p><strong>W</strong>: width / amount of columns in one sample</p>
+</li>
+<li><p><strong>x</strong>: input with shape (N, C, H, W)</p>
+</li>
+<li><p><strong>y</strong>: output of convolution network</p>
+</li>
+<li><p><strong>kernel/filter/weight</strong>: filter with trainable weights and shape of (KH, KW), where <strong>KH: height / rows of kernel,  KW: width/ columns of kernel</strong></p>
+</li>
+<li><p><strong>b</strong>: bias term.  <strong>One kernel correponds to one bias</strong></p>
+</li>
+<li><p><strong>stride</strong>: The number of pixel between adjacent receptive fields in horizonal, vertical directions.</p>
+</li>
+<li><p><strong>padding</strong>: the number of rows, columns added to the boundaries/edges of a sample matrix. </p>
+</li>
+</ul>
+<p>Usually, we set the padding row/column values to zeros. We usually set padding = (1,1) or (2,2) to add 1 or 2 row(s)/column(s) to each edge of sample matrix</p>
+<ul>
+<li><strong>Ho</strong>: height/ amount of rows of output fromm convolution</li>
+<li><strong>Wo</strong>: width/ amount of columns of output from convolution</li>
+<li>Output shape from convolution network:<ul>
+<li>Ho = 1 + (H + 2*padding - KH )/stride</li>
+<li>Wo = 1 + (W + 2*padding - KW )/stride</li>
+<li>if Ho, Wo are not integer, that means when moving the kernel along input, index out of range occurs. In this case, we can simply drop the last column/row that make index out of range. Or, we can add zero columns/rows to fill the out of range pieces in matrix.</li>
+</ul>
+</li>
+</ul>
+<h2 id="How-does-CNN-work"><a href="#How-does-CNN-work" class="headerlink" title="How does CNN work"></a>How does CNN work</h2><h4 id="Forward-pass-in-CNN"><a href="#Forward-pass-in-CNN" class="headerlink" title="Forward pass in CNN"></a>Forward pass in CNN</h4><ol>
+<li><strong>Convolution with 1-D Input:</strong>  without padding, stride =1, channel =1<br>After we define some terms above, let consider there is 1-D input X with shape: C=1, H=1, W=4  and 1-D kernel K with shape KH=1, KW = 3.<br>$$<br>X = [x1, x2, x3, x4], K = [w1, w2,w3]<br>$$</li>
+</ol>
+<p>Then the output of convolution is<br>$$<br>Y = \begin{bmatrix}<br>y_1 \\<br>y_2<br>\end{bmatrix}<br>$$</p>
+<p>where $y_1 = w_1 * x_1 + w_2 * x_2 + w_3 * x_3 +b$ and $y_2 = w_1 * x_2 + w_2 * x_3 + w_3 * x_4 +b$</p>
+<p>where b is the bias term in convolution</p>
+<ol start="2">
+<li><strong>Convolution with 2-D Input:</strong> stride =1, no padding, channel =1<br>$$X = \begin{bmatrix}<br>x1 &amp; x2 &amp; x3 \\<br>x4 &amp; x5 &amp; x6 \\<br>x7 &amp; x8 &amp; x9<br>\end{bmatrix} ,<br>K = \begin{bmatrix}<br>w1 &amp; w2 \\<br>w3 &amp; w4<br>\end{bmatrix}<br>$$</li>
+</ol>
+<p>Based on these equations,</p>
+<ul>
+<li>Ho = 1 + (H + 2*padding - KH )/stride</li>
+<li>Wo = 1 + (W + 2*padding - KW )/stride</li>
+</ul>
+<p>we know that the output Y has shape H =2, W= 2:</p>
+<p>$$<br>Y = \begin{bmatrix}<br>y1 &amp; y2 \\<br>y3 &amp; y4<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>y1 = sum( \begin{bmatrix}<br>x1 &amp; x2 \\<br>x4 &amp; x5<br>\end{bmatrix} * \begin{bmatrix}<br>w1 &amp; w2 \\<br>w3 &amp; w4<br>\end{bmatrix} ) +b = w1x1 + w2x2 + w3x4 + w4x5 + b<br>$$</p>
+<p>where * is element-wise multiplication<br>Similarly, we have</p>
+<p>$$<br>\begin{matrix}<br>y2 = w1x2 + w2x3 + w3x5 + w4x6 + b, \\<br>y3 = w1x4 + w2x5 + w3x7 + w4x8 + b, \\<br>y4 = w1x5 + w2x6 + w3x8 + w4x9 + b  \\<br>\end{matrix}<br>$$</p>
+<ol start="3">
+<li><strong>Convolution with 2-D Input:</strong> with padding = (1,1) stride =1, channel =1<br>Here I add 1 row, 1 column zeros pad to four edges of 2-D matrix. Then the sample X becomes 4 by 4 matrix. After padding, we will do the same forward pass process as step 2.</li>
+</ol>
+<p>$$<br>X = \begin{bmatrix}<br>0 &amp;  0 &amp;  0 &amp; 0  &amp; 0 \\<br>0 &amp; x1 &amp; x2 &amp; x3 &amp; 0 \\<br>0 &amp; x4 &amp; x5 &amp; x6 &amp; 0 \\<br>0 &amp; x7 &amp; x8 &amp; x9 &amp; 0 \\<br>0 &amp;  0 &amp;  0 &amp;  0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>and<br>$$<br>K = \begin{bmatrix}<br>w1 &amp; w2 &amp; w3 \\<br>w4 &amp; w5 &amp; w6 \\<br>w7 &amp; w8 &amp; w9 \\<br>\end{bmatrix}<br>$$</p>
+<p>The output Y becomes:<br>$$<br>Y = \begin{bmatrix}<br>y1 &amp; y2 &amp; y3 \\<br>y4 &amp; y5 &amp; y6 \\<br>y7 &amp; y8 &amp; y9 \\<br>\end{bmatrix}<br>$$</p>
+<p>where<br>$$<br>y1 = w_1 * 0 + w_2 * 0 + w_3 * 0 + w_4 * 0 + w_5 * x_1 + w_6 * x_2 + w_7 * 0 +w_8 * x_4 + w_9 * x_5<br>$$</p>
+<p>Let denote the $i^{th}$ row and $j^{th}$ column entry in output Y as $y_{i,j}$, the $h^{th}$ row and $w^{th}$ column entry in kernel K as $w_{h,w}$, the number of stride as $s$. </p>
+<p>We can write down the formula to compute every entry in output Y:<br>$$<br>y_{i,j} = \sum_{h=1}^{KH}\sum_{w = 1}^{KW} w_{h,w} * x_{s * i+h-1, s * j+w -1}<br>$$</p>
+<ol start="4">
+<li><strong>Convolution with 2-D Input:</strong> with <strong>channel =3,</strong> padding = (1,1) stride =1<br>when channel of sample X is more than 1, we will need the amount of kernels K equal to the number of input channel $C_{in}$.<br>Example: Input X with Channel C=3<br>$$<br>X_R = \begin{bmatrix}<br>xr1 &amp; xr2 &amp; xr3 \\<br>xr4 &amp; xr5 &amp; xr6 \\<br>xr7 &amp; xr8 &amp; xr9<br>\end{bmatrix}<br>$$</li>
+</ol>
+<p>$$<br>X_G = \begin{bmatrix}<br>xg1 &amp; xg2 &amp; xg3 \\<br>xg4 &amp; xg5 &amp; xg6 \\<br>xg7 &amp; xg8 &amp; xg9<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>X_B = \begin{bmatrix}<br>xb1 &amp; xb2 &amp; xb3 \\<br>xb4 &amp; xb5 &amp; xb6 \\<br>xb7 &amp; xb8 &amp; xb9<br>\end{bmatrix}<br>$$</p>
+<p>Then we will need  one kernel for each input channel. Hence we will have 3 kernels $K_R, K_G,K_B$. The output of this convolution network is the <strong>sum of all convolution output</strong><br>$$<br>Y = conv(X_R, K_R) + conv(X_G, K_G) + conv(X_B, K_B)<br>$$</p>
+<p>In this cases, the output channel is still C= 1. If we want the output channel to be more than 1. Let say the output channel $C_{out}$  =3, then we have $C_{out} * C_{in}$  kernels in total and each kernel has shape  of $W_o * H_o$. </p>
+<p>Hence we will have parameters with amount of $C_{out} * C_{in} * W_o * H_o$ or $C_{out} * C_{in} * (1 + (H + 2 * pad - KH) / stride ) * (1 + (W + 2 * pad - KW) / stride )$</p>
+<h4 id="Chain-Rule"><a href="#Chain-Rule" class="headerlink" title="Chain Rule"></a>Chain Rule</h4><p>Before talking about how to update the weight in kernel, let talk about the chain rule first.<br>Denote loss function as $L(y_p, y_t)$, where $y_p$ is prediction / output from estimator and $y_p =f_w(x)$ is a function of input x, $y_t$ is target, where x, y,w  are all scalar values</p>
+<p>Let: $y_p = f_w(x) =wx$<br>$$<br>L(w) = L(y_p, y_{t}) = (y_p - y_{t})^2 = (f_w(x) - y_{t})^2 = (wx - y_{t})^2<br>$$</p>
+<p>Then in chain rule to find the gradient of weight w, we have<br>$$<br>\nabla_w L(w) = \frac{dL(w)}{dw} = \frac{dL}{dy_p} * \frac{dy_p}{dw} = [2 *(y_p - y_t)] * [x] = 2x(wx - y_t)<br>$$</p>
+<p>By chain rule, we can extend $ \frac{dL}{dy_p} * \frac{dy_p}{dw}$ to  $\frac{dL}{dy_p} * \frac{dy_p}{dy_1} * \frac{dy_1}{dy_2} *…\frac{dy_i}{dw}$ in many terms</p>
+<h4 id="Backpropagation-in-CNN"><a href="#Backpropagation-in-CNN" class="headerlink" title="Backpropagation in CNN"></a>Backpropagation in CNN</h4><p>Let’s go back the feed forward step in CNN, we have equation<br>$$<br>y_{i,j} =f_w(x) = \sum_{h=1}^{KH}\sum_{w = 1}^{KW} w_{h,w} * x_{s * i+h-1, s * j+w -1}<br>$$</p>
+<p>Where the output vector of convolution is $Y$ and $y_{i,j}$ is the $i^{th}$ row and $j^{th}$ column entry of Y.  $Y^t$ is the target. $x_{i,j}$ is the $i^{th}$ row and $j^{th}$ column entry of input X. Define loss function $L(w)$ .</p>
+<p><strong>Then gradient of weight $w_{h,w}$ in kernel is obtained by</strong><br>$$<br>\frac{dL(w)}{dw_{h,w}} = \sum_{i=1}^{H}\sum_{j=1}^{W}\frac{dL}{dy_{i,j}} * \frac{dy_{i,j}}{dw_{h,w}}<br>$$</p>
+<p><strong>Example:</strong></p>
+<p>$$<br>X = \begin{bmatrix}<br>x_{11} &amp; x_{12} &amp; x_{13} \\<br>x_{21} &amp; x_{22} &amp; x_{23} \\<br>x_{31} &amp; x_{32} &amp; x_{33}<br>\end{bmatrix} , K = \begin{bmatrix}<br>w_{11} &amp; w_{12} \\<br>w_{21} &amp; w_{22}<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>Y = \begin{bmatrix}<br>y_{11} &amp; y_{12} \\<br>y_{21} &amp; y_{22}<br>\end{bmatrix}<br>$$</p>
+<p>Let Loss function be $L(w) = 0.5* \sum_i\sum_j (y_{i,j} - y^{t}_{i,j})^2$<br>and we have</p>
+<p>$$<br>\frac{dL}{dy_{i,j}} = (y_{i,j} - y^{t}_{i,j})<br>$$</p>
+<p>$$<br>\frac{dL}{dy} = \begin{bmatrix}<br>\frac{dL}{dy_{11}} &amp; \frac{dL}{dy_{12}} \\<br>\frac{dL}{dy_{21}} &amp; \frac{dL}{dy_{22}}<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>\frac{dy_{11}}{dw_{11}} = \frac{d(w_{11} * x_{11} + w_{12} * x_{12} + w_{21} * x_{21} + w_{22} * x_{22} +b)}{dw_{11}}<br>$$</p>
+<p>$$<br>\frac{dy_{11}}{dw_{11}} = x_{11}<br>$$</p>
+<p>Similarly, we have </p>
+<p>$$<br>\frac{dy}{dw_{11}} = \begin{bmatrix}<br>\frac{dy_{11}}{dw_{11}} &amp; \frac{ddy_{12}}{dw_{11}} \\<br>\frac{ddy_{21}}{dw_{11}} &amp; \frac{ddy_{22}}{dw_{11}}<br>\end{bmatrix}  = \begin{bmatrix}<br>x_{11} &amp; x_{12} \\<br>x_{21} &amp; x_{22}<br>\end{bmatrix}<br>$$</p>
+<p>Finally, gradient of weight $w_{11}$ becomes<br>$$<br>\frac{dL}{dw_{11}}  = sum(\frac{dL}{dy} * \frac{dy}{dw_{11}} )  =  \sum_{i=1}^{2}\sum_{j=1}^{2}\frac{dL}{dy_{i,j}} * \frac{dy_{i,j}}{dw_{1,1}}<br>$$</p>
+<p>$$<br>\frac{dL}{dw_{11}} = \sum_{i=1}^{2}\sum_{j=1}^{2} (y_{i,j}-y^t_{i,j})*x_{i,j}<br>$$</p>
+<p><strong>where * is element-wise multiplication</strong> Repeat doing this, we can find the gradient for all weights in all kernels.</p>
+<h2 id="Properties-in-CNN"><a href="#Properties-in-CNN" class="headerlink" title="Properties in CNN"></a>Properties in CNN</h2><ul>
+<li><strong>the weight matrix in CNN is small and save memory</strong> compared with traditional dense network.<br>For example, if we have an 18<em>18 input matrix we want to output a 3x3 matrix, we can either use a 16x16 convolution kernel with stride =1, or  9 3x3 kernels to do this.<br>In this case,  9</em>3<em>3 is smaller than 16</em>16.  Hence CNN with deeper convolution network and small filter can  save memory</li>
+<li><strong>Updating weights in CNN is fast</strong>, as the weight / kernel is small</li>
+<li><strong>CNN can be used for transfer learning</strong> by transferring learned kernels</li>
+<li><strong>CNN can be used for down-sampling data</strong>, reducing data size.<br>For example, in ResNet, it uses <strong>pixel convolution: kernel size =1 * 1</strong> and stride =2 to down sample data by half of original size in each channel of matrix</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://towardsdatascience.com/backpropagation-in-a-convolutional-layer-24c8d64d8509">https://towardsdatascience.com/backpropagation-in-a-convolutional-layer-24c8d64d8509</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1512.03385.pdf">https://arxiv.org/pdf/1512.03385.pdf</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/02/DL-ConvolutionNetwork/" data-id="cklak06xk001e6sty00xu3ucg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/12/Linux-commands/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Some Useful Linux-commands
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/10/12/PySpark-Note-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PySpark-Note-1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

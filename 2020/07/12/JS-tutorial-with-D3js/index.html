@@ -1,38 +1,306 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
 
+  
+  <title>Quick tutorial JavaScript with D3.js | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Quick tutorial JavaScript with D3.js">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/12/JS-tutorial-with-D3js/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://skywell.software/wp-content/uploads/2019/01/javascript-vs-html-vs-css-1024x683.jpg">
+<meta property="article:published_time" content="2020-07-12T22:05:19.000Z">
+<meta property="article:modified_time" content="2020-08-24T22:30:10.953Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="D3.js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://skywell.software/wp-content/uploads/2019/01/javascript-vs-html-vs-css-1024x683.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<meta name="generator" content="Hexo 5.3.0"></head>
 
-{% block page_class %}page-post-detail{% endblock %}
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JS-tutorial-with-D3js" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/12/JS-tutorial-with-D3js/" class="article-date">
+  <time datetime="2020-07-12T22:05:19.000Z" itemprop="datePublished">2020-07-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Programming/">Programming</a>
+  </div>
 
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Quick tutorial JavaScript with D3.js
+    </h1>
+  
 
-{% block content %}
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src="https://skywell.software/wp-content/uploads/2019/01/javascript-vs-html-vs-css-1024x683.jpg">
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<a id="more"></a>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a><strong>Introduction</strong></h2><h3 id="About-this-passage"><a href="#About-this-passage" class="headerlink" title="About this passage"></a>About this passage</h3><p>This passage simply introduces how to combine HTML, CSS and Javascript together to design a web page. Then D3.js, a javascript package for data visualization is introduced and applied to visualize some simple data.</p>
+<h3 id="About-HTML-CSS-JavaScript"><a href="#About-HTML-CSS-JavaScript" class="headerlink" title="About HTML, CSS, JavaScript"></a>About HTML, CSS, JavaScript</h3><p><strong>HTML</strong>:  HTML stands for <strong>Hyper Text Markup Language</strong>. It is the standard markup language for Web pages. Elements in HTML are the building blocks of HTML pages, represented by &lt;&gt; tags</p>
+<p><strong>CSS</strong>: it stands for <strong>Cascading Style Sheets</strong>. It describes how HTML elements are to be displayed.</p>
+<p><strong>JavaScript</strong>: JavaScript is the Programming Language for the Web. It can update and change both HTML and CSS. It can calculate, manipulate and validate data</p>
+<br>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<h2 id="Combining-HTML-CSS-JavaScript-for-a-webpage"><a href="#Combining-HTML-CSS-JavaScript-for-a-webpage" class="headerlink" title="Combining HTML, CSS, JavaScript for a webpage"></a><strong>Combining HTML, CSS, JavaScript for a webpage</strong></h2><p>To start with, Let’s create a folder that will contain all HTML, CSS, JavaScript files we will create. </p>
+<h3 id="Write-a-HTML-file"><a href="#Write-a-HTML-file" class="headerlink" title="Write a HTML file"></a><strong>Write a HTML file</strong></h3><p>First, we write an empty HTML file with title “Demo” and empty content for passage &lt;p&gt; &lt;\p&gt; and heading &lt;h1&gt;&lt;\h1&gt;</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span> Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Then we put Javascript into HTML directly </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span> Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span> <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> headers = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;h1&quot;</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; headers.length; i++) &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">var</span> header = headers.item(i);</span></span><br><span class="line"><span class="javascript">                    header.innerHTML = <span class="string">&quot;Hello I&#x27;m Header&quot;</span>;</span></span><br><span class="line">                    &#125;</span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> paragraphs = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;p&quot;</span>);</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span></span><br><span class="line"><span class="javascript">                    <span class="keyword">var</span> paragraph = paragraphs.item(i);</span></span><br><span class="line"><span class="javascript">                    paragraph.innerHTML = <span class="string">&quot;I&#x27;m Passage&quot;</span>;</span></span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>The tag &lt;\script&gt;&lt;\script&gt; tells HTML the code inside this block is Javascript. In this script, we select the element with tag name ‘h1’ and ‘p’ using <strong>document.getElementsByTagName()</strong> and then input text  “Hello I’m Header” and “I’m Passage”. This will let HTML display such texts in corresponding elements.</p>
+<br>
+
+<h3 id="Using-Javascript-file-instead-of-internal-script"><a href="#Using-Javascript-file-instead-of-internal-script" class="headerlink" title="Using Javascript file instead of internal script"></a><strong>Using Javascript file instead of internal script</strong></h3><p>To use JavaScript file rather than script inside HTML,  we first create a JavaScript file called “myjs.js” in the same folder. Then copy the JavaScript code from HTML to Javascirpt.<br> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> headers = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;h1&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; headers.length; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> header = headers.item(i);</span><br><span class="line">        header.innerHTML = <span class="string">&quot;Hello I&#x27;m Header&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="keyword">var</span> paragraphs = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&quot;p&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> paragraph = paragraphs.item(i);</span><br><span class="line">        paragraph.innerHTML = <span class="string">&quot;I&#x27;m Passage&quot;</span>;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure><br> In HTML file, we replace the script with a sentence, shown as below.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">title</span>&gt;</span>D3 Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>Hello World <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">&quot;myjs&quot;</span> <span class="attr">src</span>=<span class="string">&quot;myjs.js&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>“id”，”type” attributes tell HTML we are looking for a file with name “myjs” and file type of JavaScript.</p>
+<br>
+
+<h3 id="Define-style-with-CSS-file"><a href="#Define-style-with-CSS-file" class="headerlink" title="Define style with CSS file"></a><strong>Define style with CSS file</strong></h3><ul>
+<li><strong>Internal CSS code</strong><br>  Elements’ styles, like color, font size, etc can be defined using CSS code. To add CSS inside HTML, here is an example:  <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">title</span>&gt;</span>D3 Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">h2</span>   &#123;</span></span><br><span class="line"><span class="css">            <span class="attribute">color</span>: blue;</span></span><br><span class="line"><span class="css">            <span class="attribute">font-size</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="css">            <span class="attribute">font-family</span>: <span class="string">&quot;Open Sans&quot;</span>;</span></span><br><span class="line"><span class="css">            text-anchor: middle;</span></span><br><span class="line">        &#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>Hello World <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">&quot;myjs&quot;</span>  <span class="attr">src</span>=<span class="string">&quot;myjs.js&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+  The tag &lt;style&gt; tells the HTML the style settings (blue color, font-size = 12 pixel, …) for all h2 element. </li>
+</ul>
+<br>
+
+<ul>
+<li><strong>External CSS code</strong><br>Usually, using a separated css file, rather than internal css code inside HTML file, can help further improvement for our project. It is more flexible to use css for element style design.<br>To use external CSS file, replace the style codes in HTML with  &lt;link&gt; tag</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">title</span>&gt;</span>D3 Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">id</span> =<span class="string">&quot;mystyle&quot;</span> <span class="attr">href</span>=<span class="string">&quot;mystyle.css&quot;</span>  <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> /&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">                <span class="tag">&lt;<span class="name">p</span>&gt;</span>Hello World <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">&quot;myjs&quot;</span>  <span class="attr">src</span>=<span class="string">&quot;myjs.js&quot;</span>  <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Then Create a CSS file, called “mystyle.css” and copy the style code to CSS file</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h2</span>   &#123;</span><br><span class="line">               <span class="attribute">color</span>: blue;</span><br><span class="line">               <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">               <span class="attribute">font-family</span>: <span class="string">&quot;Open Sans&quot;</span>;</span><br><span class="line">               text-anchor: middle;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>The CSS file is linked to the HTML file by &lt;link&gt; tags in HTML. “id” is the identity of element “link”  and “href” is set to be “mystyle.css” file. Attribute “type” is the file type of “mycss.css” file, hence it is css or text type.</p>
+<br>
+
+<h2 id="What-is-D3-js"><a href="#What-is-D3-js" class="headerlink" title="What is D3.js"></a><strong>What is D3.js</strong></h2><p>D3.js is a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG, and CSS. D3’s emphasis on web standards gives you the full capabilities of modern browsers without tying yourself to a proprietary framework, combining powerful visualization components and a data-driven approach to DOM manipulation</p>
+<br>
+
+<h3 id="Import-D3-js"><a href="#Import-D3-js" class="headerlink" title="Import D3.js"></a>Import D3.js</h3><p>To import D3.js library, we can either add this line to the HTML file, then the D3.js library from the website will be applied.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://d3js.org/d3.v3.min.js&quot;</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>Or download D3.js library from <a target="_blank" rel="noopener" href="https://d3js.org/">https://d3js.org/</a> to the folder directly.<br>Here is an example of importing D3.js library and my javascript (D3-demo.js), css files (mystyle.css)</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">id</span>=<span class="string">&quot;mystyle&quot;</span> <span class="attr">href</span>= <span class="string">&#x27;mystyle.css&#x27;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://d3js.org/d3.v3.min.js&quot;</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>D3 Demo<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>Hello World <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span><span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">id</span>=<span class="string">&quot;myjs&quot;</span> <span class="attr">src</span>=<span class="string">&#x27;D3-demo.js&#x27;</span>  <span class="attr">type</span>=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;chart&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<br>
+
+<h3 id="Selection-Insertion-Remove-for-elements"><a href="#Selection-Insertion-Remove-for-elements" class="headerlink" title="Selection, Insertion, Remove for elements"></a>Selection, Insertion, Remove for elements</h3><ol>
+<li><strong>Selection and Modification</strong></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Using JavaScript to change  URL to stylesheet and JavaScript in HTML</span></span><br><span class="line"><span class="comment">// #mystyle ： element with id  &quot;mystyle&quot;</span></span><br><span class="line"><span class="comment">// #myjs ： element with id  &quot;myjs&quot;</span></span><br><span class="line"><span class="comment">// Note: to Select element by ID, we need to add # ahead id name</span></span><br><span class="line">css_src= <span class="string">&quot;mystyle.css&quot;</span></span><br><span class="line">js_src=<span class="string">&quot;D3-demo.js&quot;</span></span><br><span class="line"><span class="keyword">var</span> mycss= d3.select(<span class="string">&quot;#mystyle&quot;</span>).attr(<span class="string">&quot;href&quot;</span>,css_src)</span><br><span class="line"><span class="keyword">var</span> myjs = d3.select(<span class="string">&quot;#myjs&quot;</span>).attr (<span class="string">&quot;src&quot;</span>,js_src)</span><br><span class="line"></span><br><span class="line"><span class="comment">//  Change Passage text</span></span><br><span class="line"><span class="keyword">var</span> p = d3.select(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">          .selectAll(<span class="string">&quot;p&quot;</span>)</span><br><span class="line">          .text(<span class="string">&quot;d3js.org&quot;</span>);</span><br><span class="line"><span class="comment">// Change color of passage text</span></span><br><span class="line"><span class="comment">//修改段落的颜色和字体大小</span></span><br><span class="line">p.style(<span class="string">&quot;color&quot;</span>,<span class="string">&quot;red&quot;</span>)</span><br><span class="line"> .style(<span class="string">&quot;font-size&quot;</span>,<span class="string">&quot;72px&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Change &lt;h1&gt; element&#x27;s text and text style: color, font size</span></span><br><span class="line"><span class="keyword">var</span> h = d3.select(<span class="string">&quot;body&quot;</span>)</span><br><span class="line"> .selectAll(<span class="string">&quot;h1&quot;</span>)</span><br><span class="line"> .text(<span class="string">&quot;Heading&quot;</span>);</span><br><span class="line"> h.style(<span class="string">&quot;color&quot;</span>,<span class="string">&quot;red&quot;</span>)</span><br><span class="line"> .style(<span class="string">&quot;font-size&quot;</span>,<span class="string">&quot;72px&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//  Append &lt;h2&gt; tag to &lt;p&gt; section, with text &quot;Here is h2&quot;</span></span><br><span class="line"><span class="keyword">var</span> h2 = d3.select(<span class="string">&quot;body&quot;</span>).select(<span class="string">&quot;p&quot;</span>).append(<span class="string">&quot;h2&quot;</span>).text(<span class="string">&quot;Here is h2&quot;</span>);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>Bar Plot</strong></li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Setup Canvas element by appending tag &lt;svg&gt; into &lt;body&gt; section</span></span><br><span class="line"><span class="comment">// with width=300 pixels and height= 300 pixels</span></span><br><span class="line"><span class="keyword">var</span> width = <span class="number">300</span>;  <span class="comment">//画布的宽度</span></span><br><span class="line"><span class="keyword">var</span> height = <span class="number">300</span>;   <span class="comment">//画布的高度</span></span><br><span class="line"><span class="keyword">var</span> svg = d3.select(<span class="string">&quot;body&quot;</span>)     <span class="comment">//选择文档中的body元素</span></span><br><span class="line">    .append(<span class="string">&quot;svg&quot;</span>)          <span class="comment">//添加一个svg元素</span></span><br><span class="line">    .attr(<span class="string">&quot;width&quot;</span>, width)       <span class="comment">//设定宽度</span></span><br><span class="line">    .attr(<span class="string">&quot;height&quot;</span>, height); </span><br><span class="line"></span><br><span class="line"><span class="comment">// Append Rectangle bars to  Canvas</span></span><br><span class="line"><span class="comment">// Set width of each bar = each dataset value </span></span><br><span class="line"><span class="keyword">var</span> dataset = [ <span class="number">250</span> , <span class="number">210</span> , <span class="number">170</span> , <span class="number">130</span> , <span class="number">90</span> ]; </span><br><span class="line"><span class="keyword">var</span> rectHeight = <span class="number">25</span>;   <span class="comment">//每个矩形所占的像素高度(包括空白)</span></span><br><span class="line">svg.selectAll(<span class="string">&quot;rect&quot;</span>)</span><br><span class="line">    .data(dataset)</span><br><span class="line">    .enter()</span><br><span class="line">    .append(<span class="string">&quot;rect&quot;</span>)</span><br><span class="line">    .attr(<span class="string">&quot;x&quot;</span>,<span class="number">50</span>)</span><br><span class="line">    .attr(<span class="string">&quot;y&quot;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">d,i</span>)</span>&#123;</span><br><span class="line">         <span class="keyword">return</span> i * rectHeight;</span><br><span class="line">    &#125;)</span><br><span class="line">    .attr(<span class="string">&quot;width&quot;</span>,<span class="function"><span class="keyword">function</span>(<span class="params">d</span>)</span>&#123;</span><br><span class="line">         <span class="keyword">return</span> d;</span><br><span class="line">    &#125;)</span><br><span class="line">    .attr(<span class="string">&quot;height&quot;</span>,rectHeight-<span class="number">2</span>)</span><br><span class="line">    .attr(<span class="string">&quot;fill&quot;</span>,<span class="string">&quot;steelblue&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>Copy all codes above and open our HTML file in browser, we can see something like this.<br><img src ="/images/JS/js-tutorial-1.jpg"></p>
+<br>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a><strong>Reference</strong></h2><p>[1] <a target="_blank" rel="noopener" href="https://wiki.jikexueyuan.com/project/d3wiki/selection.html">https://wiki.jikexueyuan.com/project/d3wiki/selection.html</a><br>[2] <a target="_blank" rel="noopener" href="https://d3js.org/">https://d3js.org/</a><br>[3] <a target="_blank" rel="noopener" href="https://www.w3schools.com/">https://www.w3schools.com/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/12/JS-tutorial-with-D3js/" data-id="cklak06y700216styfl715hbo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/14/tensorflow-practice/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/08/Markdown-Tutorial/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Markdown Quick Tutorial</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

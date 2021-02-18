@@ -1,38 +1,478 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>ML Model - Regression models | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="ML Model - Regression models">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/30/ML-Model-LR/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-30T20:01:27.000Z">
+<meta property="article:modified_time" content="2020-12-11T01:55:08.208Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Regression">
+<meta property="article:tag" content="Variable Selection">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ML-Model-LR" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/30/ML-Model-LR/" class="article-date">
+  <time datetime="2020-09-30T20:01:27.000Z" itemprop="datePublished">2020-09-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ML Model - Regression models
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=/images/ML-model/regression.png>
+
+<a id="more"></a>
+
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This article is to first introduce types of machine learning models and summarize properties of seven regression models: Linear Regression and Logistic Regression, Lasso Regression, Ridge Regression, Elastic Net Regression and Stepwise regression.<br><br></p>
+<h2 id="Type-of-machine-learning-model"><a href="#Type-of-machine-learning-model" class="headerlink" title="Type of machine learning model"></a>Type of machine learning model</h2><h4 id="Parametric-non-parametric-models"><a href="#Parametric-non-parametric-models" class="headerlink" title="Parametric/ non-parametric models"></a>Parametric/ non-parametric models</h4><p>In general, Machine Learning model can be classified into two types of models based on the critic that if model uses parameters to estimate model or not.<br>In this case, machine learning model can be divided into two types: parametric model and non-parametric model.<br>The following are some useful machine models:</p>
+<ul>
+<li>parametric: <ul>
+<li>Linear regression, Logistic regression</li>
+<li>Neural Network</li>
+</ul>
+</li>
+<li>non-parametric:<ul>
+<li>K-Nearest neighbor (K-NN) </li>
+<li>K-Mean Clustering</li>
+<li>Decision Tree</li>
+<li>Random Forest</li>
+<li>Naive Bayesian</li>
+<li>etc…<br>Note that the <strong>“parametric”</strong> here is the parameters the model use to estimate the function, distribution. The parameters that control the complexity, performance of model are excluded. For example, K-Mean clustering and K-NN requires us to choose a k value to do clustering/ classification tasks. This k value is not the parameter we consider here.<br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="linear-non-linear-model"><a href="#linear-non-linear-model" class="headerlink" title="linear/non-linear model"></a>linear/non-linear model</h4><ol>
+<li><p>Linear model<br>The linear model is the model that can be expressed by the formula<br>$y’ =  w_0 + w_1x_1 +….+w_nx_n = w_0+ \sum_{i}^nw_ix_i$<br>where x is the data point from dataset, $w_i$ is the parameters used to adjust the model and $w_0$ is the bias term. $y’$ is the prediction from the estimator.<br>This formula is linear since it just involves first order terms and linear combination.<br>Note that the real label is<br>$y = \epsilon + w_0+ \sum_{i}^nw_ix_i$<br>where $\epsilon$ is the irreducible error between prediction $y’$ and true label $y$. In the following discussion, I discuss $y’$ prediction from model rather than label $y$.</p>
+</li>
+<li><p>Non-linear model<br>Non-linear model in other word is the model that can not be expressed by the linear formula above. If there are second order term like $x^2, x^3, x_1x_2$, it is non-linear model as well<br>Hence we can easly know that models like Naive Bayesian, K-NN, K-mean clustering, logistic regression, etc are non-linear models</p>
+<br>
+
+</li>
+</ol>
+<h2 id="Linear-Regression"><a href="#Linear-Regression" class="headerlink" title="Linear Regression"></a>Linear Regression</h2><p>The formula of Linear Regression is<br>$$y’ = w_0 + w_1x_1 +….+w_nx_n $$<br>where $w_0$ is a constant and $y’$ is the prediction from model. To simplify it, we have:</p>
+<p>$$y’ =  \sum_{i=1}^nw_ix_i + w_0$$<br>Obviously, the linear regression model is a linear model.<br><br></p>
+<h4 id="Optimize-Model"><a href="#Optimize-Model" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><ol>
+<li><p><strong>Maximum Likelihood Estimation (MLE)</strong><br> Assume the data distribution is normal distribution, then<br> the likelihood function used to estimate the real data distribution is:</p>
+<p> $$P(y=y_i|x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(y_i-f(x))^2}{2\sigma}}$$</p>
+<p> where f(x) is the linear regression estimator, estimating the mean of normal distribution $\mu$. Then the weight solution of the regression model is </p>
+<p> $$W = argmax_w P(Y|X)$$</p>
+</li>
+<li><p><strong>Loss Function to minimize</strong><br> The loss function used to update the parameter in Linear regression is <strong>mean square error (MSE)</strong></p>
+<p> $$ MSE = \frac{1}{N}\sum_i^N{ (y_i - y’_i)^2 }$$</p>
+<p> or <strong>sum square error (SSE)</strong></p>
+<p> $$ SSE = \sum_i^N{ (y_i - y’_i)^2 }$$</p>
+<p> where $y_i$ is the $i^{th}$ label and $y’_i$ is the $i^{th}$ prediction from model</p>
+<p> <strong>Properties of MSE/SSE:</strong><br> SSE / MSE error actually assumes that the distribution of data is Normal distribution and the Linear regression model is actually estimating the mean of Normal distribution with a fixed variance $\sigma$. The negative log likelihood of normal distribution is as follow:</p>
+<p> $$ -log(\Pi_i^nP(y=y_i|x_i)) \<br> \propto -log(e^{\sum_i^n\frac{-(y_i-f(x_i)^2)}{2\sigma}}) \<br> \propto \sum_i^n(y_i-f(x_i))^2<br> $$<br> where $y_i$ is the $i^{th}$ label and $x_i$ is the $i^{th}$ feature vector.<br> It is easy to see that <strong>maximize the likelihood function is equivalent to minimize the negative log likelihood function or the SSE /MSE.</strong><br> Hence to minimize the MSE error is actually estimating  the normal distribution function $P(Y|X)$.</p>
+ <br>
+
+</li>
+</ol>
+<h4 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li><strong>Linear regression is an unbias model</strong>, which is <strong>sensitive to outliers</strong>.For example, In the following linear regression</li>
+</ol>
+<img src = /images/ML-model/outlier.png>
+
+<p>There is an outlier at x= 50, y= 30.<br>During update with gradient descent w = w - 2x(y - wx). The outlier value changes the weight a lot and shift the line away from the $y=4x$. This is because in the update of parameter $w$, each data point is given equal weight to change the parameter $w$.<br>Hence linear regression is sensitive to outliers.</p>
+<ol start="2">
+<li>The output/prediction from linear regression is to <strong>estimate the expected value/ mean of normal distribution</strong><br>
+
+</li>
+</ol>
+<h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2><p>Logistic regression is an non-linear model as it can not be expressed into the linear form.<br>The formula of Logistic Regression model:</p>
+<p>$$ P(y=y_i|x) = p_i = \frac{1}{1+e^{-wx}} $$</p>
+<h4 id="Optimize-Model-1"><a href="#Optimize-Model-1" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><ol>
+<li><p><strong>Maximum Likelihood Estimation (MLE):</strong><br> we want to maximize the log likelihood function (The distribution estimated by the model) to get close to the real distribution function.</p>
+<p> In binary classification problem, we assume the data distribution is <strong>Bernoulli distribution</strong>, $ P(y=y_i|x) = p^{y_i}(1-p)^{1-y_i}$， since this distribution considers the possibility of P(y=0|x) and P(y=1|x).<br> Then the <strong>log likelihood function / log Bernoulli distribution</strong> is following:</p>
+<p> $$ logP(y_1,y_2,..y_n| x_1, x_2..x_n) =log(P(y_1|x_1)P(y_2|x_2)..P(y_n|x_n))$$</p>
+<p> $$ =\sum_i^n log(p_i^{y_i}(1-p_i)^{1-y_i})= \sum_i^n[y_ilog(p_i)+(1-y_i)log(1-p_i)]$$</p>
+<p> Since we only care the effect of weight vector and data X to the likelihood function, it can be re-written as </p>
+<p> $$ \sum_i^n[y_ilog(h_w(x_i))+(1-y_i)log(1-h_w(x_i))]$$</p>
+<p> where  $x_i, y_i$ are feature vector and binary label, <strong>$h_w(x_i) = p_i$ is the logistic regression</strong>,  estimating the possiibility that if $x_i$ belongs to class 0 or class 1.<br> The log function here is used to simplify the likelihood function and convert the multiplication into summation. This gives us easier way to analyze it. Maximizing the log likelihood is equivalent to maximize the original likelihood function.</p>
+<p> Notice that when $p_i$ predicted by the model is as same as its label $y_i$, then $p_i^{y_i}(1-p_i)^{1-y_i}$=1, the likelihood function is maximized.<br> The optimal solution of weight matrix in logistic regression is </p>
+<p> $$W = argmax_W (\sum_i^n(y_ilog(h_w(x_i))+(1-y_i)log(1-h_w(x_i))))<br> $$</p>
+ <br>
 
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>Binary Cross-Entropy</strong><br> When we add the <strong>negative sign</strong> to the log likelihood function, we can get </p>
+<p> $$ - \sum_i^n log(p_i^{y_i}(1-p_i)^{1-y_i})= -\sum_i^n(y_ilog(p_i)+(1-y_i)log(1-p_i))<br> $$</p>
+<p> This form is also called <strong>binary cross-entropy</strong>. To maximize the likelihood function to real distribution of data, is actually equivalent to minimize the <strong>binary cross entropy</strong>. Cross entropy is to measure the uncertainty between $y_i$ and $p_i$, $1-y_i$ and $1-p_i$.  Higher the entropy is, less similar they are. <strong>So binary cross entropy assume the data is in Bernoulli distribution</strong></p>
+<p> The goal to train the logisitic regression using binary cross-entropy is to let $h_w(x_i)$ get as close to $y_i$ as possible.</p>
+</li>
+</ol>
+<h4 id="Properties-1"><a href="#Properties-1" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li><p><strong>Logistic function actually projects the range of linear regression into range of [0,1]</strong>. Y-axis in logistic regression= possibility that input x belongs to one class, while the linear regression output range is ($-\infty, +\infty$).</p>
+</li>
+<li><p><strong>Logisitic regression is an bias model</strong>, since it considers the feature values X close to 0 are different and hence the gradient close to x=0 is large. However, when x is far away from x=0, such as $+\infty, -\infty $, the gradient of logistic function is close to 0 and it “considers” there is no much difference between two features x1 and x2 when both x1 and x2 $\to \infty$.</p>
+</li>
+<li><p><strong>Logistic Regression has vanishing gradient problem</strong>.<br> Since the gradient of logistic regression is :</p>
+<p> $$(\frac{1}{1+e^{-wx}})’ =\frac{ e^{-wx}}{(1+e^{-wx})^2} = (\frac{1}{1+e^{-wx}})(1-\frac{1}{1+e^{-wx}})$$</p>
+<p> when it predicts some sample X as a value very close to 0 or 1, the gradient will be very close to 0 and the weight is hard to update any more. The gradient is actually vanishing in this case. <strong>When it think a sample X is class y, then it won’t be willing to change its mind</strong>. This is a reason why it is “biased model” as well</p>
+</li>
+<li><p><strong>Logistic Regression is widely used for binary classification problem</strong>, it can be regarded as a two-classes version of softmax function. </p>
+</li>
+<li><p><strong>Using Maximum Likelihood estimation requires large data sample size in order to estimate the real distribution.</strong></p>
+</li>
+<li><p><strong>Assumption in Logistic Regression</strong> is that the logarithem value of the ratio of possibility of class =1 to possibility of class =0 is linear, which can be estimated by linear regression.<br>Proof:<br>$$<br> log(\frac{P(Y=1|X)}{P(Y=0|X)}) = log(\frac{P(Y=1|X)}{1- P(Y=1|X)})=wx \<br>$$</p>
+</li>
+</ol>
+<p>$$<br>    (1- P(Y=1|X))*e^{wx} = P(Y=1|X)<br>$$</p>
+<p>$$<br>    P(Y=1|X) = \frac{e^{wx}}{1+e^{wx}} = \frac{1}{1+e^{-wx}}<br>$$</p>
+<ol start="7">
+<li><strong>Logistic Regression is to find a linear separation boundary /a line that separate the data in sample space for classification problem</strong>. Since in logistic regression $\frac{1}{1+e^{-wx}}$, when $-wx&gt;0$, $h_w(x)&gt;0.5$ and it predicts class 1, otherwise, class 0. The line $-wx=0$ in 2-D space shown in the left figure below is actually the decision boundary. The data x with $-wx&gt;0$ is above the line and is classified as class1.</li>
+</ol>
+<img src=/images/ML-model/fitting.png>
+<br>
 
-{% block page_class %}page-post-detail{% endblock %}
+<h2 id="Polynomial-Regression"><a href="#Polynomial-Regression" class="headerlink" title="Polynomial Regression"></a>Polynomial Regression</h2><p>$$<br>y’ = w_0 + w_1x_1 + w_2x_2^2 +w_3x_3^3+…w_nx_n^n<br>$$<br>where y’, $w_i$, $x_i$ are all scalar values in this case and y’ is the predicted value from model. Different from linear regression, polynomial regression involves higher order terms.</p>
+<h4 id="Optimize-Model-2"><a href="#Optimize-Model-2" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><p><strong>Sum square error</strong><br>$$ SSE = \sum_i^N{ (y_i - y’_i)^2<br>}$$<br>It is as same as the linear regression</p>
+<h4 id="Properties-2"><a href="#Properties-2" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li>It is very easy for Polynomial regression to over-fitting as the order increase. It is an biased model as well.</li>
+<li>It predicts the expected value of Y, which is as same as linear regression</li>
+<li>To implement polynomial regression, we can first construct polynomial features, like $x_1^2, x_1x_2, x_2^2$, etc. Then apply linear regression to polynomial features<br>
 
 
-{% block content %}
+</li>
+</ol>
+<h2 id="Lasso-regression"><a href="#Lasso-regression" class="headerlink" title="Lasso regression"></a>Lasso regression</h2><p>The prediction model of lasso regression is still linear regression:<br>$$y’=\sum_{i=1}^nw_ix_i +w_0<br>$$</p>
+<h4 id="Optimize-Model-3"><a href="#Optimize-Model-3" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><ol>
+<li><p><strong>Loss function to minimize in Lasso regression:</strong></p>
+<p> $$min \sum_i^n(y_i - wx_i -w_0)^2 + \lambda||w||_{1}$$</p>
+<p> where $y_i$ is a scalar value, a label, $x_i$ is a feacture column vector, $w$ is the weight vector.  $\sum_i^n(y_i - wx_i)^2$ is the least square error (or called L2 norm distance between y and x).<br> <strong>Note that mean square error is scaled version of sum square error. Minimize the sum square error is equivalent to minimize the mean square error, so this term is as same as loss function in Linear regression</strong></p>
+<p> The second term in the loss function is the <strong>L1- regularization term</strong> used to reduce overfitting effect, in which $||w||_1 = \sum_i^n|w_i|$ is the L1 norm format.</p>
+</li>
+<li><p><strong>Principle of L1-Regularization term</strong></p>
+<p> $$min \sum_i^n(y_i - wx_i -w_0)^2 + \lambda||w||_{1}<br> $$</p>
+<p> is equivalent to optimize the problem:</p>
+<p> $$min \sum_i^n(y_i - wx_i -w_0)^2  \<br> \text{ subject to }  ||w||_1 \leq C<br> $$</p>
+<p> where C is a constant.<br> Assume there are two variables in feature vector $x_i$ and only two weight variables, then to visualize it in 2-D space, we have:</p>
+ <img src =/images/ML-model/L1-regularization.png>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<p> The x, y axis represent the weight variables. The blue point is the optimal point of the minimum least square error term. The orange region describes the constraints $||w||_1 \leq C$, hence the intercepts on x, y axis are equal to $C$.<br> <strong>The main idea of L1 regularization term</strong> is that when the weight vector satisfies the constraint, then the weight vector must be inside the orange region. We need to find the point with the smallest distance to blue point inside this region. When C is small enough such that weight vector can not reach the optimal point, then the model can reduce over-fitting effect.</p>
+<p> By using lagrange multiplier, the constraint problem can be converted to:</p>
+<p> $$min \sum_i^n(y_i - wx_i-w_0)^2 + \lambda (||w||_{1}-C)<br> $$</p>
+<p> where $\lambda$ is the lagrange multiplier coefficient used to weigh the regularization term and <strong>$\lambda$ is adjusted by user manually</strong>. Larger $\lambda$ is, more regularization term affect.  We can see that during minimization process, $C$ and $\lambda$ are actually constants, so we can ignore this term and get:</p>
+<p> $$min \sum_i^n(y_i - wx_i)^2 + \lambda||w||_{1}<br> $$</p>
+</li>
+</ol>
+<h4 id="Properties-3"><a href="#Properties-3" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li>It involves L1 regularization term to limit the range of weights and reduce over-fitting effect</li>
+<li><strong>Lasso regularization can be used to do feature selection</strong><br>Since in the figure above, we can see when the optimal solution to this constraint problem is at one of the angles of the square, some weight parameters are driven to be 0 and this leads to a sparse model. That is, the model filters out some features in $x_i$. As $\lambda$  increases, more weights are driven to 0 and more features are not selected.</li>
+<li><strong>We can not decide which features should be excluded in Lasso regression</strong>, since we don’t know which parameters become 0.</li>
+<li><strong>Feature selection with lasso regression is not stable.</strong> Since during training the model, some weights may be very close to 0, but not equal to 0. That is, the features that are expected to be filtered out are actually not filtered out and still affect the model performance.<br>In addition, different initialization of weights may lead to different feature selection.<br>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+</li>
+</ol>
+<h2 id="Ridge-Regression"><a href="#Ridge-Regression" class="headerlink" title="Ridge Regression"></a>Ridge Regression</h2><p>The prediction model of Ridge regression is linear regression as well:</p>
+<p>$$y =  \sum_{i=1}^nw_ix_i +w_0<br>$$</p>
+<p>But the loss function is different. Read the following.</p>
+<h4 id="Optimize-Model-4"><a href="#Optimize-Model-4" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><ol>
+<li><p><strong>Loss function to minimize in Ridge regression:</strong><br> $$min \sum_i^n(y_i - wx_i -w_0)^2+ \lambda||w||_{2}^2$$</p>
+<p> Ridge regression is similar to Lasso regression, except that the regularization term here use L2 norm distance. Then the constraint region in 2-D space becomes a circle, shown in below.</p>
+ <img src= /images/ML-model/L2-regularization.png>
+
+<p> Since the constraint region becomes a circle, it is almost impossible to drive some weights to be zeros unless the blue point (optimal point of least square error) is on the axis. Hence, Ridge regression can not be used for feature selection.</p>
+</li>
+</ol>
+<h4 id="Properties-4"><a href="#Properties-4" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li>Ridge regression <strong>can not be used for feature selection</strong></li>
+<li><strong>Ridge regression can be used to reduce multi-collinearity effect of features and soothe the over-fitting effect.</strong><br>multi-collinearity means that some features have a linear correlated relationship. For example, one feature value increases, another feature value may increase or decrease linearly. If model focuses on the similar features, it may become over-fitting on such feature.</li>
+</ol>
+<p><strong>The reason is that</strong> in the circle region, assume features $x_1$ and $x_2$ are collinear, if $w_1$ increases and the model weigh more on feature $x_1$, then $w_2$ will decrease and model weighs less on feature $x_2$. In this case, model could avoid focusing on learning similar features heavily and reduce the multi-collinearity effect.<br>3. <strong>Reduce the variance in model error and reduce over-fitting effect</strong></p>
+<ol start="4">
+<li><strong>Ridge regression is more stable than Lasso regression for avoiding over-fitting</strong><br>
+
+</li>
+</ol>
+<h2 id="Elastic-Net-Regression"><a href="#Elastic-Net-Regression" class="headerlink" title="Elastic Net Regression"></a>Elastic Net Regression</h2><p>The prediction model of Ridge regression is linear regression as well:</p>
+<p>$$y’ =  \sum_{i=1}^nw_ix_i +w_0$$</p>
+<h4 id="Optimize-Model-5"><a href="#Optimize-Model-5" class="headerlink" title="Optimize Model"></a>Optimize Model</h4><ol>
+<li><strong>Loss function to minimize</strong><br>$$min \sum_i^n(y_i - wx_i- w_0)^2 + \lambda_1||w||_{1} + \lambda_2 ||w||_{2}<br>$$</li>
+</ol>
+<p>where $y_i$ is the label, $w$ is the weight vector and $w_0$ is the scalar bias. $x_i$ is the feature vector.<br>Elastic net regression combines L1, L2 regularization terms together. Hence it can be regarded as the combination of weighed Ridge regression and weighed Lasso regression.</p>
+<h4 id="Properties-5"><a href="#Properties-5" class="headerlink" title="Properties"></a>Properties</h4><ol>
+<li>Combine the advantages of Lasso regression and Ridge regression.<br>
+
+</li>
+</ol>
+<h2 id="Stepwise-Regression"><a href="#Stepwise-Regression" class="headerlink" title="Stepwise Regression"></a>Stepwise Regression</h2><p>In statistics, stepwise regression is a method of fitting regression models in which the choice of predictive variables is carried out by an automatic procedure.<br>Since there are multiple variable / features in feature vectors, we want to select the most important features to construct our regression model. Different combinations of variables lead to different regression model. <strong>Stepwise regression is to select the different feature variables and fit different models and then get the best one with least Residual sum square error</strong></p>
+<h4 id="Stepwise-regression-approaches"><a href="#Stepwise-regression-approaches" class="headerlink" title="Stepwise regression approaches"></a>Stepwise regression approaches</h4><p>Assume there are p features  in dataset to pick. There are several types of approaches in stepwise regression for variable selection.</p>
+<ol>
+<li><p><strong>Forward Stepwise Regression /selection</strong></p>
+<ul>
+<li>Begin with the <strong>null model</strong> { a model that contains an intercept but no predictors.</li>
+<li>Fit <strong>p simple linear regressions</strong> and add to the null model the predictor that results in the <strong>lowest RSS</strong>.</li>
+<li>Add to that model the predictor that results in the lowest RSS among  all <strong>two-predictor models</strong>.</li>
+<li>Continue until some stopping rule is satisfied, for example when all remaining variables have a p-value above some threshold. <strong>P-value is to measure how significantly different two models are using statistic technique</strong></li>
+<li><strong>There are p(p+1)/2 models to evaluate</strong></li>
+</ul>
+</li>
+<li><p><strong>Backward Stepwise Regression (Backward elimination)</strong></p>
+<ul>
+<li>Start with <strong>all predictors</strong> in the model.</li>
+<li><strong>Remove</strong> the predictor with the largest p-value { that is, the predictor that is <strong>the least statistically significant</strong>.</li>
+<li>The new (p -1 )-predictor model is fit, and the <strong>predictor with the largest p-value is removed</strong>.</li>
+<li>Continue until a stopping rule is reached.</li>
+<li><strong>There are p(p+1)/2 models to evaluate</strong> </li>
+</ul>
+</li>
+<li><p><strong>Bidirectional Stepwise Regression</strong></p>
+<ul>
+<li>combine two methods above to see which predictor should be included or excluded from model</li>
+</ul>
+</li>
+</ol>
+<h4 id="Subset-Selection"><a href="#Subset-Selection" class="headerlink" title="Subset Selection"></a><strong>Subset Selection</strong></h4><p>Subset selection is another variable selection method, in addition to stepwise regression</p>
+<ul>
+<li>Assume there are p features  in dataset to pick</li>
+<li>fit all models for all subset</li>
+<li>pick the best model with smallest residual sum square error</li>
+<li><strong>There are $2^p$ models to evaluate</strong><br>
+
+</li>
+</ul>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>This article summarizes the seven regression methods and their properties.<br><strong>Key things to note:</strong></p>
+<ul>
+<li>Linear regression is to estimate the mean of normal distribution</li>
+<li>MSE assumes data is in normal distribution</li>
+<li>Logistic regression is an biased model to estimate the possibility that input x belongs to a class. Logistic regression assume data is in Bernoulli distribution.</li>
+<li>Binary cross entropy assumes data distribution is Bernoulli distribution</li>
+<li>Lasso Regression (L1 regularization) is good to do feature selection, but could be unstable. It can also reduce the over-fitting effect</li>
+<li>Ridge Regression can not be used for feature selection, but is good to reduce multi-collinearity effect and avoid overfitting</li>
+<li>Elastic Net Regression combines Lasso and Ridge regression</li>
+<li>Stepwise Regression and Subset selection are used to combine and select feature variables to find the estimators with the least SSE error.</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://ncss-wpengine.netdna-ssl.com/wp-content/themes/ncss/pdf/Procedures/NCSS/Stepwise_Regression.pdf">Stepwise Regression</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.analyticssteps.com/blogs/7-types-regression-technique-you-should-know-machine-learning">https://www.analyticssteps.com/blogs/7-types-regression-technique-you-should-know-machine-learning</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://www.listendata.com/2018/03/regression-analysis.html">https://www.listendata.com/2018/03/regression-analysis.html</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="http://users.isr.ist.utl.pt/~wurmd/Livros/school/Bishop%20-%20Pattern%20Recognition%20And%20Machine%20Learning%20-%20Springer%20%202006.pdf">BIshop-PatternRecognition-MachineLearning.pdf</a></p>
+<p>[5] <a target="_blank" rel="noopener" href="https://strata.uga.edu/8370/rtips/images/outlier.png">https://strata.uga.edu/8370/rtips/images/outlier.png</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/30/ML-Model-LR/" data-id="cklak0708005n6styedi9h9qr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/10/12/PySpark-Note-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          PySpark-Note-1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/09/22/Data-Structure-BuckSort-Parallel-Computing/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Data Structure - BuckSort with Parallel Computing</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

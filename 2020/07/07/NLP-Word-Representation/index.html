@@ -1,38 +1,489 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>NLP Word Representations | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="NLP Word Representations">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/07/NLP-Word-Representation/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://mccormickml.com/assets/word2vec/training_data.png">
+<meta property="og:image" content="http://mccormickml.com/assets/word2vec/skip_gram_net_arch.png">
+<meta property="og:image" content="http://mccormickml.com/assets/word2vec/matrix_mult_w_one_hot.png">
+<meta property="og:image" content="http://mccormickml.com/assets/word2vec/output_weights_function.png">
+<meta property="article:published_time" content="2020-07-08T03:40:19.000Z">
+<meta property="article:modified_time" content="2020-08-24T22:30:34.027Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Nature Language Processing">
+<meta property="article:tag" content="Word vector">
+<meta property="article:tag" content="Natural Language Representations">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://mccormickml.com/assets/word2vec/training_data.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-NLP-Word-Representation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/07/NLP-Word-Representation/" class="article-date">
+  <time datetime="2020-07-08T03:40:19.000Z" itemprop="datePublished">2020-07-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/NLP/">NLP</a>►<a class="article-category-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NLP Word Representations
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <image src="https://gst-online.com/wp-content/uploads/2018/07/16679084-abstract-word-cloud-for-representation-with-related-tags-and-terms.jpg">
+
+<a id="more"></a>
+<h2 id="1-Representation"><a href="#1-Representation" class="headerlink" title="1. Representation:"></a>1. Representation:</h2><h3 id="1-1-WordNet"><a href="#1-1-WordNet" class="headerlink" title="1.1 WordNet"></a>1.1 WordNet</h3><p>a  thesaurus containing lists of synonyms and hpernyms, using “is-a” to denote the relationship among words.</p>
+<ul>
+<li><p><strong>Advantages</strong>:</p>
+<ul>
+<li>easy to understand the relationship. It is interpretable.  </li>
+</ul>
+</li>
+<li><p><strong>Disadvantages</strong>:</p>
+<ul>
+<li>good as resource, but missing nuance in different context. Eg: “proficient” doesn’t always mean “good”</li>
+<li>Hard to update with new meanings of words, since the meanings of words may change along time</li>
+<li>subjective and bias</li>
+<li>Require Human to label</li>
+<li><strong>Can’t compute accurate word similarity</strong> <br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-One-hot"><a href="#1-2-One-hot" class="headerlink" title="1.2 One-hot"></a>1.2 One-hot</h3><p>Represent word as discrete symbol, eg. 0 or 1<br>Example: In sentence “I like dog”, the vector for “I” =[1,0,0], the vector for “like” =[0,1,0],the vector for “dog” =[0,0,1] </p>
+<table>
+<thead>
+<tr>
+<th>word</th>
+<th>one-hot vector</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“I”</td>
+<td>1 0 0</td>
+</tr>
+<tr>
+<td>“like”</td>
+<td>0 1 0</td>
+</tr>
+<tr>
+<td>“Dog”</td>
+<td>0 0 1</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong></p>
+<ol>
+<li><strong>Usually, the number of of vocabulary is equal to the number of entry in the one-hot vector.</strong> This enables the (Manhatton) distance between any two words/labels is same and the feature of each word is independent with each other.<br>The feature of a word contains no information about another word and hence don’t affect other words. Moreover, this method also has physical meaning and easy to understand.<br><strong>For example:</strong><br>Assume in linear regression,<br>we have $y =w_1x_1 + w_2x_2 + w_3x_3 $, in vector representation it is $Y = [w_1, w_2, w_3] \cdot [x_1, x_2, x_3]^T = WX$<br>Let vector X be a one-hot vector. That is, one of $x_1, x_2, x_3$ must be one. In this case, $WX$ becomes a lookup table to choose which weight $w_1, w_2, w_3$ should be learned. In this case, weight $w_1$ is affected by feature $x_1$ only, without being affected other features. This can lead to faster convergence of $w_1$ in learning .</li>
+</ol>
+<ul>
+<li><strong>Advantage</strong>:<ul>
+<li>able to represent words into number for computing</li>
+<li>Easy to understand, since it has physical meaning</li>
+<li>Features/ labels are independent from each other</li>
+</ul>
+</li>
+<li><strong>Disadvantage</strong>:<ul>
+<li>Vector dimension equal to the number of words in vocabulary, it could be very big</li>
+<li>No natural notion of similarity, since word vectors are orthogonal.</li>
+<li>Hard to extend the representation of labels when more labels are added.</li>
+<li>Could be memory expensive when a large group of labels involved. Eg, represent vocabulary in a book as one-hot vector, the vectors could be very large and sparse. <br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-Bag-of-Words-BOW"><a href="#1-3-Bag-of-Words-BOW" class="headerlink" title="1.3 Bag of Words (BOW)"></a>1.3 Bag of Words (BOW)</h3><p>Similar to one-hot, it represents each word as orthogonal vector, but the number of vector is the frequency the word appears. In BOW, a text (such as a sentence or a document) is represented as the bag (multiset)/set of its words, disregarding grammar and even word order but keeping multiplicity. </p>
+<ul>
+<li><strong>Advantage:</strong><ul>
+<li>Easy to realize and compute</li>
+<li>Easy to use for simple case (the order of words don’t matter a lot)</li>
+</ul>
+</li>
+<li><strong>Disadvantage:</strong><ul>
+<li>Without considering similarity among different words</li>
+<li>it has the same drawbacks as one-hot vector<br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-4-n-gram-model"><a href="#1-4-n-gram-model" class="headerlink" title="1.4 n-gram model"></a>1.4 n-gram model</h3><p><strong>N-gram model</strong> is an extension of bag of word model. While bag-of-word model considers each word only, N-gram model considers a tuple of n consecutive words as an element in the collection of words.</p>
+<p><strong>Example:</strong>  Consider a sentence: <em>“a boy is playing grames”</em>.</p>
+<p>When using 3-gram model, the collection of words becomes    </p>
+<pre><code>&#123;(a boy is), (boy is playing),(is playing games)&#125;
+</code></pre>
+<p>Then if we have a 3-gramm vector for a document: [1, 0,0 ], it means the element (a boy is) appear once in the document.</p>
+<ul>
+<li><strong>Advantage:</strong><ul>
+<li>More flexible and robust than bag-of-world model, since it could considers different structure of words. Some names like “deep learning”, “machine learning” with more than one words can be detected easier.</li>
+</ul>
+</li>
+<li><strong>Disadvantage:</strong><ul>
+<li>The collection could be large when using different grams. Usually, bigram and trigram are used.<br>
+
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-5-Word-Vectors-Word-Embeddings-Word-distributed-representations"><a href="#1-5-Word-Vectors-Word-Embeddings-Word-distributed-representations" class="headerlink" title="1.5 Word Vectors/ Word Embeddings/Word distributed representations"></a>1.5 Word Vectors/ Word Embeddings/Word distributed representations</h3><p><strong>Word Vectors</strong> represent words by context. Context of a word is a set of words that appear nearby, or in a fixed window  A word meaning is given by the words that frequently appear close-by. </p>
+<p>Each entry in a word vector for a word is the similarity between this center word and the words in context.</p>
+<p>Eg:  In “I like  dog”, vector for “like” = [0.01,0.7 ,0.5], where 0.5 is the possibility “dog” will occur, given center word “like”.</p>
+<img src=/images/NLP/word2vec-1.jpg>
+
+<p>More general, given the center word $w_{t}$, the possibility of context word $w_{t+1}$ will occur is $P(w_{t+1}|w_{t} )$. Then in word vector, our goal is to find the best condition distribution to represent the vector. There are many frameworks to find word vector,  such as <strong>word2Vec, Glove, Fasttext</strong>.</p>
+<ul>
+<li><strong>Advantage</strong>:<ul>
+<li>Able to compute similarity between words</li>
+<li>No need to label by human</li>
+</ul>
+</li>
+<li><strong>Disadvantage</strong>:<ul>
+<li>Dimension of vector is equal to the number of words in vocabulary. It could be very large</li>
+<li>Need to learn the similarity by word2vector framework. Hard to compute similarity when there is a large corpus of words</li>
+</ul>
+</li>
+</ul>
+<br>
+
+<h2 id="2-Word2Vector-Skip-gram"><a href="#2-Word2Vector-Skip-gram" class="headerlink" title="2. Word2Vector:  Skip-gram"></a>2. Word2Vector:  Skip-gram</h2><p>A framework to learn and find dense word vectors, rather than sparse orthogonal vector like bag-of-word model. Here is details about <a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224n/slides/cs224n-2020-lecture01-wordvecs1.pdf">word2vector</a></p>
+<p>The dense word vectors measure similarity between two words. If two words are similar, then they have similar word vectors.</p>
+<p><strong>Goal: to learn the word vector that measure the similarity between context and center word, Or possibility that the next word will occur, given the center word.</strong></p>
+<h3 id="2-1-Summary-of-Idea-in-Word2Vector"><a href="#2-1-Summary-of-Idea-in-Word2Vector" class="headerlink" title="2.1 Summary of Idea in Word2Vector:"></a>2.1 <strong>Summary of Idea in Word2Vector</strong>:</h3><ol>
+<li>Collect a large corpus of text</li>
+<li>Represent <strong>each word</strong> in text as <strong>a vector</strong> (<strong>count vector</strong> or one-hot model)</li>
+<li>Go through each position t in text, find center word c and outside words o (context words)</li>
+<li>Find <strong>similarity of the word vectors</strong> for c and o  (c and o are actually from the output of the neural network),  compute possibility of context o, given center word vector c</li>
+<li>Keep adjusting word vectors / train the network to <strong>maximize possibility/likelihood function</strong>  and find the optimal word vectors that contains similarity between c and o.</li>
+<li><strong>Note: input to network is one-hot vector , output to network is similarity/possibility vector. The output is the vector we want</strong></li>
+</ol>
+<h3 id="2-2-One-hot-Vector"><a href="#2-2-One-hot-Vector" class="headerlink" title="2.2 One-hot Vector"></a>2.2 <strong>One-hot Vector</strong></h3><ul>
+<li>In Skip gram, it first find the set of vocabularies and then converts each word into its one-hot vector. In one-hot vector, 1 represents the word</li>
+</ul>
+<br>
+
+<ul>
+<li><p>Example:<br>consider a sentence “I like dog and you like cat”.<br>Then there is a set of words [“I”,”you” ,”like””,”dog”,”cat”,”and”]. </p>
+<table>
+<thead>
+<tr>
+<th>word</th>
+<th>one-hot vector</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“I”</td>
+<td>[1,0,0,0,0,0]</td>
+</tr>
+<tr>
+<td>“like”</td>
+<td>[0,1,0,0,0,0]</td>
+</tr>
+<tr>
+<td>“dog”</td>
+<td>[0,0,1,0,0,0]</td>
+</tr>
+<tr>
+<td>“and”</td>
+<td>[0,0,0,1,0,0]</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>  Then one-hot vector for “like” = [0,0,1,0,0,0], where 1 at the corresponding position represents “like” in the word set.<br>  Dimension of vector = |V| , where V is vocabulary set of the text.</p>
+</li>
+</ul>
+<br>
+
+<h3 id="2-3-Skip-gram-neural-network"><a href="#2-3-Skip-gram-neural-network" class="headerlink" title="2.3 Skip-gram neural network"></a>2.3 <strong>Skip-gram neural network</strong></h3><!-- <img src="http://mccormickml.com/assets/word2vec/training_data.png"> -->
+<img src="http://mccormickml.com/assets/word2vec/skip_gram_net_arch.png">
 
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<ul>
+<li><p>The neural network takes one-hot vector as input, with size |V|. Let denote one-hot vector as <strong>v</strong> for convenience</p>
+</li>
+<li><p>There are only one hidden layer. <strong>There is no activation function in this layer and hence it is linear</strong>. The number of neurons <strong>N</strong>  is defined by user.</p>
+</li>
+<li><p>Softmax activation function for output with <strong>|V| neurons</strong></p>
+</li>
+<li><p>There is a input weight matrix <strong>W</strong> with dimension <strong>|V|-by-N</strong> between input layer and hidden layer (|V| rows and N columns)</p>
+</li>
+<li><p>There is a input weight matrix <strong>W ‘</strong> with dimension <strong>N-by-|V|</strong> between hidden layer and output layer</p>
+</li>
+<li><p>Since input is 0,1 vector, when it times input matrix <strong>W</strong>, it actually selects a row of the matrix.<br><em>Hence, we can consider <strong>W</strong> as a look-up table and output from hidden layer <strong>c = Wv</strong> is the real “word vector”</em>.</p>
+</li>
+<li><p>“Word vector”  is acutually one-hot vector or bag-of-word vector times input weight matrix <strong>W</strong></p>
+</li>
+</ul>
+<img src="http://mccormickml.com/assets/word2vec/matrix_mult_w_one_hot.png" width= 400 height= 80>
 
-{% block page_class %}page-post-detail{% endblock %}
+<br>
 
+<ul>
+<li>The i^th entry in the output vector from softmax function is the possibility that if you pick up a word nearby the input word, that is the i^th word in the vocabulary.</li>
+</ul>
+<img src="http://mccormickml.com/assets/word2vec/output_weights_function.png">
 
-{% block content %}
+<br>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<h4 id="Note"><a href="#Note" class="headerlink" title="Note:"></a>Note:</h4><ol>
+<li>when <strong>training</strong> neural network, its <strong>output is one-hot</strong> vector ( set the maximum softmax output value as 1, others as 0s), indicating the predicted nearby context words</li>
+<li>When <strong>evaluating</strong> network, using softmax output value, <strong>possibility as output</strong>, to compute the cost value</li>
+<li>__Since there are different actual context words $w_{t-1}, w_{t-2}, …$, corresponding to the single input vector $w_{t}$.__<br>If we consider P($w_{t-1},w_{t-2},w_{t-3}|w_t$) with window with size of 4 containing central word $w_t$  and context words $w_{t-1},w_{t-2},w_{t-3}$,<br>then the output look something like this:<img src=/images/NLP/word2vec-3.jpg>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+</li>
+</ol>
+<br>
+
+<h3 id="2-4-Evaluation-of-Skip-gram"><a href="#2-4-Evaluation-of-Skip-gram" class="headerlink" title="2.4 Evaluation of Skip-gram"></a>2.4 <strong>Evaluation of Skip-gram</strong></h3><p>Since the input to the network is a single word, it is also regarded as center word $w_t$, at the <strong>t</strong> position in text. The words nearby it are called context, or outside words. The context word at <strong>t+k</strong> position, is denoted as $w_{t+k}$. </p>
+<p>Hence our goal, or objective is to estimate the distribution $P(w_{t+k}| w_{t})$.<br>The distribution has the meaning that given center word $w_t$, the possibility that context word $w_{t+k}$ will appears.<br><img src=/images/NLP/word2vec-1.jpg></p>
+<br>
+
+<p>In order to estimate the distribution, we need to maximize the likelihood function, or its log value, called loss, or cost function, shown as below.</p>
+<img src=/images/NLP/word2vec-2.jpg>
+
+<br>
+
+<h4 id="Advantages"><a href="#Advantages" class="headerlink" title="Advantages"></a><strong>Advantages</strong></h4><ul>
+<li>It is <strong>unsupervised learning</strong> hence can work on any raw text given.</li>
+<li>It requires <strong>less memory</strong> comparing with other words to vector representations.</li>
+<li>It requires two weight matrix of dimension [N, |v|] each instead of [|v|, |v|]. And <strong>usually, N is around 300 while |v| is in millions.</strong> So, we can see the advantage of using this algorithm.</li>
+</ul>
+<h4 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages"></a><strong>Disadvantages</strong></h4><ul>
+<li>Finding the best value for N and the context position is difficult.</li>
+<li>Softmax function is computationally expensive.</li>
+<li>The time complexity for training is high</li>
+</ul>
+<br>
+
+<h3 id="Models-for-Word2vector"><a href="#Models-for-Word2vector" class="headerlink" title="Models for Word2vector"></a>Models for Word2vector</h3><ol>
+<li><strong>Skip-gram</strong><br>Predict context (outside) words (surrounding the center word) given center<br>word</li>
+<li><strong>Continuous Bag of words （CBOW）</strong><br>Predict center word from (bag of) context words. It is an inverse version of skip-gram.</li>
+</ol>
+<img src=/images/NLP/CBOW.jpg>
+
+<br>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h2><p>[1] <a target="_blank" rel="noopener" href="http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/">http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/</a><br>[2] <a target="_blank" rel="noopener" href="http://web.stanford.edu/class/cs224n/slides/cs224n-2020-lecture02-wordvecs2.pdf">http://web.stanford.edu/class/cs224n/slides/cs224n-2020-lecture02-wordvecs2.pdf</a><br>[3] <a target="_blank" rel="noopener" href="https://towardsdatascience.com/skip-gram-nlp-context-words-prediction-algorithm-5bbf34f84e0c">https://towardsdatascience.com/skip-gram-nlp-context-words-prediction-algorithm-5bbf34f84e0c</a><br>[4] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/50243702">https://zhuanlan.zhihu.com/p/50243702</a><br>[5] <a target="_blank" rel="noopener" href="http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf">http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/07/07/NLP-Word-Representation/" data-id="cklak06yl002e6stydoh680y3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/08/Markdown-Tutorial/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Markdown Quick Tutorial
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/30/hexo-gitpage-website/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Use Hexo + ICarus to build a website</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

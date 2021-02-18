@@ -1,38 +1,403 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Statistic-P-value | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Statistic-P-value">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/22/Statistic-P-value/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-11-23T03:17:39.000Z">
+<meta property="article:modified_time" content="2020-11-23T05:23:36.405Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="P-value">
+<meta property="article:tag" content="Independence Test">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Statistic-P-value" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/22/Statistic-P-value/" class="article-date">
+  <time datetime="2020-11-23T03:17:39.000Z" itemprop="datePublished">2020-11-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Statistic/">Statistic</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Statistic-P-value
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://www.statisticshowto.com/wp-content/uploads/2014/01/p-value1.jpg>
+
+<a id="more"></a>
+
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This article introduces how to compute the P-value using different distributions / statistic methods, including Z-distribution,  t-distribution, F-test ,Chi-Square $X^2$ Distribution.<br>In all distributions, we first determine the random variable value in possibility density function (CDF) and then use the corresponding distribution look-up table to check the P-value (Possibility) of that distribution. Finally compare P-value with the significant level, $\alpha$ to check should we reject Null hypothesis H0  or not.</p>
+<h2 id="Notations"><a href="#Notations" class="headerlink" title="Notations"></a>Notations</h2><p>Before talking about different testing for P-value, let’s denote some notations:</p>
+<ul>
+<li>x: sampled data , a small group of observations </li>
+<li>P: population size. Population is the total set of observations that can be made</li>
+<li>n: sample size </li>
+<li>$\mu_0$: population mean</li>
+<li>$\sigma_0$: population variance</li>
+<li>$\mu’$:  sample mean</li>
+<li>$\sigma’$: sample variance</li>
+</ul>
+<h2 id="Z-test-Z-statistic-standard-normal-distribution"><a href="#Z-test-Z-statistic-standard-normal-distribution" class="headerlink" title="Z-test / Z-statistic (standard normal distribution)"></a>Z-test / Z-statistic (standard normal distribution)</h2><ul>
+<li><p>Assumption<br>Z-test assumes distributions of both population and sample are Normal distribution<br>Null Hypothesis in z-test is that two groups have no difference</p>
+</li>
+<li><p>Computation of Z-Score of <strong>continuous random variable</strong></p>
+</li>
+</ul>
+<p>$$<br>    z-score = \frac{\mu’ - \mu_0 }{\sigma_0/ \sqrt{n}}<br>$$</p>
+<p>if we don’t know population standard variance, but know population mean only, we can use sample variance deviation to estimate the population variance deviation. Then it becomes</p>
+<p>$$<br>    z-score = \frac{\mu’ - \mu_0 }{\sigma’/ \sqrt{n}}<br>$$</p>
+<p>if compare two groups:</p>
+<p>$$<br>    z-score = \frac{\mu_1 - \mu_2 }{\sqrt{(\sigma_1^2/n_1)+(\sigma_2^2/n_2)}}<br>$$</p>
+<ul>
+<li>Computation of Z-Score of <strong>binary random variable</strong><br>  Denote  $p_0$ as the Population possibility of obtaining current case X, $p’$ as the Sample possibility of current case X</li>
+</ul>
+<p>$$<br>    z score = \frac{p’ - p_0 }{ (p_0(1-p_0))/ \sqrt{n}}<br>$$</p>
+<ul>
+<li><p>When to use</p>
+<ul>
+<li>when we know the population is normal distribution</li>
+<li>when the <strong>sample size is small</strong>, usually <strong>smaller than 30</strong>.</li>
+<li>When we <strong>know some distribution settings</strong>, like $\mu_0$ = 0, $\sigma_0$=1 in standard normal distribution</li>
+</ul>
+</li>
+<li><p>Example<br>To test if two groups have no difference, we can let sample mean, variance of group A as $\mu_A$ $\sigma_A$, sample mean of group B as $\mu_B$, $\sigma_B$. Then let $\mu’ = \mu_A - \mu_B$  if we assume population mean of group difference is $\mu_0$ = 0, then we can model the group difference like this</p>
+</li>
+</ul>
+<p>$$<br>z-score = \frac{(\mu_A - \mu_B) - 0 }{\sigma_0/ \sqrt{n}}<br>$$</p>
+<p>Or </p>
+<p>$$<br>z-score = \frac{(\mu_A - \mu_B) - 0 }{\sqrt{(\sigma_1^2/n_1)}}<br>$$</p>
+<h2 id="t-test-t-statistic-similar-to-normal-distribution"><a href="#t-test-t-statistic-similar-to-normal-distribution" class="headerlink" title="t-test / t-statistic (similar to normal distribution)"></a>t-test / t-statistic (similar to normal distribution)</h2><ul>
+<li>Assumption<br>t-test also assumes Normal distribution as the population distribution and sample distribution. Different from z-test, <strong>t-test doesn’t assume we know the parameters (mean, variance) of normal distribution.</strong>.</li>
+</ul>
+<p>Null Hypothesis in t-test is that two groups have no difference</p>
+<p>Note that as degree of freedom in t-distribution increases, it is more similar to normal distribution.</p>
+<ul>
+<li>Computation of t-Score for <strong>continuous random variable</strong></li>
+</ul>
+<p>$$<br>    t-score = \frac{\mu_1 - \mu_2}{\sqrt{(\sigma_1^2/n_1)+(\sigma_2^2/n_2)}}<br>$$</p>
+<p>since both t-test and z-test assume normal distribution, they have the same formula</p>
+<ul>
+<li><p>Find P-value of t-score<br>  After we determine the t-score in CDF, we can find the corresponding P-value in t-distribution using this <a target="_blank" rel="noopener" href="https://www.chegg.com/homework-help/questions-and-answers/determine-t-value-cases-click-icon-view-table-areas-t-distribution-find-t-value-area-right-q25519898">table</a> </p>
+</li>
+<li><p>When to use</p>
+<ul>
+<li><p><strong>t-test is used when population parameters (population mean and population variance) are not known</strong></p>
+</li>
+<li><p>when <strong>sample size is very large</strong>, usually &gt;30. (So usually in model evaluation, we use t-test with large dataset)</p>
+</li>
+<li><p>when we assume data is normal distribution</p>
+</li>
+<li><p>Note that since <strong>in t-test we don’t know the population distribution</strong> parameters, so the <strong>variances in t-test are sample variance</strong>. <strong>But in Z-test</strong>, we know the population distribution parameters, <strong>we usually use population variance and population mean instead</strong></p>
+</li>
+<li><p>In my word, z-test assumes we know normal distribution parameters, so we can use those parameters for testing and use less samples. But t-test doesn’t assume we know anything about distribution, so it uses samples parameters (sample mean and variance) to estimate the normal distribution for testing.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Chi-Square-test-X-2-statistic"><a href="#Chi-Square-test-X-2-statistic" class="headerlink" title="Chi-Square-test / $X^2$-statistic"></a>Chi-Square-test / $X^2$-statistic</h2><ul>
+<li>Assumption<br>In Chi-Square test, it is to test the independence/correlation between <strong>categorical variables</strong><br>Note that <strong>Chi-Square test is a one(right)-tail test</strong> and the we can not use it for two-tail test. It meausres the correlation of two categorical variable. </li>
+</ul>
+<p>Null Hypothesis in Chi-Square test is that two groups are independent from each other</p>
+<ul>
+<li>Computation of Pearson’s Chi-Square value<br>Consider we have two binary categorical variable with total sample size of n. The table is shown as follow, we want to test their correlation. </li>
+</ul>
+<img src=/images/HT/chi-test1.png>
 
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<p>Then the Pearson’s Chi-Square Correlation is computed by </p>
+<img src=/images/HT/chi-test2.png>
 
-{% block page_class %}page-post-detail{% endblock %}
+<p>where i, j mean the $i^{th}$ row and $j^{th}$ column. n is the total sample amount<br>$$<br>E_{i,j} = \frac{X_iX_j}{n}<br>$$</p>
+<ul>
+<li>Find P-value from Chi-Square CDF function based on the Chi Square-value we find</li>
+</ul>
+<p>We can find the Chi-square distribution in this <a target="_blank" rel="noopener" href="https://www.google.com/imgres?imgurl=https://www.itl.nist.gov/div898/handbook/eda/section3/gif/chspdftb.gif&imgrefurl=https://www.itl.nist.gov/div898/handbook/eda/section3/eda3674.htm&tbnid=w_AzmRQzFgPzWM&vet=12ahUKEwjt1ZDv4vnsAhUCUawKHWCjAFcQMygWegUIARDPAQ..i&docid=K8D9jlCRwBlHxM&w=380&h=280&q=chi%20squared%20distribution%20table&ved=2ahUKEwjt1ZDv4vnsAhUCUawKHWCjAFcQMygWegUIARDPAQ">link</a><br>and the distribution table from <a target="_blank" rel="noopener" href="https://math.stackexchange.com/questions/2009660/basic-question-about-using-the-chi-square-table">here</a></p>
+<ul>
+<li><p>When to use</p>
+<ul>
+<li>when we are testing categorical variable and we need one-tail test only</li>
+<li>when we are testing independence between two variables</li>
+</ul>
+</li>
+<li><p>Example:<br>  Measuring the independence between gender and salary, independence between smoking and cancer.</p>
+</li>
+</ul>
+<h2 id="F-test-F-statistic"><a href="#F-test-F-statistic" class="headerlink" title="F-test / F-statistic"></a>F-test / F-statistic</h2><ul>
+<li><p>Assumption<br>F-score is to measure the ratio between explained variance over the unexplained variance</p>
+</li>
+<li><p>Computation of F-Score for P-Value<br>To understand the F-score, let consider a real linear regression model:</p>
+</li>
+</ul>
+<p>$$<br>    y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \epsilon<br>$$</p>
+<p>and an estimated linear regression<br>$$<br>    y’ = \beta_0 + \beta_1X_1 + \beta_2X_2<br>$$<br>where $\epsilon$ is the unexplainable, irreducible error</p>
+<p>Then the Residual Sum Square Error (RSS) between two linear models among n samples is </p>
+<p>$$<br>    RSS = \sum_i^n(y_i - y’_i)^2<br>$$</p>
+<p>RSS Error is to measure the variability between two model.</p>
+<p>In F-statistic, we want to check if there is relationship between feature $X_i$ and target. If there is no relationship, then weight $\beta_i$ = 0.(i&gt;0).</p>
+<p>Then Null hypothesis in F-statistic is that $\beta_1 = \beta_2=..=\beta_p=0$ consider there is no relationship between features and target<br>Then alternative hypothesis is that $\beta_i \neq 0$ for some i&gt;0.</p>
+<p>In this case, for null hypothesis, we have a <strong>Restricted Linear Model</strong><br>$$<br>    \bar{y} = \beta_0<br>$$ </p>
+<p>and a <strong>Full Linear model</strong></p>
+<p>$$<br>    y_i’ = \beta_0 + \beta_1X_{1i}<br>$$</p>
+<p>where $X_{1i}$, $\bar{y_i}$ means the the $1^{st}$ feature in the $i^{th}$ sample and the prediction of the $i^{th}$ sample.</p>
+<p>Denote the degree of freedom of restrict model as $df_r$, and the degree of freedom of Full model as $df_F$. There are n sample data points and  p+1 weight cofficients $\beta_i$ ($\beta_0$ to $\beta_p$ )to pick. Then degree of freedom = n -p.<br>Hence in this case, we care about choosing $\beta_1$ or not. We have $df_r$ = n-1 and $df_F$ = n-2</p>
+<p>Total Sum Square Error (TSS) of Restrict Linear model:<br>$$<br>TSS = \sum_i^n(y_i - \bar{y})^2<br>$$</p>
+<p>Residual Sum Square Error (RSS) of Full Linear model:<br>$$<br>RSS = \sum_i^n(y_i - y’_i)^2<br>$$</p>
+<p>The formula to compute F-score is </p>
+<p>$$<br>F-score = \frac{ (TSS-RSS)/(df_r - df_F)}{RSS/df_F} = \frac{ (TSS-RSS)/1}{RSS/(n-2)}<br>$$</p>
+<p>More general, If there are p+1 weight coefficient in Full model, then we have<br>$$<br>F-score = \frac{ (TSS-RSS)/p}{RSS/(n-p-1)}<br>$$</p>
+<p>where $TSS- RSS$ is the variability explained by model and $RSS$ measure the variability left unexplained after the regression (which is also the irreducible error mentioned before)</p>
+<p>If F-value &gt; 0 and &lt;= 1, we don’t reject H0. If F-value &gt;1, then we reject H0 and choose H1.<br>If F-value &lt;0, then F-test fails, it doesn’t mean anything.<br>Note that F-test is also a One-tail hypothesis test.</p>
+<ul>
+<li>When to use<ul>
+<li>when we are measuring if some features matters in prediction / there is correlation between features and target</li>
+<li>F-test can be adjusted  by the number of predictors, but individual t-test doesn’t</li>
+<li><strong>Note that when the number of predictors p &gt; the number of samples n, F-test will fail since value  $RSS/(n-p-1)$ becomes negative and this F-value is out of the range of random variable value in F-distribution</strong></li>
+</ul>
+</li>
+<li>Example<br>There are some examples from this link: <a target="_blank" rel="noopener" href="https://online.stat.psu.edu/stat501/lesson/6/6.2">https://online.stat.psu.edu/stat501/lesson/6/6.2</a></li>
+</ul>
+<h2 id="R-2-test"><a href="#R-2-test" class="headerlink" title="$R^2$ test"></a>$R^2$ test</h2><ul>
+<li><p>Assumption<br>$R^2$ measures the proportion of variability of prediction y that can be explained by feature X</p>
+</li>
+<li><p>Computation of $R^2$-Score for P-Value<br>$$<br>  R^2 - value = \frac{TSS- RSS}{RSS}<br>$$</p>
+</li>
+</ul>
+<p>where RSS and TSS are computed as same as those in F-test</p>
+<p>$$<br>TSS = \sum_i^n(y_i - \bar{y})^2<br>$$</p>
+<p>where $\bar{y} =\beta_0$ = mean of $y_i$<br>since when we estimate $\bar{y} =\beta_0$ using samples to minimize the sum square loss, let gradient of $\sum_i^n(y_i-\bar{y})^2$ = 0, we have $-2\sum_i^n(y_i-\bar{y}) =0$ and $\bar{y} = (\sum_i^ny_i)/n$</p>
+<p>Residual Sum Square Error (RSS) of Full Linear model:<br>$$<br>RSS = \sum_i^n(y_i - y’_i)^2<br>$$</p>
+<p>Random Variable $R^2$ has range [0,1]. If $R^2$  fall outside this range, then the test fails. If $R^2$ value is close to 1, then reject H0 and consider H1 and there is relationship between features and y. if $R^2$ value is close to 0, then model is wrong and don’t fit well, then can not reject H0.</p>
+<ul>
+<li>When to use<ul>
+<li>when we want to  measures the proportion of variability of prediction y that can be explained by feature X</li>
+</ul>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://towardsdatascience.com/statistical-tests-when-to-use-which-704557554740">https://towardsdatascience.com/statistical-tests-when-to-use-which-704557554740</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.jmp.com/en_us/statistics-knowledge-portal/t-test/t-distribution.html">https://www.jmp.com/en_us/statistics-knowledge-portal/t-test/t-distribution.html</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://www.jmp.com/en_us/statistics-knowledge-portal/t-test/t-distribution.html">https://www.jmp.com/en_us/statistics-knowledge-portal/t-test/t-distribution.html</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://www2.palomar.edu/users/rmorrissette/Lectures/Stats/ttests/ttests.htm">https://www2.palomar.edu/users/rmorrissette/Lectures/Stats/ttests/ttests.htm</a></p>
+<p>[5] <a target="_blank" rel="noopener" href="https://online.stat.psu.edu/stat501/lesson/6/6.2">https://online.stat.psu.edu/stat501/lesson/6/6.2</a></p>
+<p>[6] <a target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/130069/what-is-the-distribution-of-r2-in-linear-regression-under-the-null-hypothesis">https://stats.stackexchange.com/questions/130069/what-is-the-distribution-of-r2-in-linear-regression-under-the-null-hypothesis</a></p>
+<p>[7] <a target="_blank" rel="noopener" href="https://www.statisticshowto.com/wp-content/uploads/2014/01/p-value1.jpg">https://www.statisticshowto.com/wp-content/uploads/2014/01/p-value1.jpg</a></p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/11/22/Statistic-P-value/" data-id="cklak06yu002r6sty4jkngy5i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li></ul>
 
-{% block content %}
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/23/ML-K-mean-Cluster/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          ML-K-mean-Cluster
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/13/DL-DropOut/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">DeepLearning -2 DropOut</div>
+    </a>
+  
+</nav>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  
+</article>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,38 +1,729 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Model Evaluation and Selection | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Model Evaluation and Selection">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/08/13/Model-Eval-Selection/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-13T21:27:44.000Z">
+<meta property="article:modified_time" content="2020-12-08T17:37:14.220Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="ROC curve">
+<meta property="article:tag" content="Confusion Metric">
+<meta property="article:tag" content="Cross Validation">
+<meta property="article:tag" content="Holdout">
+<meta property="article:tag" content="Ensemble Learning">
+<meta property="article:tag" content="Model Evaluation">
+<meta property="article:tag" content="Model Selection">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Model-Eval-Selection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/08/13/Model-Eval-Selection/" class="article-date">
+  <time datetime="2020-08-13T21:27:44.000Z" itemprop="datePublished">2020-08-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Machine-Learning/">Machine Learning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Model Evaluation and Selection
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src=https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fnmeth.3945/MediaObjects/41592_2016_Article_BFnmeth3945_Fig1_HTML.jpg>
+
+<a id="more"></a>
+
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>In order to do something better in our study, our jobs or even our life,  evaluation step is an indispensable part of improvement. Otherwise, How do we know our work is good or bad? In addition, “good” and “bad” are ambiguous terms if we don’t have any evaluation methods.</p>
+<p>Similarly, in machine learning, in order to training a “better” model, we need concrete evaluation metrics to tell us if our models perform well, so that we can choose the best one.</p>
+<p>The goal of this passage is to conclude the common useful ways to evaluate and improve our machine learning models. My Thoughts are also provided.</p>
+<h2 id="Evaluation-Metrics"><a href="#Evaluation-Metrics" class="headerlink" title="Evaluation Metrics"></a>Evaluation Metrics</h2><ul>
+<li><p><strong>Confusion Matrix</strong><br>In classification task, we have predictions from our model on the test set and ground truth labels/targets indicating the real class of each sample in dataset.<br>Let consider we are predicting if data belongs to  class “C” or not.</p>
+<p>  <strong>Then Confusion matrix is</strong></p>
+<table>
+<thead>
+<tr>
+<th>Actual class\prediction</th>
+<th>C</th>
+<th>not C</th>
+<th>sum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C</strong></td>
+<td>TP</td>
+<td>FN</td>
+<td>actual P= TP+FN</td>
+</tr>
+<tr>
+<td><strong>Not C</strong></td>
+<td>FP</td>
+<td>TN</td>
+<td>actual N = FP+TN</td>
+</tr>
+<tr>
+<td>sum</td>
+<td>predicted P’ = TP+FP</td>
+<td>predicted N’ = FN+TN</td>
+<td>All</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p>True positive (TP): the amount of samples that are <strong>predicted</strong> as class “C” and they <strong>actually</strong> belong to class “C”.</p>
+<p>False positive (FP): the amount of samples that are <strong>predicted</strong> as class “C” and they <strong>actually</strong> DON’T belong to class “C”.</p>
+<p>False Negative (FN): the amount of samples that are <strong>predicted</strong> as Not class “C” and they <strong>actually</strong> belong to class “C”.</p>
+<p>True Negative (TN): the amount of samples that are <strong>predicted</strong> as not class “C” and they <strong>actually</strong> don’t belong to class “C”.</p>
+<ul>
+<li><p><strong>Accuracy</strong>:<br>measure how accurate the predictions are<br>  <strong>$acc = \frac{TP+TN}{TP+TN+FP+FN}$</strong></p>
+<br></li>
+<li><p><strong>Error Rate:  1-acc</strong></p>
+<br>
+</li>
+<li><p><strong>Sensitivity/Recall</strong>: (Precentage of <strong>correct positive</strong> prediction on <strong>Actual positive</strong> )<br>Recognition rate on True positive:<br>$sens = \frac{TP}{predicted P’} = \frac{TP}{TP+FN}$</p>
+</li>
+</ul>
+<br>
+
+<ul>
+<li><strong>Specificity</strong>:(Precentage of <strong>correct negative</strong> prediction on <strong>Actual negative</strong> )<br><strong>How many positive predictions in true data are recognized by model?</strong><br>Recognition rate on True Negative:<br>  $spec = \frac{TN}{predicted N’} = \frac{TN}{TN+FP}$</li>
+</ul>
+<br>
 
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+<ul>
+<li><p><strong>Precision</strong>: (Percentage of correct positive prediction on <strong>all positive prediction</strong>)<br>  Measure what % of tuples that the classifier labeled as positive are actually positive<br>  <strong>How many positive predictions of your model are correct?</strong></p>
+<p>  $precision = \frac{TP}{predicted P’} = \frac{TP}{TP+FP}$</p>
+</li>
+</ul>
+<br>
 
-{% block page_class %}page-post-detail{% endblock %}
+<ul>
+<li><p>__F-score: $F_\beta$__: It weighs precision and recall</p>
+<p>  $$ F_\beta = \frac{(1+\beta^2) * precision*recall}{\beta^2 * precision+recall}$$</p>
+  <br>
+  $\beta$ controls the weight of precision. Higher $\beta$ weigh more to precision than recall and hence precision is given more attention.
+<br>
+</li>
+<li><p><strong>F-1 score ($\beta =1$)</strong>:</p>
+<p>  $$ F_1 = \frac{2 * precision * recall}{precision+recall}$$</p>
+  <br>
+  Both precision and recall are given equal weights.
+</li>
+<li><p><strong>When to use Recall, Sensitivity and F-1 to evaluate model?</strong></p>
+<ul>
+<li><p><strong>Sensitivity/Recall</strong>:<br>When we want the model to be more sensitive to positive cases and would like to predict more False Positive than False Negative.<br><strong>Example:</strong><br>In <strong>disease detection</strong>, we would like to use recall more than precision, since we want to detect disease and cure earily, we only care if we get disease or not (Positive or<br>  not)<br><strong>Cybersecurity</strong>, fault detection. We care if fault occurs/ prediction is positive or not only. Even if more FP than FN are in prediction, it help us reduce the possibility of missing faults (FN)</p>
+</li>
+<li><p><strong>Precision</strong>:<br>when we care  <strong>real positive</strong> cases, or both FN and TP. That is, <strong>we don’t want the model to  predict more FP than FN</strong>. False negative also matters.<br><strong>Example:</strong><br>Spam detection: when mailbox detects a spam, it will directly delete/remove that email. However, if that email is actually not a spam (False positive), but an important email, then deleting it leads to an unexpected result.<br>In this case, we want to reduce the false positive cases to avoid deleting an important email. Hence, we don’t use FP, but use FN and precision instead. </p>
+</li>
+<li><p><strong>F-Score</strong>:<br>when we care both precision and recall, but want to weigh them.<br>This depends on the assumption in the real cases. If the real case assumes both precision and recall are important, then we use F-score.</p>
+</li>
+<li><p><strong>Score used for GAN</strong>:<br>Inception Score, FID. For more details, Please read this <a target="_blank" rel="noopener" href="https://medium.com/@jonathan_hui/gan-how-to-measure-gan-performance-64b988c47732">article</a></p>
+<br>
 
 
-{% block content %}
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Estimation-of-Model-Accuracy"><a href="#Estimation-of-Model-Accuracy" class="headerlink" title="Estimation of Model Accuracy"></a>Estimation of Model Accuracy</h2><ul>
+<li><p><strong>Holdout</strong><br>  The purpose of holdout is to  evaluate how well the model performs on the unseen dataset. <strong>It is used to evaluate the both the framework of model and the hyperparameters of model</strong><br>  <strong>Process:</strong></p>
+<ol>
+<li><p>Split dataset into <strong>two independent datasets randomly</strong>: training set (usually 80%) and test set (usually 20%)</p>
+</li>
+<li><p>Train the initial model with training set and then test model with test set</p>
+</li>
+<li><p>Repeat steps 1~2 k times and <strong>calculate average accuracy of the k accuracies obtained</strong></p>
+</li>
+<li><p><strong>Note:</strong></p>
+</li>
+</ol>
+<ul>
+<li>The test sets in k iterations may be repeated</li>
+<li>Accuracy of model could be unstable due to the split method on dataset.<br>For example, if after randomly spliting dataset into training set and test set, all samples belonging to class “C” are in test set, then model can not learn features from class “C” and hence perform worse. Otherwise, it could perform better if it learn features from class “C” from training set.</li>
+</ul>
+</li>
+</ul>
+<br>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+<ul>
+<li><p><strong>Cross Validation</strong><br>  The purpose of Cross Validation is to <strong>evaluate the framework of the model, rather than how good the hyper parameters of the model is.</strong></p>
+<ul>
+<li><p><strong>K-fold</strong></p>
+  <img src=/images/model-eval/kfolds.png>
+  <br>
+  1. Split the training set into k-subsets: {D1, D2,..Dk} with (almost) equal size.
+  2. Loop through k iterations. At $i^th$  iteration, select subset Di as validation set and the remaining k-1 subsets as training set.
+  3. Compute accuracy of each iteration
+  4. Compute the mean of accuracies obtained in k iterations.
+  <br>
+</li>
+<li><p><strong>Leave One out</strong></p>
+<ol>
+<li>It is a case of k-fold cross validation with <strong>setting K= N, the number of data point in training set</strong>.</li>
+<li>It hence takes N-1 iterations to evaluate model.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Stratified Cross validation</strong></p>
+<ol>
+<li>It is a case of K-fold cross validation with each setting:  <strong>each set contains approximately the same percentage of samples of each target class as the complete set</strong>.<br>
+__For example:__
+In a dataset S= {A1,A2,A3,B1,B2,B3,C1,C2,C3}, which has classes A,B,C. Each class occupies 30% of total dataset.In Stratified 3-fold Cross-validation, S= {K1,K2,K3}. 
+To make each class of data in each fold have the same percentage, we have:
+K1 ={A1,B1,C1},
+K2 ={A2,B2,C2},
+K3 ={A3,B3,C3}
+such that the percentage of each class of sample in each fold is still 30%.
+<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Note for Cross-Validation</strong></p>
+<ol>
+<li>When <strong>K</strong>  is small, the variance in performance of model could be large, since each fold contains more data and hence becomes noisy.</li>
+<li>When <strong>K</strong> is large, eg. in LeaveOneOut, <strong>K=N</strong>,  variance of performance of model would be smaller.</li>
+<li><strong>In each fold of training set, we need to start training the initial model again, rather than training the model from the last fold.</strong></li>
+<li>Cross validation is to <strong>evaluate the performance of the framework of the model</strong>, rather than of the parameters of the model.<br>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Bootstrap (Sample-based)</strong> </p>
+<ol>
+<li><strong>Samples</strong> the given training tuples uniformly <strong>with replacement</strong> <strong>d</strong> times as training set. <strong>The remaining data tuples form the test set (or validation set)</strong>.<br>That is,<br>the tuples/samples that have been chosen can still be chosen with equal possibility</li>
+<li>Train model with training set</li>
+<li>Compute average accuracy of model on both training set and test set</li>
+<li>Repeat steps 1~3 k times, then compute average accuracy of all accuracy obtained in k iterations.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Comparison among methods Above</strong></p>
+<ol>
+<li><p><strong>holdout</strong><br> <strong>Purpose</strong><br> Holdout is mainly used to evaluate how well the model performs on the unseen dataset. It  evaluates both framework and hyperparameter of the model.<br> <em>Different from cross-validation, the <strong>holdout data can be any size (usually 20% of the training dataset), while cross-validation requires validation data has the same size as each fold.</strong> When the amount of fold is small (like 2) in cross-validation, it could waste the training set.</em></p>
+ <br>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+<p> <strong>Advantages</strong></p>
+<ul>
+<li><p><em>Less expensive in computation, Easy to compute,</em> compared with cross-validation, since it splits test set randomly </p>
+<p><strong>Disadvantages</strong></p>
+</li>
+<li><p>Estimated accuracy may be unstable (Accuracy is easy to change), since holdout <strong>depends on the dataset split methods</strong> on training set and test set. </p>
+<p><strong>When to Use</strong></p>
+</li>
+<li><p>When the dataset is very large and hard to compute multiple subset</p>
+<br>
+</li>
+</ul>
+</li>
+<li><p><strong>Cross-validation</strong><br> <strong>Advantages</strong></p>
+<ul>
+<li><p><strong>The estimated accuracy is much stable than holdout</strong> , since it trains model on multiple different train-test set splits. It guarantees to  train model with all samples.</p>
+<p><strong>Disadvantages</strong></p>
+</li>
+<li><p> The Cost for computation is expensive when dataset is very large.</p>
+</li>
+<li><p>When value <strong>K</strong>  is <strong>smaller</strong>, the <strong>variance</strong> in performance of model will be <strong>larger</strong> and model is <strong>easier to overfit</strong> (training with more data samples could be more noisy).</p>
+</li>
+<li><p>When value <strong>K</strong>  is <strong>smaller</strong>, <strong>it could waste the training set</strong>. For example, in 2-fold, we use only half of training set to train the model, which is a waste of training data.</p>
+<p><strong>When to Use</strong></p>
+</li>
+<li><p>when dataset is not very large (10000 samples or even more)</p>
+</li>
+<li><p>when you have powerful computational device. </p>
+<br>
+</li>
+</ul>
+</li>
+<li><p><strong>Bootstrap</strong><br> <strong>Advantages</strong></p>
+<ul>
+<li><p>Performance of model doesn’t depend on the split method on dataset</p>
+</li>
+<li><p>When dataset is small or insufficient, or imbalanced (some classes are more than other significantly), it may reduce overfitting effect by sampling with replacement</p>
+</li>
+<li><p>Less expensive on computation compared with cross validation</p>
+<p><strong>Disadvantages</strong></p>
+</li>
+<li><p>Need to determine what sampling method to use</p>
+<p><strong>When to Use</strong></p>
+</li>
+<li><p>when dataset is small or insufficient (In this case, we may use Over-sampling to repeat some data)</p>
+</li>
+<li><p>when dataset is imbalanced</p>
+</li>
+<li><p>when dataset is pretty large (In this case, we may use down-sampling to select part of data for training)</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="Comparison-of-performances-among-different-model"><a href="#Comparison-of-performances-among-different-model" class="headerlink" title="Comparison of performances among different model"></a>Comparison of performances among different model</h2><p><strong>How do we know the performances between models are similar?</strong></p>
+<ul>
+<li><strong>t-Test / Student’s t test</strong> Read this <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Student%27s_t-test">paper</a></li>
+</ul>
+<h2 id="Model-Selection"><a href="#Model-Selection" class="headerlink" title="Model Selection"></a>Model Selection</h2><ul>
+<li><p><strong>ROC curve</strong>: receiver operating charatistic curve (true positive rate -VS- False positive rate)<br>we first let model output possibility of each class and then set the threshold to convert possibility to 0, 1 binary classification labels.<br>The threshold is usually default as 0.5.<br>Based on the binary classification, compute true positive rate <strong>TPR</strong>/recall  (<strong>TP/(TP+FN)</strong>) and false positive rate/<strong>FPR</strong> (<strong>FP/(FP+TN) = FP/real negative</strong>)<br>Since threshold is set to 0.5, during training of model, the performance of model will change and hence TPR and FPR will change.<br>The changing TPR and FPR leads to the ROC curve</p>
+<br>
+</li>
+<li><p><strong>AUC</strong>: area under curve ( ROC curve)<br>Since TPR and FPR range from 0 to 1, hence AUC has range [0, 1]. AUC usually is inside [0.5, 1] because a good model usually can classify sample correctly with 0.5 possibility.</p>
+<br>
+</li>
+<li><p><strong>Physical Meaning of AUC:</strong><br><strong>AUC is the possibility that a random-chosen positive sample is ranked more highly than a randomly-chosen negative sample.</strong><br>In other words, AUC is the <strong>possibility that a model’s prediction possibility of a random positive sample is more higher than a random negative sample</strong>. Then when AUC of a model is larger, it is more likely for the model to predict positive sample as 1  , rather than negative sample as 1.</p>
+<br>
+</li>
+<li><p>Example: when <strong>threshold =0.5</strong><br>  <strong>Case 1</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sample</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Possibility</td>
+<td>0.9</td>
+<td>0.8</td>
+<td>0.51</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td>Prediction</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Ground Truth</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>In case 1 we see that possibility that positive sample is ranked higher than negative sample, since all positive sample has possibility greater than negative sample and TPR = 2/2=1 as FPR = 1/2 =0.5 &lt; TPR. Hence in this case, it is a good model.</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>  <strong>Case 2</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sample</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Possibility</td>
+<td>0.9</td>
+<td>0.3</td>
+<td>0.51</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>Prediction</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Ground Truth</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>  In case 2, we see that TPR = 1/2 &lt; FPR= 2/2=1 and AUC is small. The possibility that positive sample ranked higher than negative sample is small. The prediction possibilty of positive sample is also small than negative sample in sample B,D. Hence the model performance is not good enough.</p>
+</li>
+</ul>
+<br>
+
+<h2 id="Improvement-on-Accuracy-Ensembling-method"><a href="#Improvement-on-Accuracy-Ensembling-method" class="headerlink" title="Improvement on Accuracy: Ensembling method"></a>Improvement on Accuracy: Ensembling method</h2><ul>
+<li><p><strong>Bagging (bootstrap aggregation)</strong></p>
+<ul>
+<li><p><strong>Main Idea:</strong><br><strong>Its goal is to reduce variance</strong> by using multiple classifiers, like decision tree. It uses boostrap method to sample data and train multiple classifiers and then average the prediction over a collection of classifiers (for <strong>continuous value prediction, regression</strong>), or return the prediction with maximum votes (for<br><strong>classification</strong>)<br><strong>Random forest is a bagging approach, which bags a set of decision trees together.</strong> </p>
+<br>
+</li>
+<li><p><strong>Assumptions</strong><br>  we have training set with size of <strong>D</strong> and a set of models with size of <strong>K</strong></p>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>Similar to Bootstrap, at each iteration i, a training set Di of d tuples is sampled with replacement from training set.</li>
+<li>A classifier model Mi is learned for each training set Di</li>
+</ol>
+</li>
+<li><p><strong>Prediction:</strong></p>
+<ol>
+<li>Each Classifier Mi returns prediction for input X. </li>
+<li>Discrete value output: The bagged classifier counts the votes and assigns the class with the most votes to X</li>
+<li>Continous value output:<br>take the average value of each prediction for a given test sample.</li>
+</ol>
+</li>
+<li><p><strong>Advantages:</strong></p>
+<ol>
+<li>Better than a single classifier from the classifier set. </li>
+<li>More robust in noisy data and hence <strong>smaller variance</strong></li>
+</ol>
+</li>
+<li><p><strong>Disadvantages:</strong><br>  1.<strong>Its training depends on sampling techniques</strong>, which could affect the accuracy</p>
+<ol start="2">
+<li><strong>The prediction may be not precise</strong>, since it uses average value of classifiers’ predictions.<br>For example, if valid prediction values are 1,2,or 3, then the average of predictions from different model could lead to a floating point number.</li>
+</ol>
+</li>
+<li><p><strong>Properties of Random Forest</strong></p>
+<ol>
+<li><p>Comparable in accuracy to Adaboost, but more robust to errors and outliers.</p>
+</li>
+<li><p>Insensitive to the number of attributes selected for consideration at each split, and faster than boosting</p>
+<br>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Boosting</strong></p>
+<ul>
+<li><p><strong>Main Idea:</strong><br><strong>Its goal is to improve accuracy, let models better fit training set.</strong> It uses weighted votes from a collection of classifiers</p>
+<br>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>Each training sample/tuple is given a weight, eg $w_i$ for the $i^{th}$ tuple. Then we have training set {(X0,y0, w0), … ,(Xi,yi, wi)}<br>where $X_i$ and $y_i$ are training sample and target</li>
+<li>We have k classifiers {M0, M1,…Mk}. Each classifier is learned from the whole training set <strong>iteratively</strong>. That is, if we have k classifiers, then we need to iterate the training set at least k times (at $i^{th}$ iteration, we train the $i^{th}$ classifier),  so that each classifier can learn the training set.</li>
+<li>After classifier $M_i$ is learned on training set, classifier $M_{i+1}$ paies more attention to the training samples that are misclassified by $M_i$ <br>   
+</li>
+</ol>
+</li>
+<li><p><strong>Prediction:</strong><br>  The final Model combines the votes of each individual classifier. Either find the prediction with largest sum of weights (<strong>Classification</strong>), or find the average of all prediction values (<strong>Regression</strong>)<br>  The weight of each classifier’s vote is a function of its accuracy</p>
+<br>
+</li>
+<li><p><strong>Advantages</strong></p>
+<ol>
+<li>Boosting can be extended to numeric prediction</li>
+<li>Better fit the training set since it adjusts the weights of training set and gives more attention to the misclassified sample.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Disadvantages</strong></p>
+<ol>
+<li>Easy to overfit. Need Additional techniques to avoid overfitting. (I will discuss the methods dealing with Overfitting ). <br>
+</li>
+</ol>
+</li>
+<li><p><strong>Questions:</strong></p>
+<ol>
+<li>How to <strong>pay more attention</strong> to misclassified samples?  give Higher weights? But How to compute weights?<br><strong>Answer:</strong> This depends on the actual boosting algorithm, like GradientBoosting, AdaBoosting<br>
+</li>
+</ol>
+</li>
+<li><p><strong>AdaBoosting</strong></p>
+<ol>
+<li><p><strong>Assumption:</strong><br>Assume we have training set with size of <strong>D</strong> and a set of classifier models with size of <strong>T</strong></p>
+</li>
+<li><p>__Error of model $M_i$__</p>
+<p> Error($M_i$) = $\sum_i^D (w_i \times err(X_i))$</p>
+<p> if using normalized weight (weight in range [0,1]), then<br> Error($M_i$) = $\frac{\sum_i^D (w_i \times err(X_i))}{(\sum_j^D w_j)} $</p>
+ <br>
+
+<p> <strong>Note:</strong><br> In classification, $err(X_i)= 1(C_i(X_i) !=Y_i)$, $C_i(X_I)$ means the prediction of model $M_i$ on sample $X_i$. If the prediction is correction $error(X_i) =0$, otherwise 1.</p>
+<br>
+</li>
+<li><p><strong>Weight of model $M_i$’s voting: $\alpha_i$</strong><br> $\alpha_i = log\frac{1-error(M_i)}{error(M_i)} + log(K-1)$.</p>
+<p> Note:<br> K =  the number of classes in dataset. When K=1, log(K-1) term can be ignored</p>
+<br>
+</li>
+<li><p><strong>Update of weight</strong><br> $w_i = w_i \cdot exp(\alpha_i \cdot 1(M_j(X_i) != Y_i))$</p>
+ <br>
+
+<p> The weight $w_i$ of the $i^{th}$ training tuple $X_i$  is updated by timing exponential value of weight of model <strong>only when this model $M_j$ misclassifies the $X_i$ ( That is $M_j(X_i) !=Y_i$ and hence  $1(M_j(X_i) !=Y_i) =1 $)</strong>. </p>
+<br>
+</li>
+<li><p><strong>Prediction</strong><br> $C(X_i) = argmax_{k} \sum_{j=1}^T \alpha_{m}\cdot 1(M_j(X_i)== Y_i)$<br> where $1(M_j(X_i)== Y_i)$  is equal to 1 if prediction is correct, otherwise, 0.<br> <strong>The prediction of the whole model has the largest sum of weight of models, NOT the weight of training tuple!</strong></p>
+<br>
+</li>
+<li><p>More detail for AdaBoosting, Read <a target="_blank" rel="noopener" href="https://web.stanford.edu/~hastie/Papers/samme.pdf">this paper</a></p>
+<br>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Stacking</strong></p>
+<ul>
+<li><p><strong>Main Idea:</strong><br>It combines and trains a set of <strong>heterogeneous</strong> classifiers in parallel.<br>It consists of 2-level models:<br><strong>level-0: base model</strong><br>Models fit on the training data and whose predictions are compiled.<br><strong>level-1: Meta-Model</strong><br>It learns <strong>how to best combine the predictions</strong> of the base models. </p>
+<br>
+</li>
+<li><p><strong>Training:</strong> </p>
+<ol>
+<li>split the training data into K-folds </li>
+<li>one of base models is fitted on the K-1 parts and predictions are made for Kth part.</li>
+<li>Repeat step 2 for each fold</li>
+<li>Fit the base model on the whole train data set to calculate its performance on the test set.</li>
+<li>repeat step 2~4 for each base model</li>
+<li>Predictions from the train set are used as features for the second level model.<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Classification:</strong><br>   Second level model is used to make a prediction on the test set.</p>
+<br>
+</li>
+<li><p><strong>Advantage:</strong></p>
+<ol>
+<li> It harness the capabilities of a range of well-performing models on a classification or regression task and make predictions that have better performance than any single model in the ensemble.        <br>
+</li>
+</ol>
+</li>
+<li><p><strong>Disadvantage:</strong></p>
+<ol>
+<li>It could be computational expensive since it uses k-fold method and use multiple level models.<br>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Comparison among Ensembling, boosting and bagging</strong></p>
+<ol>
+<li>Goal of bagging is to reduce variance and noise while boosting is to improve accuracy using weighted models. Stacking is to improve accuracy of model using hetergenerous models.</li>
+<li>Adaboost let classifiers pay more attention to the misclassified samples, but if those misclassified samples are outlier or noisy data, it will affect a lot and lead to larger variance.<br>However, bagging and ensemble uses averaging and voting methods and each classifier has equal weight, which is less sensitive to the noise data and outlier.</li>
+</ol>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_37352167/article/details/85028835">https://blog.csdn.net/weixin_37352167/article/details/85028835</a><br>[2] <a target="_blank" rel="noopener" href="https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/">https://machinelearningmastery.com/stacking-ensemble-machine-learning-with-python/</a><br>[3] <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Student%27s_t-test">https://en.wikipedia.org/wiki/Student%27s_t-test</a><br>[4] <a target="_blank" rel="noopener" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fnmeth.3945/MediaObjects/41592_2016_Article_BFnmeth3945_Fig1_HTML.jpg">https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fnmeth.3945/MediaObjects/41592_2016_Article_BFnmeth3945_Fig1_HTML.jpg</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/08/13/Model-Eval-Selection/" data-id="cklak0708005o6sty69kn2byn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/24/data-structure-sorting/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Data Structure 2 -sorting
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/29/NLP-Word2Vec-Improvement/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">NLP Improvement on Word2Vector</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

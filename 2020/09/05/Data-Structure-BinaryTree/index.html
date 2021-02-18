@@ -1,38 +1,318 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Data Structure 3 - BinaryTree | Wenkang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Data Structure 3 - BinaryTree">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/05/Data-Structure-BinaryTree/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-05T22:28:06.000Z">
+<meta property="article:modified_time" content="2020-09-14T15:44:01.031Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="Binary Tree">
+<meta property="article:tag" content="Traversal">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Wenkang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Wenkang&#39;s Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/wenkangwei/wenkangwei.github.io`"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Data-Structure-BinaryTree" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/05/Data-Structure-BinaryTree/" class="article-date">
+  <time datetime="2020-09-05T22:28:06.000Z" itemprop="datePublished">2020-09-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Structure/">Data Structure</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Data Structure 3 - BinaryTree
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <img src = https://media.geeksforgeeks.org/wp-content/uploads/Untitled-Diagram-2-7.png>
+<a id="more"></a>
+
+<h1 id="Binary-Tree"><a href="#Binary-Tree" class="headerlink" title="Binary Tree"></a>Binary Tree</h1><h3 id="Definition-of-Binary-Tree"><a href="#Definition-of-Binary-Tree" class="headerlink" title="Definition of Binary Tree"></a>Definition of Binary Tree</h3><p>The settings of binary tree are following:</p>
+<ol>
+<li>Each node in the tree contains no more than 2 children nodes (left node, right node)</li>
+<li>Leaf nodes of the tree are the nodes that contain no children nodes</li>
+</ol>
+<h3 id="Traversal-of-Binary-Tree"><a href="#Traversal-of-Binary-Tree" class="headerlink" title="Traversal of Binary Tree"></a>Traversal of Binary Tree</h3><h4 id="Type-of-traversals-of-binary-tree"><a href="#Type-of-traversals-of-binary-tree" class="headerlink" title="Type of traversals of binary tree"></a>Type of traversals of binary tree</h4><p>Consider this example of binary tree<br><img src=/images/data-structure/binary-tree.png></p>
+<ol>
+<li><p><strong>Pre-order traversal</strong><br>The order of visiting nodes:  <strong>current node -&gt; left children node -&gt; right children node</strong>.<br>In the binary tree above, we start from the root node (current node) and follow the rule to visit each node. Then have cur_node= 10, left_node =5. when we goes to left_node 5, 5 becomes the new current node and hence print 5 and then its left_node 2. When it finds there is no left node after 2, it goes back to 5 and visit its right node.<br>Repeat doing this, we have Pre-Order traversal of this binary tree: <strong>10-&gt; 5-&gt;2-&gt; 7-&gt; 15-&gt;20</strong></p>
+</li>
+<li><p><strong>In-order traversal</strong><br>The order of visiting nodes:  <strong>left children node -&gt; current node -&gt; right children node</strong><br>Similar to Pre-Order traversal, except the traversal order, In-order requires the current node is the second node to be visited. Hence, In-Order traversal of this example is: <strong>2-&gt;5-&gt;7-&gt;10-&gt;15-&gt;20</strong></p>
+</li>
+</ol>
+<ol start="3">
+<li><strong>Post-order traversal</strong><br>The order of visiting nodes:  <strong>left children node -&gt; right children node -&gt; current node</strong><br>Similarly, Post-Order traversal of the example is: <strong>2-&gt;7-&gt;5-&gt;15-&gt;20-&gt;10</strong> </li>
+</ol>
+<ol start="4">
+<li><strong>Level-order traversal</strong><br>It traverses the binary tree from top level to lower level. In each level of tree, it iterates the nodes from left to right. Level-Order traversal of this example: <strong>10-&gt;5-&gt;15-&gt;2-&gt;7-&gt;20</strong></li>
+</ol>
+<h4 id="Implementation-of-Traversal-of-Binary-Tree"><a href="#Implementation-of-Traversal-of-Binary-Tree" class="headerlink" title="Implementation of Traversal of Binary Tree"></a>Implementation of Traversal of Binary Tree</h4><ol>
+<li><strong>Recursive Method</strong></li>
+</ol>
+<ul>
+<li>Pre-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h), h is the height of the tree. It is used by recursion to store address of function in stack<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.left = <span class="literal">None</span></span><br><span class="line">        self.right = <span class="literal">None</span></span><br><span class="line">        self.val = <span class="literal">None</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Pre_Order</span>(<span class="params">self, root</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        result = []</span><br><span class="line">        result.append(root.val)</span><br><span class="line">        left_list = self.Pre_Order(root.left)</span><br><span class="line">        right_list = self.Pre_Order(root.right)</span><br><span class="line">        result.extend(left_list)</span><br><span class="line">        result.extend(right_list)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></li>
+<li>In-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h), h is the height of the tree. It is used by recursion to store address of function in stack<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">In_Order</span>(<span class="params">self, root</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        result = []</span><br><span class="line">        left_list = self.In_Order(root.left)</span><br><span class="line">        result.extend(left_list)</span><br><span class="line">        result.append(root.val)</span><br><span class="line">        right_list = self.In_Order(root.right)</span><br><span class="line">        result.extend(right_list)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></li>
+<li>Post-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h), h is the height of the tree. It is used by recursion to store address of function in stack<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">Post_Order</span>(<span class="params">self, root</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        result = []</span><br><span class="line">        left_list = self.Post_Order(root.left)</span><br><span class="line">        result.extend(left_list)</span><br><span class="line">        right_list = self.Post_Order(root.right)</span><br><span class="line">        result.extend(right_list)</span><br><span class="line">        result.append(root.val)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ol start="2">
+<li><strong>Iterative Method</strong></li>
+</ol>
+<ul>
+<li>Pre-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h), h is the height of the tree<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">PreOrder</span>(<span class="params">self, root</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    input: TreeNode root</span></span><br><span class="line"><span class="string">    return: Integer[]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># write your solution here</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">      <span class="keyword">return</span> []</span><br><span class="line">    stack = [(root, <span class="number">1</span>)]</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(stack)&gt;<span class="number">0</span>:</span><br><span class="line">      node, count = stack.pop()</span><br><span class="line">      <span class="keyword">if</span> count ==<span class="number">1</span>:</span><br><span class="line">        result.append(node.val)</span><br><span class="line">        stack.append((node,<span class="number">2</span>))</span><br><span class="line">        <span class="keyword">if</span> node.left:</span><br><span class="line">          node = node.left</span><br><span class="line">          stack.append((node, <span class="number">1</span>))</span><br><span class="line">      <span class="keyword">if</span> count == <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">if</span> node.right:</span><br><span class="line">          node= node.right</span><br><span class="line">          stack.append((node,<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></li>
+<li>In-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h), h is the height of the tree<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">InOrder</span>(<span class="params">self, root</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    input: TreeNode root</span></span><br><span class="line"><span class="string">    return: Integer[]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># write your solution here</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">      <span class="keyword">return</span> []</span><br><span class="line">    stack = [(root, <span class="number">1</span>)]</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(stack)&gt;<span class="number">0</span>:</span><br><span class="line">      node, count = stack.pop()</span><br><span class="line">      <span class="keyword">if</span> count ==<span class="number">1</span>:</span><br><span class="line">        stack.append((node,<span class="number">2</span>))</span><br><span class="line">        <span class="keyword">if</span> node.left:</span><br><span class="line">          node = node.left</span><br><span class="line">          stack.append((node, <span class="number">1</span>))</span><br><span class="line">      <span class="keyword">if</span> count == <span class="number">2</span>:</span><br><span class="line">        result.append(node.val)</span><br><span class="line">        <span class="keyword">if</span> node.right:</span><br><span class="line">          node= node.right</span><br><span class="line">          stack.append((node,<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></li>
+<li>Post-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">PostOrder</span>(<span class="params">self, root</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    input: TreeNode root</span></span><br><span class="line"><span class="string">    return: Integer[]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># write your solution here</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">      <span class="keyword">return</span> []</span><br><span class="line">    stack = [(root, <span class="number">1</span>)]</span><br><span class="line">    result = []</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(stack)&gt;<span class="number">0</span>:</span><br><span class="line">      node, count = stack.pop()</span><br><span class="line">      <span class="keyword">if</span> count ==<span class="number">1</span>:</span><br><span class="line">        stack.append((node,<span class="number">2</span>))</span><br><span class="line">        <span class="keyword">if</span> node.left:</span><br><span class="line">          node = node.left</span><br><span class="line">          stack.append((node, <span class="number">1</span>))</span><br><span class="line">      <span class="keyword">if</span> count == <span class="number">2</span>:</span><br><span class="line">        stack.append((node, <span class="number">3</span>))</span><br><span class="line">        <span class="keyword">if</span> node.right:</span><br><span class="line">          node= node.right</span><br><span class="line">          stack.append((node,<span class="number">1</span>))</span><br><span class="line">      <span class="keyword">if</span> count==<span class="number">3</span>:</span><br><span class="line">        result.append(node.val)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></li>
+<li>Level-Order<br><strong>Time Complexity:</strong> O(n)<br><strong>Memory Complexity:</strong> O(h)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">LevelOrder</span>(<span class="params">self,root</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        queue = [root]</span><br><span class="line">        result = []</span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">len</span>(queue) &gt;<span class="number">0</span>:</span><br><span class="line">            <span class="comment"># dequeue</span></span><br><span class="line">            node = queue[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">del</span> queue[<span class="number">0</span>]</span><br><span class="line">            result.append(node.val)</span><br><span class="line">            <span class="comment"># enqueue</span></span><br><span class="line">            <span class="keyword">if</span> node.left:</span><br><span class="line">                queue.append(node.left)</span><br><span class="line">            <span class="keyword">if</span> node.right:</span><br><span class="line">                queue.append(node.right)</span><br><span class="line">        <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
 
 
-{% block title %} {{ page.title }} | {{ config.title }} {% endblock %}
+</li>
+</ul>
+<h3 id="Special-Binary-Tree"><a href="#Special-Binary-Tree" class="headerlink" title="Special Binary Tree"></a>Special Binary Tree</h3><h4 id="1-Balanced-Binary-Tree"><a href="#1-Balanced-Binary-Tree" class="headerlink" title="1. Balanced Binary Tree"></a>1. Balanced Binary Tree</h4><p><strong>Balanced Binary Tree</strong> is a tree that the depth of left and right subtrees of <strong>every node</strong> differ by 1 or less.<br>Hence,  <strong>for each node</strong> in the tree, we need to check the heights of left, right subtrees.<br>In the examples below:<br><img src=/images/data-structure/balanced-tree.png></p>
+<p>Example 1 is a balanced tree, but Example 2 is not, since left and right subtrees of the node of 20 in example 2 has the height difference 2-0 = 2 &gt;1.</p>
+<h4 id="2-Complete-Binary-Tree"><a href="#2-Complete-Binary-Tree" class="headerlink" title="2. Complete Binary Tree"></a>2. Complete Binary Tree</h4><p>A Binary Tree is a complete Binary Tree if all the levels are completely filled <strong>except possibly the last level</strong> and the last level has all keys <strong>as left as possible</strong><br>Consider the following example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     1</span><br><span class="line"> &#x2F;  \   &#x2F;  </span><br><span class="line">2    4  2 </span><br></pre></td></tr></table></figure>
+<p>This is an complete as well as balanced tree.<br>However, the following one is balanced but not complete tree, since in the last level, all keys are not as left as possible as the node 2 should be in the left node, but it doesn’t.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     1</span><br><span class="line"> &#x2F;  \     \</span><br><span class="line">2    4      2 </span><br></pre></td></tr></table></figure>
+<h4 id="4-Perfect-Binary-Tree"><a href="#4-Perfect-Binary-Tree" class="headerlink" title="4. Perfect Binary Tree"></a>4. Perfect Binary Tree</h4><p>Perfect Binary Tree A Binary tree is a Perfect Binary Tree in which all the internal nodes have two children and all leaf nodes are at the same level.</p>
+<p>Example of a perfect tree</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     1</span><br><span class="line"> &#x2F;  \    &#x2F; \</span><br><span class="line">2    4  3    2 </span><br></pre></td></tr></table></figure>
+<p>Example of <strong>not</strong> a perfect tree</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     1</span><br><span class="line"> &#x2F;  \    &#x2F;</span><br><span class="line">2    4  3   </span><br></pre></td></tr></table></figure>
+<p>This is a complete, balanced binary tree, but not a perfect tree</p>
+<h4 id="5-Binary-Search-Tree"><a href="#5-Binary-Search-Tree" class="headerlink" title="5. Binary Search Tree"></a>5. Binary Search Tree</h4><p>Binary search tree is a tree that for every node in the tree, the values in left subtree are smaller than its value,  the values in right subtree are greater than its.<br>if we consider the duplicated values in the tree,  the values in right subtree can be greater than <strong>or equal to</strong> the node value. This case should be discussed if duplicated values exist. <strong>This difference should be determined when discussing with the hiring manager</strong></p>
+<p>Example of Binary Search Tree</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     11</span><br><span class="line"> &#x2F;  \     \</span><br><span class="line">2    7     21</span><br></pre></td></tr></table></figure>
+<p>Example of <strong>Not</strong> a Binary Search Tree</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">     10</span><br><span class="line">    &#x2F;   \ </span><br><span class="line">   5     1</span><br><span class="line"> &#x2F;  \     \</span><br><span class="line">2    7     21</span><br></pre></td></tr></table></figure>
 
-{% block page_class %}page-post-detail{% endblock %}
+<h4 id="6-AVL-Tree"><a href="#6-AVL-Tree" class="headerlink" title="6. AVL Tree"></a>6. AVL Tree</h4><p>AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes.<br>When inserting each element in the AVL tree, it will re-balance the tree automatically.<br>The operations of this data structure will be demonstrated in future</p>
+<h4 id="7-Red-Black-Tree"><a href="#7-Red-Black-Tree" class="headerlink" title="7. Red-Black Tree"></a>7. Red-Black Tree</h4><p>Red-Black tree is also a self-balancing tree. It has the following constraints:</p>
+<ol>
+<li>Each node has a color <strong>either red or black</strong></li>
+<li><strong>Root</strong> of tree is always <strong>black</strong></li>
+<li>No adjacent red nodes. The parent/ children of a red node could not be red.  <strong>But there could be adjacent black nodes</strong></li>
+<li><strong>Every path</strong> from a node (including root) to any of its descendant NULL node has the <strong>same number of black nodes</strong>.<br>Example:</li>
+</ol>
+<img src=https://www.geeksforgeeks.org/wp-content/uploads/RedBlackTree.png>
 
+<p>Every path starting from node 18 to NiL/ None, have the same amount of black node 1.</p>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><p>In future, I may write the notes about more operations about binary tree, AVL tree, Red-Black Tree, just like computing height of tree, isBalanced, isSymmetric, insertion and deletion of element in AVL tree/Red-Black tree</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/">https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/</a><br>[2] <a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/avl-tree-set-1-insertion/">https://www.geeksforgeeks.org/avl-tree-set-1-insertion/</a><br>[3] <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9">https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%85%83%E6%90%9C%E5%B0%8B%E6%A8%B9</a></p>
 
-{% block content %}
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/05/Data-Structure-BinaryTree/" data-id="cklak06xp001l6sty0p6pbkya" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li></ul>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/20/Distributed-Computing-note-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Distributed Computing Basic Note - 1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/24/data-structure-sorting/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Data Structure 2 -sorting</div>
+    </a>
+  
+</nav>
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Checklist/">Checklist</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Collection/">Data Collection</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/">Data Structure</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Structure/Sorting/">Sorting</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Deep-Learning/">Deep Learning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/">Machine Learning</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/">Ensemble Method</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/">Accuracy Improvement</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/">NLP</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/NLP/Machine-Learning/">Machine Learning</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Parallel-Computing/">Parallel Computing</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Programming/">Programming</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PySpark/">PySpark</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Recommendation-System/">Recommendation System</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Report/">Report</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/">Searching</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Searching/Data-Strucure/">Data Strucure</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Statistic/">Statistic</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a></li></ul>
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Amdahl-s-Law/" rel="tag">Amdahl's Law</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backpropagation/" rel="tag">Backpropagation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bagging/" rel="tag">Bagging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BeautifulSoup/" rel="tag">BeautifulSoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Binary-Tree/" rel="tag">Binary Tree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting/" rel="tag">Boosting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boosting-Machine/" rel="tag">Boosting Machine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BuckSort/" rel="tag">BuckSort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Collaborative-Filtering/" rel="tag">Collaborative Filtering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Confusion-Metric/" rel="tag">Confusion Metric</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Convolution-Neural-Network/" rel="tag">Convolution Neural Network</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cross-Validation/" rel="tag">Cross Validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/D3-js/" rel="tag">D3.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Analysis/" rel="tag">Data Analysis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataScience/" rel="tag">DataScience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dropout/" rel="tag">Dropout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ensemble-Learning/" rel="tag">Ensemble Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Holdout/" rel="tag">Holdout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Icarus/" rel="tag">Icarus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Independence-Test/" rel="tag">Independence Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/K-Mean-Clustering/" rel="tag">K-Mean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KMean-Clustering/" rel="tag">KMean Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LGBM/" rel="tag">LGBM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Machine-Learning/" rel="tag">Machine Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Evaluation/" rel="tag">Model Evaluation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Model-Selection/" rel="tag">Model Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Natural-Language-Representations/" rel="tag">Natural Language Representations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nature-Language-Processing/" rel="tag">Nature Language Processing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Negative-Sampling/" rel="tag">Negative Sampling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/P-value/" rel="tag">P-value</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Computing/" rel="tag">Parallel Computing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Parallel-Speedup/" rel="tag">Parallel Speedup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PySpark/" rel="tag">PySpark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROC-curve/" rel="tag">ROC curve</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Recommendation-System/" rel="tag">Recommendation System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regression/" rel="tag">Regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Regular-Expression/" rel="tag">Regular Expression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/" rel="tag">Sorting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stacking/" rel="tag">Stacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traversal/" rel="tag">Traversal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unsupervised-Learning/" rel="tag">Unsupervised Learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Variable-Selection/" rel="tag">Variable Selection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Scrapping/" rel="tag">Web Scrapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep/" rel="tag">Wide and Deep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wide-and-Deep-Model/" rel="tag">Wide and Deep Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-Embedding/" rel="tag">Word Embedding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Word-vector/" rel="tag">Word vector</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binary-search/" rel="tag">binary search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bubble-sort/" rel="tag">bubble sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commands/" rel="tag">commands</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/insertion-sort/" rel="tag">insertion sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/merge-sort/" rel="tag">merge sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/non-parametric-learning/" rel="tag">non-parametric learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/" rel="tag">quick sort</a></li></ul>
+    </div>
+  </div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Amdahl-s-Law/" style="font-size: 10px;">Amdahl's Law</a> <a href="/tags/Backpropagation/" style="font-size: 10px;">Backpropagation</a> <a href="/tags/Bagging/" style="font-size: 10px;">Bagging</a> <a href="/tags/BeautifulSoup/" style="font-size: 10px;">BeautifulSoup</a> <a href="/tags/Binary-Tree/" style="font-size: 10px;">Binary Tree</a> <a href="/tags/Boosting/" style="font-size: 10px;">Boosting</a> <a href="/tags/Boosting-Machine/" style="font-size: 10px;">Boosting Machine</a> <a href="/tags/BuckSort/" style="font-size: 10px;">BuckSort</a> <a href="/tags/Collaborative-Filtering/" style="font-size: 10px;">Collaborative Filtering</a> <a href="/tags/Confusion-Metric/" style="font-size: 10px;">Confusion Metric</a> <a href="/tags/Convolution-Neural-Network/" style="font-size: 10px;">Convolution Neural Network</a> <a href="/tags/Cross-Validation/" style="font-size: 10px;">Cross Validation</a> <a href="/tags/D3-js/" style="font-size: 10px;">D3.js</a> <a href="/tags/Data-Analysis/" style="font-size: 10px;">Data Analysis</a> <a href="/tags/DataScience/" style="font-size: 10px;">DataScience</a> <a href="/tags/Dropout/" style="font-size: 10px;">Dropout</a> <a href="/tags/Ensemble-Learning/" style="font-size: 10px;">Ensemble Learning</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/Holdout/" style="font-size: 10px;">Holdout</a> <a href="/tags/Icarus/" style="font-size: 10px;">Icarus</a> <a href="/tags/Independence-Test/" style="font-size: 10px;">Independence Test</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/K-Mean-Clustering/" style="font-size: 10px;">K-Mean Clustering</a> <a href="/tags/KMean-Clustering/" style="font-size: 10px;">KMean Clustering</a> <a href="/tags/LGBM/" style="font-size: 20px;">LGBM</a> <a href="/tags/Machine-Learning/" style="font-size: 10px;">Machine Learning</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Model-Evaluation/" style="font-size: 10px;">Model Evaluation</a> <a href="/tags/Model-Selection/" style="font-size: 10px;">Model Selection</a> <a href="/tags/Natural-Language-Representations/" style="font-size: 10px;">Natural Language Representations</a> <a href="/tags/Nature-Language-Processing/" style="font-size: 10px;">Nature Language Processing</a> <a href="/tags/Negative-Sampling/" style="font-size: 10px;">Negative Sampling</a> <a href="/tags/P-value/" style="font-size: 10px;">P-value</a> <a href="/tags/Parallel-Computing/" style="font-size: 10px;">Parallel Computing</a> <a href="/tags/Parallel-Speedup/" style="font-size: 10px;">Parallel Speedup</a> <a href="/tags/PySpark/" style="font-size: 10px;">PySpark</a> <a href="/tags/ROC-curve/" style="font-size: 10px;">ROC curve</a> <a href="/tags/Recommendation-System/" style="font-size: 10px;">Recommendation System</a> <a href="/tags/Regression/" style="font-size: 10px;">Regression</a> <a href="/tags/Regular-Expression/" style="font-size: 10px;">Regular Expression</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Stacking/" style="font-size: 10px;">Stacking</a> <a href="/tags/Traversal/" style="font-size: 10px;">Traversal</a> <a href="/tags/Unsupervised-Learning/" style="font-size: 10px;">Unsupervised Learning</a> <a href="/tags/Variable-Selection/" style="font-size: 10px;">Variable Selection</a> <a href="/tags/Web-Scrapping/" style="font-size: 10px;">Web Scrapping</a> <a href="/tags/Wide-and-Deep/" style="font-size: 10px;">Wide and Deep</a> <a href="/tags/Wide-and-Deep-Model/" style="font-size: 10px;">Wide and Deep Model</a> <a href="/tags/Word-Embedding/" style="font-size: 10px;">Word Embedding</a> <a href="/tags/Word-vector/" style="font-size: 10px;">Word vector</a> <a href="/tags/binary-search/" style="font-size: 10px;">binary search</a> <a href="/tags/bubble-sort/" style="font-size: 10px;">bubble sort</a> <a href="/tags/commands/" style="font-size: 10px;">commands</a> <a href="/tags/insertion-sort/" style="font-size: 10px;">insertion sort</a> <a href="/tags/merge-sort/" style="font-size: 10px;">merge sort</a> <a href="/tags/non-parametric-learning/" style="font-size: 10px;">non-parametric learning</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick sort</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/08/report/">CPSC 6300 Final Report</a>
+          </li>
+        
+          <li>
+            <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Wenkang Wei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,5 +1,381 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>CPSC 6300 Final Report - Wenkang&#039;s Blog</title><meta description=""><meta property="og:type" content="article"><meta property="og:title" content="CPSC 6300 Final Report"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:locale" content="en_US"><meta property="article:published_time" content="2020-12-08T05:18:39.000Z"><meta property="article:modified_time" content="2020-12-09T04:28:38.618Z"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="LGBM"><meta property="article:tag" content="Wide and Deep Model"><meta property="article:tag" content="Recommendation System"><meta property="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/08/report/"},"headline":"Wenkang's Blog","image":[],"datePublished":"2020-12-08T05:18:39.000Z","dateModified":"2020-12-09T04:28:38.618Z","author":{"@type":"Person","name":"Wenkang Wei"},"description":""}</script><link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/08/report/"><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-12-08T05:18:39.000Z" title="2020-12-08T05:18:39.000Z">2020-12-08</time><span class="level-item"><a class="link-muted" href="/categories/Report/">Report</a></span><span class="level-item">28 minutes read (About 4184 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">CPSC 6300 Final Report</h1><div class="content"><img src=https://miro.medium.com/max/2560/1*GMikfjbGYyPGDTYdJuMwhg.png>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.lug.ustc.edu.cn/css?family=lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LGBM,Wide and Deep Model,Recommendation System," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/icon.png?v=5.1.0" />
+
+
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPSC 6300 Final Report">
+<meta property="og:url" content="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/08/report/index.html">
+<meta property="og:site_name" content="Wenkang&#39;s Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-08T05:18:39.000Z">
+<meta property="article:modified_time" content="2020-12-09T04:28:38.618Z">
+<meta property="article:author" content="Wenkang Wei">
+<meta property="article:tag" content="LGBM">
+<meta property="article:tag" content="Wide and Deep Model">
+<meta property="article:tag" content="Recommendation System">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io`/2020/12/08/report/"/>
+
+
+
+
+
+  <title> CPSC 6300 Final Report | Wenkang's Blog </title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wenkang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/wenkangwei/wenkangwei.github.io`/2020/12/08/report/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wenkang Wei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wenkang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CPSC 6300 Final Report
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-12-08T00:18:39-05:00">
+                2020-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Report/" itemprop="url" rel="index">
+                    <span itemprop="name">Report</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <img src=https://miro.medium.com/max/2560/1*GMikfjbGYyPGDTYdJuMwhg.png>
 
 <a id="more"></a>
 
@@ -8,7 +384,7 @@
 <h2 id="Motivation-and-Goal"><a href="#Motivation-and-Goal" class="headerlink" title="Motivation and Goal"></a>Motivation and Goal</h2><p>We are to construct a recommendation system to predict the chances of a user listening to a song repetitively after the first observable listening event within a time window was triggered. If there are recurring listening event(s) triggered within a month after the user’s very first observable listening event, its target is marked 1, and 0 otherwise in the training set. By constructing such a recommendation system, we are able to remind music users of their favorite songs and increase the rate of the audience as well as the benefit to the music platform. </p>
 <h1 id="Introduction-and-Description-of-Data"><a href="#Introduction-and-Description-of-Data" class="headerlink" title="Introduction and Description of Data"></a>Introduction and Description of Data</h1><p>Music is important in our daily life and the role of music is determined by people and the environment. Music has a lot of help, for example, it can cultivate sentiment and reduce stress. However, some people don’t need music in their lives or live in music. People who never listen to music or harmony feel that music has a low sense of existence. But in fact, in their everyday lives, they actually have songs, ringing alarms, wind, and rain. So, the role of music performance is one of the most important companions in life. </p>
 <p>In order to recommend suitable music to users in music platforms efficiently, a recommendation system is an essential part of music platforms.  A recommendation system is a subclass of an information filtering system that seeks to predict the “rating” or “preference” a user would give to an item. Due to the fact that there are millions of kinds of music, composers, artists, and other information from users, it is hard for users to pick the kinds of music they like from millions of songs and remember which songs they like and want to re-play. Usually, users forget the songs they have added to their favorite song album due to the large number of songs they have a play. Hence it is necessary to build a music recommendation system to recommend kinds of music, which users prefer and are likely to repeat listening to.</p>
-<p>The dataset we collected is KKBox Music 1.7GB dataset. Our dataset is from Kaggle <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data">KKBox-Music-Recommendation-Challenge</a>. You can also get the dataset from our <a href="https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view">GoogleDrive</a> .   The description of the dataset is as follow:</p>
+<p>The dataset we collected is KKBox Music 1.7GB dataset. Our dataset is from Kaggle <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data" target="_blank" rel="noopener">KKBox-Music-Recommendation-Challenge</a>. You can also get the dataset from our <a href="https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view" target="_blank" rel="noopener">GoogleDrive</a> .   The description of the dataset is as follow:</p>
 <p>Descriptions of dataset:</p>
 <ol>
 <li><p>train.csv</p>
@@ -137,12 +513,12 @@ memory usage: 1.8+ MB
 </code></pre>
 <p>In the dataset description above, we can obtain the information from both sources of songs, songs, and members. By using the information of sources of songs, we can know where the songs re-played by users are from. The information about songs and members can provide us with details about what kinds of songs are often re-played by users, or what types of members are more likely to repeat playing songs. Such kinds of data can give us insight into users’ behaviors of repeating listening to music. </p>
 <p>Based on the information from members, songs and sources of songs,  we can use them as the input features to machine learning model. The target is the chance of a user listening to a song repetitively after the first observable listening event within a time window was triggered. If there are recurring listening event(s) triggered within a month after the user’s very first observable listening event, its target is marked 1, and 0 otherwise in the training set. Hence, the question can be defined as a binary classification problem and the prediction from machine learning model should be either possibility of the chance, or 0 , 1 binary value indicating if there is a chance.</p>
-<h1 id="Literature-Review-Related-Work"><a href="#Literature-Review-Related-Work" class="headerlink" title="Literature Review/Related Work"></a>Literature Review/Related Work</h1><p>As for the KKBox music recommendation system project, many Kaggle users choose to use a light gradient boosting machine (LGBM) due to its simplicity in preprocessing a large amount of data, and its fast computation speed. Based on the blog <a href="https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc">[5]</a>, the LGBM model is a light gradient boosting machine model, which is based on multiple decision tree models and use gradient boosting ensemble learning method to improve the training accuracy.  One work from Kaggle we refer to <a href="https://www.kaggle.com/asmitavikas/feature-engineered-0-68310">[3]</a>  is to use the LGBM boosting machine as a baseline to fit the dataset and train the model using binary cross-entropy loss since the prediction task in this project is a binary classification task.</p>
+<h1 id="Literature-Review-Related-Work"><a href="#Literature-Review-Related-Work" class="headerlink" title="Literature Review/Related Work"></a>Literature Review/Related Work</h1><p>As for the KKBox music recommendation system project, many Kaggle users choose to use a light gradient boosting machine (LGBM) due to its simplicity in preprocessing a large amount of data, and its fast computation speed. Based on the blog <a href="https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc" target="_blank" rel="noopener">[5]</a>, the LGBM model is a light gradient boosting machine model, which is based on multiple decision tree models and use gradient boosting ensemble learning method to improve the training accuracy.  One work from Kaggle we refer to <a href="https://www.kaggle.com/asmitavikas/feature-engineered-0-68310" target="_blank" rel="noopener">[3]</a>  is to use the LGBM boosting machine as a baseline to fit the dataset and train the model using binary cross-entropy loss since the prediction task in this project is a binary classification task.</p>
 <p>In addition to the LGBM model, there are some deep learning models used for the recommendation system. One of the neural network models is called the wide and deep model <a href="https://github.com/zenwan/Wide-and-Deep-PyTorch/blob/master/wide_deep/torch_model.py">[1]</a> . In this model, first uses an embedding network to transform the sparse categorical data into dense numerical data in one branch. Then it merges the branch of categorical data and the branch of numerical features together to feed the traditional network in the main branch. The main branch of the neural network works as a classifier while the embedding neural network works as a transformation network to preprocess the data. Since in this Kaggle project, no one tries such a neural network model for this task, we are interested in trying this model and see how it works in this problem. Then we compare it with the LGBM models.</p>
 <h1 id="Modeling-Approach"><a href="#Modeling-Approach" class="headerlink" title="Modeling Approach"></a>Modeling Approach</h1><p><strong>Task</strong> -  Since this project is to predict the chances of a user listening to a song repetitively after the first observable listening event within a time window was triggered, the output from the machine learning model is the possibility that a user will repeat listening to a song after the first listening event. Hence, this problem can be modeled as a binary classification problem</p>
 <p><strong>Loss Function</strong> - Since this task is a binary classification problem, we simply select binary cross-entropy loss as the loss function used to train parametric machine learning models, like deep learning models, logistic regression, etc.</p>
 <p><strong>Evaluation Metric</strong> - The evaluation metric to measure the performance of the machine learning model is selected to be accuracy and AUC (area under the curve) since we care about how accurate the models could be.  </p>
-<p><strong>LGBM Modeling</strong> - Light Gradient Boosting Machine (LGBM) model is a tree-based model，this model merge and train multiple decision tree models to do classification or regression tasks, using the Boosting ensemble learning process. It will automatically encode categorical data into vectors and train models for labels or one-hot encoding. Since it provides a fast way to transform categorical data and train models with good accuracy performance based on the results from leaderboard in Kaggle, we try it here and tune its parameters to fit the data.<br>Here is the reference to use LGBM: <a href="https://lightgbm.readthedocs.io/en/latest/Quick-Start.html">https://lightgbm.readthedocs.io/en/latest/Quick-Start.html</a></p>
+<p><strong>LGBM Modeling</strong> - Light Gradient Boosting Machine (LGBM) model is a tree-based model，this model merge and train multiple decision tree models to do classification or regression tasks, using the Boosting ensemble learning process. It will automatically encode categorical data into vectors and train models for labels or one-hot encoding. Since it provides a fast way to transform categorical data and train models with good accuracy performance based on the results from leaderboard in Kaggle, we try it here and tune its parameters to fit the data.<br>Here is the reference to use LGBM: <a href="https://lightgbm.readthedocs.io/en/latest/Quick-Start.html" target="_blank" rel="noopener">https://lightgbm.readthedocs.io/en/latest/Quick-Start.html</a></p>
 <p><strong>Wide and Deep Neural Network model</strong> - This model using the embedding network in the neural network, this model converts categorical attributes into dense vectors, allowing one to reduce the dimension of categorical data and remove key features such as PCA. Then for feature selection and classification in the main branch, it blends dense embedded vectors with numerical data. The main branch is a typical neural network that acts as a classification function using linear layers, activation functions (relu, softmax, sigmoid). The output is the possibility that the user may repeat listening to the music.<br>The architecture of Wide and Deep Model is referred to <a href="https://github.com/zenwan/Wide-and-Deep-PyTorch">https://github.com/zenwan/Wide-and-Deep-PyTorch</a></p>
 <p><strong>Baseline model</strong> -  We choose our baseline model as LGBM boosting machine model with following setings: ‘objective’: ‘binary’, learning_rate =  0.3 , num_leaves = 110, bagging_fraction = 0.95, bagging_freq = 1, bagging_seed = 1, feature_fraction =0.9, feature_fraction_seed =1, max_bin = 256, max_depth = 10, num_rounds = 200.<br>After we choose the baseline model, we tune the LGBM model by changing the max_depth parameter to be [10 , 15, 20 , 25, 30] to see how the depth affects our LGBM performance. After that, we also implement the Wide and Deep Model with learning rate  = 0.001, binary cross-entropy loss, and 2 epochs. The reason why we use different settings on the Wide and Deep model is that the training process of the neural network is very slow and the convergence speed of the model is slower than the LGBM model. The training loss of the neural network is easy to increase after decreasing for some iterations. So we need to tune some parameters to train the neural network model.</p>
 <h1 id="Project-Trajectory-Results-and-Interpretation"><a href="#Project-Trajectory-Results-and-Interpretation" class="headerlink" title="Project Trajectory, Results, and Interpretation"></a>Project Trajectory, Results, and Interpretation</h1><p>Our goal in this project doesn’t change. It is to construct a recommendation system to predict the chances of a user listening to a song repetitively after the first observable listening event within a time window was triggered. If there are recurring listening event(s) triggered within a month after the user’s very first observable listening event, its target is marked 1, and 0 otherwise in the training set. </p>
@@ -340,18 +716,18 @@ memory usage: 1.8+ MB
 </ol>
 <p>In conclusion, we collect a 1.7GB KKBOX music dataset from Kaggle and do exploratory data analysis (EDA) on the data by visualizing the attributes and compute the correlations among features. Then we clean the dataset by removing outliers from age/bd attributes, filling missing categorical data with new labels, and missing numerical data with median value. We also transform the text data and create new features. After that, we use 80% dataset as training set and 20% dataset as a validation set.<br>In Modeling and Evaluation, we use LGBM models and Wide &amp; Deep Neural network models to fit the dataset and also tune the max_depth parameter in LGBM to do binary classification tasks. The best accuracy performance of our models is 67.25% while the best accuracy from the Kaggle leaderboard is about 74%. In the end, we also summarize the future works to improve the project, like using better hardware resources, tunning other parameters of models, and explore more useful features for training.</p>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://github.com/zenwan/Wide-and-Deep-PyTorch/blob/master/wide_deep/torch_model.py">https://github.com/zenwan/Wide-and-Deep-PyTorch/blob/master/wide_deep/torch_model.py</a></p>
-<p>[2] <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/submit">https://www.kaggle.com/c/kkbox-music-recommendation-challenge/submit</a></p>
-<p>[3] <a href="https://www.kaggle.com/asmitavikas/feature-engineered-0-68310">https://www.kaggle.com/asmitavikas/feature-engineered-0-68310</a></p>
-<p>[4] <a href="https://blog.statsbot.co/recommendation-system-algorithms-ba67f39ac9a3">https://blog.statsbot.co/recommendation-system-algorithms-ba67f39ac9a3</a></p>
-<p>[5] <a href="https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc">https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc</a></p>
-<p>[6] <a href="https://towardsdatascience.com/how-to-build-a-wide-and-deep-model-using-keras-in-tensorflow-2-0-2f7a236b5a4b">https://towardsdatascience.com/how-to-build-a-wide-and-deep-model-using-keras-in-tensorflow-2-0-2f7a236b5a4b</a></p>
-<p>[7] <a href="https://lightgbm.readthedocs.io/en/latest/pythonapi/lightgbm.Dataset.html#lightgbm.Dataset">https://lightgbm.readthedocs.io/en/latest/pythonapi/lightgbm.Dataset.html#lightgbm.Dataset</a></p>
+<p>[2] <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/submit" target="_blank" rel="noopener">https://www.kaggle.com/c/kkbox-music-recommendation-challenge/submit</a></p>
+<p>[3] <a href="https://www.kaggle.com/asmitavikas/feature-engineered-0-68310" target="_blank" rel="noopener">https://www.kaggle.com/asmitavikas/feature-engineered-0-68310</a></p>
+<p>[4] <a href="https://blog.statsbot.co/recommendation-system-algorithms-ba67f39ac9a3" target="_blank" rel="noopener">https://blog.statsbot.co/recommendation-system-algorithms-ba67f39ac9a3</a></p>
+<p>[5] <a href="https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc" target="_blank" rel="noopener">https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc</a></p>
+<p>[6] <a href="https://towardsdatascience.com/how-to-build-a-wide-and-deep-model-using-keras-in-tensorflow-2-0-2f7a236b5a4b" target="_blank" rel="noopener">https://towardsdatascience.com/how-to-build-a-wide-and-deep-model-using-keras-in-tensorflow-2-0-2f7a236b5a4b</a></p>
+<p>[7] <a href="https://lightgbm.readthedocs.io/en/latest/pythonapi/lightgbm.Dataset.html#lightgbm.Dataset" target="_blank" rel="noopener">https://lightgbm.readthedocs.io/en/latest/pythonapi/lightgbm.Dataset.html#lightgbm.Dataset</a></p>
 <h1 id="Support-Materials"><a href="#Support-Materials" class="headerlink" title="Support Materials"></a>Support Materials</h1><ul>
-<li><p><strong>Dataset:</strong><br>You can find the dataset from Kaggle: <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data">https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data</a> Or you can get the dataset from our Google Drive: <a href="https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view?usp=sharing">https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view?usp=sharing</a></p>
+<li><p><strong>Dataset:</strong><br>You can find the dataset from Kaggle: <a href="https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data" target="_blank" rel="noopener">https://www.kaggle.com/c/kkbox-music-recommendation-challenge/data</a> Or you can get the dataset from our Google Drive: <a href="https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view?usp=sharing" target="_blank" rel="noopener">https://drive.google.com/file/d/1-WJHZUWFtz9ksfvFoX-dc-ZKjZ6fTk0D/view?usp=sharing</a></p>
 </li>
-<li><p><strong>Link to Our website/ notebook in databrick platform:</strong><br><a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3546981394788271/3905787926422076/7844345949955417/latest.html">https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3546981394788271/3905787926422076/7844345949955417/latest.html</a></p>
+<li><p><strong>Link to Our website/ notebook in databrick platform:</strong><br><a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3546981394788271/3905787926422076/7844345949955417/latest.html" target="_blank" rel="noopener">https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/3546981394788271/3905787926422076/7844345949955417/latest.html</a></p>
 </li>
-<li><p><strong>Link to Our notebook in Google Colab (This notebook is as same as notebook in databrick, but in Colab, you can directly run it after copying it to your drive):</strong><br><a href="https://colab.research.google.com/drive/1dssuTVKvDXM0zULihRt4tJUoOUoCxaFj?usp=sharing">https://colab.research.google.com/drive/1dssuTVKvDXM0zULihRt4tJUoOUoCxaFj?usp=sharing</a></p>
+<li><p><strong>Link to Our notebook in Google Colab (This notebook is as same as notebook in databrick, but in Colab, you can directly run it after copying it to your drive):</strong><br><a href="https://colab.research.google.com/drive/1dssuTVKvDXM0zULihRt4tJUoOUoCxaFj?usp=sharing" target="_blank" rel="noopener">https://colab.research.google.com/drive/1dssuTVKvDXM0zULihRt4tJUoOUoCxaFj?usp=sharing</a></p>
 </li>
 <li><p><strong>Github repository of this project:</strong><br><a href="https://github.com/wenkangwei/cpsc6300-final-project">https://github.com/wenkangwei/cpsc6300-final-project</a></p>
 </li>
@@ -360,61 +736,450 @@ memory usage: 1.8+ MB
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">With my signature, I certify on my honor that:</span><br><span class="line"></span><br><span class="line">The submitted work is my and my teammates&#39; original work and not copied from the work of someone else.</span><br><span class="line">Each use of existing work of others in the submitted is cited with proper reference.</span><br><span class="line">Signature: ___Wenkang Wei_________ Date: ______12&#x2F;4&#x2F;2020________</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">With my signature, I certify on my honor that:</span><br><span class="line"></span><br><span class="line">The submitted work is my and my teammates&#39; original work and not copied from the work of someone else.</span><br><span class="line">Each use of existing work of others in the submitted is cited with proper reference.</span><br><span class="line">Signature: ___ShuLe Zhu_________ Date: ______12&#x2F;4&#x2F;2020________</span><br></pre></td></tr></table></figure>
 <h1 id="Credit"><a href="#Credit" class="headerlink" title="Credit"></a>Credit</h1><p>The above project template is based on a template developed by Harvard IACS CS109 staff (see <a href="https://github.com/Harvard-IACS/2019-CS109A/tree/master/content/projects">https://github.com/Harvard-IACS/2019-CS109A/tree/master/content/projects</a>).</p>
-</div><div class="article-tags size-small mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/LGBM/">LGBM</a><a class="link-muted mr-2" rel="tag" href="/tags/Wide-and-Deep-Model/">Wide and Deep Model</a><a class="link-muted mr-2" rel="tag" href="/tags/Recommendation-System/">Recommendation System</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://ppoffice.github.io/hexo-theme-icarus-categorites-Plugins/Share/" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/12/15/Recommendation-System-1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/"><span class="level-item">KKBox Music Recommendation System</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
-            el: '#valine-thread' ,
-            appId: "kvXCKmDNxnA2486N29e5cP7i-MdYXbMMI",
-            appKey: "0Lv5b0SqotzkGHQvD64u4AKo",
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/wechat-qr-code.jpg" alt="Wenkang Wei wechat" style="width: 200px; max-width: 100%;"/>
+    <div>subscribe to my blog by scanning my public wechat account</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LGBM/" rel="tag"># LGBM</a>
+          
+            <a href="/tags/Wide-and-Deep-Model/" rel="tag"># Wide and Deep Model</a>
+          
+            <a href="/tags/Recommendation-System/" rel="tag"># Recommendation System</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-            avatar: "mm",
+              <a href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/" rel="next" title="KKBox Music Recommendation System">
+                <i class="fa fa-chevron-left"></i> KKBox Music Recommendation System
+              </a>
             
-            meta: ["nick","mail","link"],
-            pageSize: 10,
-            lang: "en",
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-            highlight: true,
+              <a href="/2020/12/15/Recommendation-System-1/" rel="prev" title="Recommendation-System-1- Collaborative Filtering and Content-based Filtering">
+                Recommendation-System-1- Collaborative Filtering and Content-based Filtering <i class="fa fa-chevron-right"></i>
+              </a>
             
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Wenkang Wei" />
+          <p class="site-author-name" itemprop="name">Wenkang Wei</p>
+           
+              <p class="site-description motion-element" itemprop="description">second-year master student / Computer engineering / deep learning / machine learning / data science </p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
             
+              <span class="links-of-author-item">
+                <a href="https://github.com/wenkangwei" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
             
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/wenkang-wei-588811167" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-fab fa-linkedin"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
             
+              <span class="links-of-author-item">
+                <a href="https://www.facebook.com/wenkang.wei" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-fab fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
             
-            requiredFields: [],
-        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile is-mobile" href="https://github.com/wenkangwei" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Checklist/"><span class="level-start"><span class="level-item">Checklist</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Data-Collection/"><span class="level-start"><span class="level-item">Data Collection</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/"><span class="level-start"><span class="level-item">Data Structure</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/Sorting/"><span class="level-start"><span class="level-item">Sorting</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Ensemble-Method/"><span class="level-start"><span class="level-item">Ensemble Method</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/"><span class="level-start"><span class="level-item">Accuracy Improvement</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/NLP/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Parallel-Computing/"><span class="level-start"><span class="level-item">Parallel Computing</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Programming/"><span class="level-start"><span class="level-item">Programming</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/PySpark/"><span class="level-start"><span class="level-item">PySpark</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Recommendation-System/"><span class="level-start"><span class="level-item">Recommendation System</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Report/"><span class="level-start"><span class="level-item">Report</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Searching/"><span class="level-start"><span class="level-item">Searching</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Searching/Data-Strucure/"><span class="level-start"><span class="level-item">Data Strucure</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Statistic/"><span class="level-start"><span class="level-item">Statistic</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Web/"><span class="level-start"><span class="level-item">Web</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Amdahl-s-Law/"><span class="tag">Amdahl&#039;s Law</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Backpropagation/"><span class="tag">Backpropagation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Bagging/"><span class="tag">Bagging</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BeautifulSoup/"><span class="tag">BeautifulSoup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Binary-Tree/"><span class="tag">Binary Tree</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting/"><span class="tag">Boosting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting-Machine/"><span class="tag">Boosting Machine</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BuckSort/"><span class="tag">BuckSort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Collaborative-Filtering/"><span class="tag">Collaborative Filtering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Confusion-Metric/"><span class="tag">Confusion Metric</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Convolution-Neural-Network/"><span class="tag">Convolution Neural Network</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cross-Validation/"><span class="tag">Cross Validation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/D3-js/"><span class="tag">D3.js</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Analysis/"><span class="tag">Data Analysis</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DataScience/"><span class="tag">DataScience</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Dropout/"><span class="tag">Dropout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Ensemble-Learning/"><span class="tag">Ensemble Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Holdout/"><span class="tag">Holdout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Icarus/"><span class="tag">Icarus</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Independence-Test/"><span class="tag">Independence Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/K-Mean-Clustering/"><span class="tag">K-Mean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/KMean-Clustering/"><span class="tag">KMean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/LGBM/"><span class="tag">LGBM</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Markdown/"><span class="tag">Markdown</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Evaluation/"><span class="tag">Model Evaluation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Selection/"><span class="tag">Model Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Natural-Language-Representations/"><span class="tag">Natural Language Representations</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Nature-Language-Processing/"><span class="tag">Nature Language Processing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Negative-Sampling/"><span class="tag">Negative Sampling</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/P-value/"><span class="tag">P-value</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Computing/"><span class="tag">Parallel Computing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Speedup/"><span class="tag">Parallel Speedup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PySpark/"><span class="tag">PySpark</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ROC-curve/"><span class="tag">ROC curve</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Recommendation-System/"><span class="tag">Recommendation System</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regression/"><span class="tag">Regression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regular-Expression/"><span class="tag">Regular Expression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Sorting/"><span class="tag">Sorting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Stacking/"><span class="tag">Stacking</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Traversal/"><span class="tag">Traversal</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unsupervised-Learning/"><span class="tag">Unsupervised Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Variable-Selection/"><span class="tag">Variable Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Web-Scrapping/"><span class="tag">Web Scrapping</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep/"><span class="tag">Wide and Deep</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep-Model/"><span class="tag">Wide and Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-Embedding/"><span class="tag">Word Embedding</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-vector/"><span class="tag">Word vector</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/binary-search/"><span class="tag">binary search</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/bubble-sort/"><span class="tag">bubble sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/commands/"><span class="tag">commands</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/insertion-sort/"><span class="tag">insertion sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/merge-sort/"><span class="tag">merge sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/non-parametric-learning/"><span class="tag">non-parametric learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/quick-sort/"><span class="tag">quick sort</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recent</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-16T00:48:52.000Z">2020-12-15</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-08T05:18:39.000Z">2020-12-08</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/08/report/">CPSC 6300 Final Report</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Report/">Report</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-01T20:13:14.000Z">2020-12-01</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-23T05:04:34.000Z">2020-11-23</time></p><p class="title is-6"><a class="link-muted" href="/2020/11/23/ML-K-mean-Cluster/">ML-K-mean-Cluster</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Machine-Learning/">Machine Learning</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-11-23T03:17:39.000Z">2020-11-22</time></p><p class="title is-6"><a class="link-muted" href="/2020/11/22/Statistic-P-value/">Statistic-P-value</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Statistic/">Statistic</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2020/12/"><span class="level-start"><span class="level-item">December 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/11/"><span class="level-start"><span class="level-item">November 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/10/"><span class="level-start"><span class="level-item">October 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">September 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">August 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/07/"><span class="level-start"><span class="level-item">July 2020</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/06/"><span class="level-start"><span class="level-item">June 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe to Updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button is-primary" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/images/avatar.jpg" alt="Wenkang Wei"></figure><p class="title is-size-4 is-block line-height-inherit">Wenkang Wei</p><p class="is-size-6 is-block">computer engineering| machine learning</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Clemson,SC</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">26</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">20</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">57</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/wenkangwei" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/wenkangwei"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="LinkedIn" href="https://www.linkedin.com/in/wenkang-wei-588811167"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><!--!--></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a><p class="size-small"><span>&copy; 2021 Wenkang Wei</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
-            site: {
-                url: 'https://github.com/wenkangwei/wenkangwei.github.io`',
-                external_link: {"enable":true,"exclude":[]}
-            },
-            article: {
-                highlight: {
-                    clipboard: true,
-                    fold: 'unfolded'
-                }
-            }
-        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to Top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
-            if (typeof $.fn.lightGallery === 'function') {
-                $('.article').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof $.fn.justifiedGallery === 'function') {
-                if ($('.justified-gallery > p > .gallery-item').length) {
-                    $('.justified-gallery > p > .gallery-item').unwrap();
-                }
-                $('.justified-gallery').justifiedGallery();
-            }
-        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
-            'HTML-CSS': {
-                matchFontHeight: false
-            },
-            SVG: {
-                matchFontHeight: false
-            },
-            CommonHTML: {
-                matchFontHeight: false
-            },
-            tex2jax: {
-                inlineMath: [
-                    ['$','$'],
-                    ['\\(','\\)']
-                ]
-            }
-        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
-            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
-        });</script></body></html>
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TITLE-KKBox-Music-Recommendation-System"><span class="nav-number">1.</span> <span class="nav-text">TITLE: KKBox Music Recommendation System</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Team-Members-Wenkang-Wei-ShuLe-Zhu"><span class="nav-number">1.1.</span> <span class="nav-text">Team Members: Wenkang Wei, ShuLe Zhu</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Date-12-5-2020"><span class="nav-number">1.2.</span> <span class="nav-text">Date: 12&#x2F;5&#x2F;2020</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Problem-Statement-and-Motivation"><span class="nav-number">2.</span> <span class="nav-text">Problem Statement and Motivation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-statement"><span class="nav-number">2.1.</span> <span class="nav-text">Problem statement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation-and-Goal"><span class="nav-number">2.2.</span> <span class="nav-text">Motivation and Goal</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-and-Description-of-Data"><span class="nav-number">3.</span> <span class="nav-text">Introduction and Description of Data</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Literature-Review-Related-Work"><span class="nav-number">4.</span> <span class="nav-text">Literature Review&#x2F;Related Work</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Modeling-Approach"><span class="nav-number">5.</span> <span class="nav-text">Modeling Approach</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Project-Trajectory-Results-and-Interpretation"><span class="nav-number">6.</span> <span class="nav-text">Project Trajectory, Results, and Interpretation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusions-and-Future-Work"><span class="nav-number">7.</span> <span class="nav-text">Conclusions and Future Work</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Support-Materials"><span class="nav-number">9.</span> <span class="nav-text">Support Materials</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Declaration-of-academic-integrity-and-responsibility"><span class="nav-number">10.</span> <span class="nav-text">Declaration of academic integrity and responsibility</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Credit"><span class="nav-number">11.</span> <span class="nav-text">Credit</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wenkang Wei</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="[object Object]"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unjkp.com/valine/dist/Valine.min.js"></script>  
+  <script src="/js/src/Valine.min.js"></script> 
+
+   
+  
+  <script src="/js/src/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: true,
+        appId: 'kvXCKmDNxnA2486N29e5cP7i-MdYXbMMI',
+        appKey: '0Lv5b0SqotzkGHQvD64u4AKo',
+        placeholder: '说点什么吧！',
+        avatar:'hide',
+        guest_info:['nick'] , 
+        pageSize:'10' || 10,
+    });
+   
+    var infoEle = document.querySelector('#comments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0){
+      infoEle.childNodes.forEach(function(item) {
+        item.parentNode.removeChild(item);
+      });
+    }
+  </script>
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+---
+title: Markdown Quick Tutorial
+type:
+  - tags
+  - categories
+tags:
+  - Markdown
+toc: true
+Categories:
+  - Markdown
+  - Tutorial
+date: 2020-07-08 16:04:43
+---
+
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT6cg41vhOQh5Cs6B-ImRvNZaWcxmETgUM4fg&usqp=CAU">
+
+<!-- more -->
+
+__Source File For this tutorial:__  [Click Here](/src/Markdown-Tutorial.md)
+
+
+## Example 1:
+ **Markdown Code:**
+~~~md
+_Italic_       *Italic* 
+__Bold__       **Bold**
+<span style="color:blue">Blue</span>
+_<span style="color:red">Red and Italic</span>_
+___<span style="color:red">Red and Italic and Bold</span>___
+**_<span style="color:red">Red and Italic and Bold</span>_**
+~~~
+
+**Output:**
+
+_Italic_       *Italic* 
+__Bold__       **Bold**
+<span style="color:blue">Blue</span>
+_<span style="color:red">Red and Italic</span>_
+___<span style="color:red">Red and Italic and Bold</span>___
+**_<span style="color:red">Red and Italic and Bold</span>_**
+
+
+<br>
+
+## Example 2:
+**Markdown Code:**
+~~~md
+
+~~Strickout~~
+<u>Underline</u>
+
+创建脚注格式类似这样 [^Footnote]。
+
+[^Footnote]: Here is footnote
+
+output "*"  \*  \_
+~~~
+
+
+**Output** 
+
+~~Strickout~~
+<u>Underline</u>
+
+创建脚注格式类似这样 [^Footnote]。
+
+[^Footnote]: Here is footnote
+
+output "*"  \*  \_
+<br>
+
+
+## Example 3
+
+**Markdown Code:**
+~~~md
+
+__Here is check list__
+- [ ] my
+- [ ] check
+- [x] list
+
+__Here is Emoji__
+:blush:
+:smile:
+:angry:
+:cry:
+:joy: 
+
+>Block
+>1. Block 1
+>2. Blokc 2
+~~~
+
+
+**Output** 
+
+__Here is check list__
+- [ ] my
+- [ ] check
+- [x] list
+
+__Here is Emoji__
+:blush:
+:smile:
+:angry:
+:cry:
+:joy: 
+
+>Block
+>1. Block 1
+>2. Blokc 2
+
+<br>
+
+## Example 4
+**Markdown Code:**
+
+
+**Output** 
+
+Here is code `function()` 
+
+~~~
+Code Block
+~~~
+
+~~~C
+int text= C Code Block
+~~~
+|Col1 |Col2 |Col3|
+|---|---|---|
+|a|b|c|
+
+|左对齐(left) |居中(center) |右对齐(right)|默认左对齐(default)|
+|:---|:---:|---:|---|
+|a|b|c|d|
+
+
+- list 1
+- list 2
+- list 3
++ list 1
++ list 2
++ list 3
+
+<br>
+
+## Example 5
+
+**Markdown Code:**
+~~~md
+
+<image src="https://gst-online.com/wp-content/uploads/2018/07/16679084-abstract-word-cloud-for-representation-with-related-tags-and-terms.jpg">
+
+[Here is a link](https://google.com/)
+[1]: http://static.runoob.com/images/runoob-logo.png
+<h1>Embeded HTML</h1>
+<h2>Hearder</h2>
+<h3>Hearder</h3>
+
+使用 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> 重启电脑
+
+## math formula： Need to be loaded on browser
+$$
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix} 
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+\frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
+\end{vmatrix}
+${$tep1}{\style{visibility:hidden}{(x+1)(x+1)}}
+$$
+~~~
+
+**Output** 
+
+<image src="https://gst-online.com/wp-content/uploads/2018/07/16679084-abstract-word-cloud-for-representation-with-related-tags-and-terms.jpg">
+
+[Here is a link](https://google.com/)
+[1]: http://static.runoob.com/images/runoob-logo.png
+<h1>Embeded HTML</h1>
+<h2>Hearder</h2>
+<h3>Hearder</h3>
+
+使用 <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Del</kbd> 重启电脑
+
+## math formula： Need to be loaded on browser
+$$
+\mathbf{V}_1 \times \mathbf{V}_2 =  \begin{vmatrix} 
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\frac{\partial X}{\partial u} &  \frac{\partial Y}{\partial u} & 0 \\
+\frac{\partial X}{\partial v} &  \frac{\partial Y}{\partial v} & 0 \\
+\end{vmatrix}
+${$tep1}{\style{visibility:hidden}{(x+1)(x+1)}}
+$$

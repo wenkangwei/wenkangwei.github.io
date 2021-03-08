@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Tag: review - Wenkang&#039;s Blog</title><meta description="second-year master student &amp;#x2F; Computer engineering &amp;#x2F; deep learning &amp;#x2F; machine learning &amp;#x2F; data science"><meta property="og:type" content="website"><meta property="og:title" content="Wenkang&#039;s Blog"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:description" content="second-year master student &amp;#x2F; Computer engineering &amp;#x2F; deep learning &amp;#x2F; machine learning &amp;#x2F; data science"><meta property="og:locale" content="en_US"><meta property="og:image" content="https://github.com/img/og_image.png"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="Computer engineering"><meta property="article:tag" content=" machine learning"><meta property="article:tag" content=" data science"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io`"},"headline":"Wenkang's Blog","image":["https://github.com/img/og_image.png"],"author":{"@type":"Person","name":"Wenkang Wei"},"description":"second-year master student &#x2F; Computer engineering &#x2F; deep learning &#x2F; machine learning &#x2F; data science"}</script><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/tags">Tags</a></li><li class="is-active"><a href="#" aria-current="page">review</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2021-03-08T05:00:46.000Z" title="2021-03-08T05:00:46.000Z">2021-03-08</time><span class="level-item"><a class="link-muted" href="/categories/Programming/">Programming</a></span><span class="level-item">11 minutes read (About 1656 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2021/03/08/Cpp-review/">Cpp review 1</a></h1><div class="content"><a id="more"></a>
+<h2 id="Important-Keywords"><a href="#Important-Keywords" class="headerlink" title="Important Keywords"></a>Important Keywords</h2><ul>
+<li><h3 id="const"><a href="#const" class="headerlink" title="const"></a>const</h3></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Meaning</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>const int x</td>
+<td>constant variable</td>
+<td>Value of x must be initialized first</td>
+</tr>
+<tr>
+<td><strong>const int</strong> *x</td>
+<td>constant content;  mutable pointer; <br>d</td>
+<td>constant content pointer x points to. <br> address of pointer x is mutable. <br> x can be initialized after defintion</td>
+</tr>
+<tr>
+<td>int * <strong>const x</strong></td>
+<td>constant pointer;<br> mutable content;</td>
+<td>pointer x must be initialized first;</td>
+</tr>
+<tr>
+<td>const int* const x</td>
+<td>Constant pointer; <br>Constant content</td>
+<td>x must be initialized first</td>
+</tr>
+<tr>
+<td>const Class a</td>
+<td>constant class var</td>
+<td>content of member var of a can not be changed; <br> <strong>can not call not-constant functions</strong>;(avoid changing member values)</td>
+</tr>
+<tr>
+<td>void func(const int x)</td>
+<td>const var as input</td>
+<td>function can not change the local variable;</td>
+</tr>
+<tr>
+<td><strong>const int&amp; funct(x)</strong></td>
+<td>return constant reference</td>
+<td>pointer using this reference can not change its content</td>
+</tr>
+<tr>
+<td><strong>const int funct(x)</strong></td>
+<td>return constant var</td>
+<td>return a constant variable</td>
+</tr>
+<tr>
+<td><strong>int func() const</strong></td>
+<td>constant member function</td>
+<td>Function is unable to change member values in the class</td>
+</tr>
+<tr>
+<td>const MyClass c</td>
+<td>constant Class variable</td>
+<td>variable c <strong>can not call non-const member function</strong> and c <strong>can not change member variable values</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><h3 id="define"><a href="#define" class="headerlink" title="define"></a>define</h3><ul>
+<li>Macro preprocesing keyword. </li>
+<li>Different from <strong>const</strong>, #define doesn’t have data type</li>
+<li>Compiler replaces the words only without checking the variable and its memory. E.g  <strong>#define A B</strong>. Replace A with B only, compiler doesn’t check the type of A.</li>
+<li>In C++ program, usually use const rather than define for security.</li>
+</ul>
+</li>
+<li><h3 id="sizeof-x-sizeof-x"><a href="#sizeof-x-sizeof-x" class="headerlink" title="sizeof(x) / sizeof x"></a>sizeof(x) / sizeof x</h3><ul>
+<li>check number of bytes of variable based on data type</li>
+<li>sizeof class_variable = sum of bytes of all member variables in class</li>
+<li>in 64-bit machine, sizeof pointer = 8 bytes = 64 bits</li>
+</ul>
+</li>
+<li><h3 id="static"><a href="#static" class="headerlink" title="static"></a>static</h3><ul>
+<li><p><strong>static global var</strong></p>
+<ul>
+<li>only visiable to current file</li>
+<li>data is stored in global memory, whereas local var is stored in stack and heap.</li>
+<li>Automatically initialized as 0</li>
+<li>Eg:  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> a;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>static local var</strong></p>
+<ul>
+<li>It is initialized once</li>
+<li>stored in global memory without releasing memory until program terminates</li>
+<li>can be used in local code block only.</li>
+</ul>
+</li>
+<li><p><strong>static function</strong></p>
+<ul>
+<li>visible to current file only</li>
+<li>can be defined in public, protected, private region.</li>
+</ul>
+</li>
+<li><p><span style="color:red">static class member: used for private class info, rather than instance info</span></p>
+<ul>
+<li><p> Different from common private member (which can be called and modified via <strong>this</strong> pointer), static class member <strong>DO NOT</strong> have <strong>this</strong> pointer</p>
+</li>
+<li><p><strong>Only private and protected</strong> member can define static. Public member can not define static.<br>However, <strong>static function</strong> can be defined in public region as well.</p>
+</li>
+<li><p>Can be called <strong>only by private/protected class function</strong></p>
+</li>
+<li><p><strong>Initialization</strong> for static member <strong>inside class</strong> requires <strong>const</strong> definition</p>
+</li>
+<li><p>Initialization for static member <strong>outside class</strong> requires that</p>
+<ol>
+<li>it can be <strong>initialized once</strong>. </li>
+<li>Initialization must be <strong>outside code block, like global variable</strong></li>
+</ol>
+</li>
+<li><p>Example code:</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">myclass</span>&#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span>&#123;<span class="built_in">cout</span>&lt;&lt;b;&#125;  <span class="comment">// call private var inside member function </span></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">int</span> a; </span><br><span class="line">        <span class="comment">//or</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> a =<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">int</span> a=<span class="number">0</span>;<span class="comment">//wrong, a must be const</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">int</span> b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> myclass::b = <span class="number">10</span>; <span class="comment">//   way to initialize staic class member, like global var, but won't conflict global var.</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;...&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><h3 id="external"><a href="#external" class="headerlink" title="external"></a>external</h3><p>  Tell the compiler that there is an function, whose implement of function is in other file.</p>
+</li>
+<li><h3 id="inline"><a href="#inline" class="headerlink" title="inline"></a>inline</h3><ul>
+<li><p>inline function tell the compiler to embed the code of the function into every place where the function is called. So, inline function reduce the time used to expand the function by using more memory.</p>
+</li>
+<li><p>Normal function in C/C++ is expanded by compiler only when they are call. This requires longer time to run program</p>
+</li>
+<li><p><strong>Inline function has higher memory complexity and lower time complexity than normal function</strong></p>
+</li>
+<li><p><strong>Not suitable</strong> for <strong>construtor</strong> function (since it will generate lots of codes )</p>
+</li>
+<li><p>Not suitable for virtual function</p>
+</li>
+<li><p>inline function is unable to use render/loop  operation</p>
+</li>
+<li><p><strong>Note:</strong></p>
+<ol>
+<li>Inline function doesn’t support loop and switch</li>
+<li>Usually, inline function is used when function has a few codes. (usually less than 10 lines)</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 id="typedef-and-define"><a href="#typedef-and-define" class="headerlink" title="typedef  and #define"></a>typedef  and #define</h3><ul>
+<li> It is a sentence not command for compiler, so it requires “;” compared with #define</li>
+<li>Compiler check the grammar and type of typedef, but doesn’t check type of #define</li>
+<li>#define simply replaces the notation with new one, it doesn’t check the grammar or operation in definition</li>
+<li>Example:  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">typdef <span class="class"><span class="keyword">struct</span> <span class="title">A</span>&#123;</span>...&#125; B;     <span class="comment">//define A as type B</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> A   B               <span class="comment">// define / replace  B with A</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> func(x)    x*x</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><h3 id="explicit"><a href="#explicit" class="headerlink" title="explicit"></a>explicit</h3><ul>
+<li>Require constructor to run explictly<br>Eg:<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">c = myclass(<span class="number">1</span>);</span><br><span class="line"><span class="comment">//or</span></span><br><span class="line">c= (myclass) <span class="number">12</span>;    <span class="comment">// convert type explictly</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">myclass c;</span><br><span class="line">c = <span class="number">1</span>;      <span class="comment">//  Not allowed, need  (myclass) 1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><h3 id="Using"><a href="#Using" class="headerlink" title="Using"></a>Using</h3><ul>
+<li><strong>Declaration</strong> of  “using” keyword:<br>  It indicates the class we use is from std library.<ul>
+<li>Example: <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br></pre></td></tr></table></figure>
+It indicates the class vector is from std</li>
+</ul>
+</li>
+<li><strong>Compile command</strong>:<br>   It tells the compiler to use the whole namespace (every element from this namespace)<ul>
+<li>Example: <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br></pre></td></tr></table></figure>
+<br>
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Variable-type"><a href="#Variable-type" class="headerlink" title="Variable type"></a>Variable type</h2><ul>
+<li><strong>global</strong></li>
+<li><strong>local</strong> </li>
+<li><strong>static</strong></li>
+</ul>
+<br>
+
+<h2 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h2><ul>
+<li><strong>Operator computes from right to left:</strong><ul>
+<li>&lt;condition-expression&gt; <strong>?</strong> &lt;return if condition=__True__&gt; <strong>:</strong> &lt;return if condition =__False__&gt;<br>It returns value from right to left</li>
+<li> <strong>=</strong></li>
+</ul>
+</li>
+<li><strong>Operator Priority</strong><ul>
+<li>arithmetic operator: *, % , / are higher than +, -</li>
+<li>Relationship operator:  &gt;, &lt; , &gt;=，&lt;=  are higher than !=, ==</li>
+<li>logic operator: <strong>!</strong> higher than <strong>&amp;&amp;</strong>, <strong>&amp;&amp;</strong> higher than <strong>||</strong></li>
+<li>logic bit operator: <strong>~</strong> higher than <strong>&amp;</strong>,  <strong>&amp;</strong>  higher than <strong>|</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h2><ul>
+<li><h3 id="a-and-a"><a href="#a-and-a" class="headerlink" title="a++ and ++a"></a>a++ and ++a</h3><ul>
+<li>a++:  return another local variable contain value of a. Then a=a+1</li>
+<li>++a: a=a+1 and then return a.</li>
+<li>Speed: a++ &gt; a+=1 &gt; a=a+1.</li>
+</ul>
+</li>
+<li><h3 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h3><p>  input must be one of <strong>char,short, int</strong></p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(a):</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">case</span> x1: ....; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> x2:....; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>: ....; <span class="keyword">break</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Pointer-and-reference"><a href="#Pointer-and-reference" class="headerlink" title="Pointer and reference"></a>Pointer and reference</h2><table>
+<thead>
+<tr>
+<th>Pointer</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pointer is a variable</td>
+<td>Reference is an essentially implicit pointer or the representation of the address of a memory piece</td>
+</tr>
+<tr>
+<td>Pointer can be empty or uninitialized;</td>
+<td>Reference requires variable to be initialized before using reference.</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>nullptr</strong></p>
+</li>
+<li><p><strong>virtual pointer</strong></p>
+</li>
+</ul>
+<h2 id="Pointer-and-Array"><a href="#Pointer-and-Array" class="headerlink" title="Pointer and Array"></a>Pointer and Array</h2><ul>
+<li><p>Array Pointer: the pointer pointing to the address of an array</p>
+<br>
+</li>
+<li><p>Array Name:  <strong>array name is not a pointer, but just return the address of the array (address of the first element)</strong></p>
+<br>
+</li>
+<li><p><strong>Pointer for array element</strong>:</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> *p = arr</span><br><span class="line"><span class="built_in">cout</span>&lt;&lt;*p++;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>*p++ : return element *p, then p++</li>
+<li>++*p: (*p) element +1 and then return.  <strong>Without changing the address pointer p pointing to</strong><br>
+</li>
+</ul>
+</li>
+<li><p><strong>Array Pointer</strong></p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line"><span class="built_in">size</span> =<span class="number">5</span>;</span><br><span class="line"><span class="keyword">int</span> (*p)[<span class="built_in">size</span>] = &amp;arr;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>(*p)[size] : array pointer, <strong>pointing to array NOT element</strong> </p>
+</li>
+<li><p><strong>size of (*p)[size] must be number of element in arr</strong></p>
+</li>
+<li><p>p++: address skip the whole array size (5 * 4 bytes<br>here), not element size </p>
+</li>
+<li><p>(*p)[0]: return arr[0]</p>
+<br>
+</li>
+</ul>
+</li>
+<li><p><strong>Wild Pointer(野指针)</strong><br>  pointer that <strong>has not been initialized before using</strong></p>
+<br>
+</li>
+<li><p><strong>Dangling Pointer(悬空指针)</strong><br>  pointer that point to <strong>invalid memory address (after memory released)</strong></p>
+</li>
+</ul>
+<h2 id="Macro-and-Preprocesssor"><a href="#Macro-and-Preprocesssor" class="headerlink" title="Macro and Preprocesssor"></a>Macro and Preprocesssor</h2><h2 id="Difference-between-Class-and-Structure"><a href="#Difference-between-Class-and-Structure" class="headerlink" title="Difference between Class and Structure"></a>Difference between Class and Structure</h2><h2 id="Object-Oriented-Design"><a href="#Object-Oriented-Design" class="headerlink" title="Object-Oriented Design"></a><span style="color:red">Object-Oriented Design</span></h2><h3 id="Basic-Features-of-OOD-in-C"><a href="#Basic-Features-of-OOD-in-C" class="headerlink" title="Basic Features of OOD in C++"></a>Basic Features of OOD in C++</h3><ul>
+<li><p><strong>Three Traits</strong></p>
+<ol>
+<li><p><strong>Encapsulation(封装性)</strong><br>A mechanism of bundling the data, and the functions that use them and <strong>data abstraction</strong> is a mechanism of exposing only the interfaces and hiding the implementation details from the user</p>
+<br>
+</li>
+<li><p><strong>Polymorphism(多态)</strong><br>Different classes inherent from the same parent class can have different methods, class members. It diversifies features of classes. Polymorphims in C++ is achieved by using <strong>virtual</strong> keyword.</p>
+<br>
+</li>
+<li><p><strong>Inheritance(继承)</strong><br>The members of the base class become members of the<br>derived class. It helps save our time and avoid re-writing the same codes.</p>
+<br>
+</li>
+</ol>
+</li>
+<li><p><strong>Publich, Protected, private</strong></p>
+<table>
+<thead>
+<tr>
+<th>Properties</th>
+<th>Private</th>
+<th>Protected</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Accessibility</td>
+<td>only Base Class member/method</td>
+<td>only Base Class and Child Class member/method</td>
+<td>Any instance and Class member</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Inheritance Properties:</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Private Inheritance:</strong><ul>
+<li>Base Class’s private members won’t be inherited by Child Class</li>
+<li>Base Class’s public and protected members will be converted to be private in Child Class</li>
+</ul>
+</li>
+<li><strong>Protected Inheritance:</strong><ul>
+<li>Base Class’s private members won’t be inherited by Child Class</li>
+<li><strong>Base Class’s protected, public members wil become protected</strong> in Child Class,</li>
+<li>Base Class’s members <strong>can not be accessed by Child Class of Base Class’s Child Class</strong>.</li>
+</ul>
+</li>
+<li><strong>Public Inheritance:</strong><ul>
+<li>Base Class’s private members won’t be inherited by Child Class</li>
+<li>Base Class’s protected, public members don’t change (Still protected, or public)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Types of overloading</strong></p>
+<ol>
+<li><p><strong>overloading the amount of parameter</strong></p>
+<p>Example</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Class A&#123;</span><br><span class="line">   publich:</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;&#125;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>overloading the data types of parameter</strong></p>
+<p>Example</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Class A&#123;</span><br><span class="line">   publich:</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;&#125;</span><br><span class="line">   <span class="function"><span class="keyword">char</span> <span class="title">func</span><span class="params">(<span class="keyword">char</span> a)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>overloading of const and non-const methods</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Class A&#123;</span><br><span class="line">   publich:</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;&#125;</span><br><span class="line">   <span class="comment">// the const method can not change class member values</span></span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> a)</span> <span class="keyword">const</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>overloading of Operators</strong></p>
+<p>Example:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class A&#123;</span><br><span class="line">publich:</span><br><span class="line">   <span class="keyword">int</span> <span class="keyword">operator</span> + (<span class="keyword">const</span> <span class="keyword">int</span> a, <span class="keyword">const</span> <span class="keyword">int</span> b) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Operators that can not be overloaded:</strong></p>
+</li>
+</ol>
+<ul>
+<li><strong>::</strong> , <strong>pointer operator . *</strong>,  <strong>condition operator ?:</strong> ,  <strong>sizeof, typeof</strong></li>
+<li><strong>const_cast static_cast dynamic_cast reinterpret_cast</strong></li>
+</ul>
+</li>
+<li><p><strong>Methods that can not be inherent</strong></p>
+<ol>
+<li>Constructor</li>
+<li>Deconstructor </li>
+<li>Friend method</li>
+<li>Operators</li>
+</ol>
+</li>
+<li><p><strong>Methods that can be inherited</strong></p>
+<ol>
+<li>static functions</li>
+<li>non-static functions</li>
+<li>non-static members (Note: static members must be private or protected that are usually unable to be inherent)</li>
+<li>Virtual function (used for polymorphism)<br>
+
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Interface-and-Virtual-class-method-and-pointer"><a href="#Interface-and-Virtual-class-method-and-pointer" class="headerlink" title="Interface and Virtual class, method and pointer"></a>Interface and Virtual class, method and pointer</h3><ul>
+<li><p><strong>Pure virtual function</strong><br>it is applied by using <strong>virtual</strong> keyword and <strong>=0</strong> behind the function.</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> x)</span> </span>=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<br>
+</li>
+<li><p><strong>Abstract Class</strong><br>Abstract class <strong>provide</strong> an appropriate <strong>base class</strong> from which other classes can inherit<br><strong>An abstract class must contain at least one pure virtual function</strong></p>
+<br>
+</li>
+<li><p><strong>Interface</strong><br>Interface <strong>describes the behavior a class</strong> without a particular implementation of that class.<br><strong>Interface in C++ is implemented by using Abstract class.</strong></p>
+<br>
+</li>
+<li><p><strong>Virtual Function and Polymorphism</strong><br>A Child of base class can overload the virtual function and give particular implement of the function to achieve polymorphism</p>
+</li>
+<li><p><strong>Virtual Function mechanism: using virtual pointer and virtual table</strong></p>
+<ol>
+<li>In base class with virtual function, Compiler creates an virtual pointer <strong>vptr</strong> and a virtual table <strong>vtbl</strong></li>
+<li><strong>vptr</strong> points to the address of <strong>vtbl</strong> to write and <strong>store the addresses of all virtual functions</strong> in this base class.</li>
+<li>The pointer vptr is stored at the beginning of the memory of the base class. (the first element of the Class is <strong>vptr</strong> )<br>
+Example:
+<img src=images/Cpp/virtual-func-2.png>
+For class A and Class B, each of them have virtual pointer __vptr__ pointing to a virtual table, which stores addresses of virtual functions. In addition, the virtual pointer of each class is stored at the beginning of the class.
+
+
+</li>
+</ol>
+</li>
+</ul>
+<pre><code>4. In __single inheritance__ (a class is allowed to inherit only one class), child class will inherit the vptr from base class, but __create a new vtbl table to store addresses of new virtual functions and inherited/overrided virtual functions__
+5. In __multiple inheritance__: 
+    + child class inherits multiple vptr, then creates multiple vtbls, in which each vtbl corresponds to each base class (Hence __the number of vtbl = number of base class inherited__).
+    + __All addresses of new virtual functions will be stored at the end of the first vtbls__
+</code></pre>
+<h3 id="Template-and-Generic-Function"><a href="#Template-and-Generic-Function" class="headerlink" title="Template and Generic Function"></a>Template and Generic Function</h3><ul>
+<li>A generic function defines a general set of operations that will be applied to various types of data.</li>
+</ul>
+<h3 id="Memory-allocation-and-Types-of-memory"><a href="#Memory-allocation-and-Types-of-memory" class="headerlink" title="Memory allocation and Types of memory"></a>Memory allocation and Types of memory</h3><ul>
+<li><p><strong>new and malloc</strong></p>
+<table>
+<thead>
+<tr>
+<th>new</th>
+<th>malloc</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A keyword</td>
+<td>a function</td>
+</tr>
+<tr>
+<td>it calls the operator <strong>operator new()</strong> <br>-&gt; <strong>malloc()</strong><br>-&gt; then call <strong>constructor</strong> in class</td>
+<td>directly allocate memory without using constructor</td>
+</tr>
+<tr>
+<td>return class pointer</td>
+<td>return void pointer</td>
+</tr>
+<tr>
+<td>can be overloading</td>
+<td>can not be overloading</td>
+</tr>
+<tr>
+<td>No need to tell size of memory</td>
+<td>Need to tell size of memory</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<ul>
+<li><p><strong>delete and free</strong></p>
+<table>
+<thead>
+<tr>
+<th>delete</th>
+<th>free</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A keyword</td>
+<td>a function</td>
+</tr>
+<tr>
+<td>it calls the operator <strong>operator delete()</strong> <br>-&gt; <strong>free()</strong><br>-&gt; then call <strong>deconstructor</strong> in class</td>
+<td>directly free memory without using constructor</td>
+</tr>
+<tr>
+<td>return class pointer</td>
+<td>return void pointer</td>
+</tr>
+<tr>
+<td>can be overloading</td>
+<td>can not be overloading</td>
+</tr>
+<tr>
+<td>No need to check if memory exists</td>
+<td>Need to check memory first</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>create and delete Class array</strong></p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="built_in">size</span>=<span class="number">10</span>;</span><br><span class="line">ClassA* a = <span class="keyword">new</span> ClassA[<span class="built_in">size</span>]</span><br><span class="line"><span class="keyword">delete</span>[] a; </span><br><span class="line"></span><br><span class="line"><span class="comment">// input is an array of int class    </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ClassA::func</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;....&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>malloc, calloc, realloc and alloca</strong></p>
+<ul>
+<li><p><strong>malloc</strong>: allocate memory <strong>without initialization</strong></p>
+</li>
+<li><p><strong>calloc</strong>: allocate memory and <strong>initialize them to zero</strong></p>
+</li>
+<li><p><strong>realloc</strong>: <strong>extend the memory</strong> with bigger size than before.</p>
+</li>
+<li><p><strong>alloca</strong>: allocate tempory memory on stack on local scope. <strong>Memory will be released outside the scope. Hence no need to use free()</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="link-and-compile-in-C"><a href="#link-and-compile-in-C" class="headerlink" title="link and compile in C++"></a>link and compile in C++</h2><ul>
+<li><strong>Dynamic Link</strong></li>
+<li><strong>Static Link</strong></li>
+</ul>
+<h2 id="Regular-Expression-re"><a href="#Regular-Expression-re" class="headerlink" title="Regular Expression (re)"></a>Regular Expression (re)</h2><h2 id="STL-container"><a href="#STL-container" class="headerlink" title="STL container"></a>STL container</h2><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://www.tutorialspoint.com/cplusplus/cpp_overloadinging.htm">https://www.tutorialspoint.com/cplusplus/cpp_overloadinging.htm</a></p>
+<p>[2] <a href="https://blog.csdn.net/csdn_chai/article/details/78041050">https://blog.csdn.net/csdn_chai/article/details/78041050</a></p>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile is-mobile" href="https://github.com/wenkangwei" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Data-Collection/"><span class="level-start"><span class="level-item">Data Collection</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/"><span class="level-start"><span class="level-item">Data Structure</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/Sorting/"><span class="level-start"><span class="level-item">Sorting</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Ensemble-Method/"><span class="level-start"><span class="level-item">Ensemble Method</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Ensemble-Method/Accuracy-Improvement/"><span class="level-start"><span class="level-item">Accuracy Improvement</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/NLP/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Parallel-Computing/"><span class="level-start"><span class="level-item">Parallel Computing</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Programming/"><span class="level-start"><span class="level-item">Programming</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/PySpark/"><span class="level-start"><span class="level-item">PySpark</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Recommendation-System/"><span class="level-start"><span class="level-item">Recommendation System</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Report/"><span class="level-start"><span class="level-item">Report</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Searching/"><span class="level-start"><span class="level-item">Searching</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Searching/Data-Strucure/"><span class="level-start"><span class="level-item">Data Strucure</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Statistic/"><span class="level-start"><span class="level-item">Statistic</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Web/"><span class="level-start"><span class="level-item">Web</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Amdahl-s-Law/"><span class="tag">Amdahl&#039;s Law</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Backpropagation/"><span class="tag">Backpropagation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Bagging/"><span class="tag">Bagging</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BeautifulSoup/"><span class="tag">BeautifulSoup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Binary-Tree/"><span class="tag">Binary Tree</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting/"><span class="tag">Boosting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting-Machine/"><span class="tag">Boosting Machine</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BuckSort/"><span class="tag">BuckSort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C++</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Collaborative-Filtering/"><span class="tag">Collaborative Filtering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Confusion-Metric/"><span class="tag">Confusion Metric</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Convolution-Neural-Network/"><span class="tag">Convolution Neural Network</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cross-Validation/"><span class="tag">Cross Validation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/D3-js/"><span class="tag">D3.js</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Analysis/"><span class="tag">Data Analysis</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Dropout/"><span class="tag">Dropout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Ensemble-Learning/"><span class="tag">Ensemble Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Holdout/"><span class="tag">Holdout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hypothesis-Test/"><span class="tag">Hypothesis Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Icarus/"><span class="tag">Icarus</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Independence-Test/"><span class="tag">Independence Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/K-Mean-Clustering/"><span class="tag">K-Mean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/KMean-Clustering/"><span class="tag">KMean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/LGBM/"><span class="tag">LGBM</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Markdown/"><span class="tag">Markdown</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Evaluation/"><span class="tag">Model Evaluation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Selection/"><span class="tag">Model Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Natural-Language-Representations/"><span class="tag">Natural Language Representations</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Nature-Language-Processing/"><span class="tag">Nature Language Processing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Negative-Sampling/"><span class="tag">Negative Sampling</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/P-value/"><span class="tag">P-value</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Computing/"><span class="tag">Parallel Computing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Speedup/"><span class="tag">Parallel Speedup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PySpark/"><span class="tag">PySpark</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ROC-curve/"><span class="tag">ROC curve</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Recommendation-System/"><span class="tag">Recommendation System</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regression/"><span class="tag">Regression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regular-Expression/"><span class="tag">Regular Expression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Sorting/"><span class="tag">Sorting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Stacking/"><span class="tag">Stacking</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Traversal/"><span class="tag">Traversal</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unsupervised-Learning/"><span class="tag">Unsupervised Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Variable-Selection/"><span class="tag">Variable Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Web-Scrapping/"><span class="tag">Web Scrapping</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep/"><span class="tag">Wide and Deep</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep-Model/"><span class="tag">Wide and Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-Embedding/"><span class="tag">Word Embedding</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-vector/"><span class="tag">Word vector</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/binary-search/"><span class="tag">binary search</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/bubble-sort/"><span class="tag">bubble sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/commands/"><span class="tag">commands</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/insertion-sort/"><span class="tag">insertion sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/merge-sort/"><span class="tag">merge sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/non-parametric-learning/"><span class="tag">non-parametric learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/quick-sort/"><span class="tag">quick sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/review/"><span class="tag">review</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recent</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2021-03-08T05:00:46.000Z">2021-03-08</time></p><p class="title is-6"><a class="link-muted" href="/2021/03/08/Cpp-review/">Cpp review 1</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Programming/">Programming</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-02-19T03:22:29.000Z">2021-02-18</time></p><p class="title is-6"><a class="link-muted" href="/2021/02/18/Statistic-Hypothesis-Testing/">Statistic- 1 Hypothesis-Testing</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Statistic/">Statistic</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-16T00:48:52.000Z">2020-12-15</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/15/Recommendation-System-1/">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-08T05:18:39.000Z">2020-12-08</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/08/report/">CPSC 6300 Final Report</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Report/">Report</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-12-01T20:13:14.000Z">2020-12-01</time></p><p class="title is-6"><a class="link-muted" href="/2020/12/01/kkboxmusicrecommendation-notebook-v4/">KKBox Music Recommendation System</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2021/03/"><span class="level-start"><span class="level-item">March 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/02/"><span class="level-start"><span class="level-item">February 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/12/"><span class="level-start"><span class="level-item">December 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/11/"><span class="level-start"><span class="level-item">November 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/10/"><span class="level-start"><span class="level-item">October 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">September 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">August 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/07/"><span class="level-start"><span class="level-item">July 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/06/"><span class="level-start"><span class="level-item">June 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe to Updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button is-primary" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/images/avatar.jpg" alt="Wenkang Wei"></figure><p class="title is-size-4 is-block line-height-inherit">Wenkang Wei</p><p class="is-size-6 is-block">computer engineering| machine learning</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Clemson,SC</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">27</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">19</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">59</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/wenkangwei" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/wenkangwei"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="LinkedIn" href="https://www.linkedin.com/in/wenkang-wei-588811167"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><!--!--></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a><p class="size-small"><span>&copy; 2021 Wenkang Wei</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'https://github.com/wenkangwei/wenkangwei.github.io`',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to Top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>GNN-3-NodeEmbedding - Wenkang&#039;s Blog</title><meta description=""><meta property="og:type" content="article"><meta property="og:title" content="GNN-3-NodeEmbedding"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:locale" content="en_US"><meta property="article:published_time" content="2021-06-22T17:08:04.000Z"><meta property="article:modified_time" content="2021-06-22T17:19:05.316Z"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="GNN"><meta property="article:tag" content="Graph"><meta property="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io%60/2021/06/22/GNN-3-NodeEmbedding/"},"headline":"Wenkang's Blog","image":[],"datePublished":"2021-06-22T17:08:04.000Z","dateModified":"2021-06-22T17:19:05.316Z","author":{"@type":"Person","name":"Wenkang Wei"},"description":""}</script><link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io%60/2021/06/22/GNN-3-NodeEmbedding/"><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2021-06-22T17:08:04.000Z" title="2021-06-22T17:08:04.000Z">2021-06-22</time><span class="level-item"><a class="link-muted" href="/categories/Deep-Learning/">Deep Learning</a></span><span class="level-item">32 minutes read (About 4810 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">GNN-3-NodeEmbedding</h1><div class="content"><img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/GraphSAGE-process.png >
+
+
+<a id="more"></a>
+
+<h1 id="Node-Embedding-and-Node-Prediction"><a href="#Node-Embedding-and-Node-Prediction" class="headerlink" title="Node Embedding and Node Prediction"></a>Node Embedding and Node Prediction</h1><h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>首先回顾一下上一篇文章关于MessagePassing的GNN的内容。在GNN的MessagePassing里面，每个node代表一个subject，然后edge代表subject之间的关系。而MessagePassing一句话总结就是让每个node的特征(node representation 或node embedding)通过对应的neighbor nodes的信息进行聚集并用于更新每个node<br>的信息，从而学习到更好的node embedding表达。之后我们可以对学习到的node embedding里面每个node的特征向量输入到classifier里面进行node classification识别subject的类别。除了node classification外，node embedding还能用来做edge classification， graph classification 等任务。</p>
+<p>而这次项目的目的是要实现GNN图神经网络并进行实践应用到Cora (scientific publications)科学文献dataset里面，并对每篇文章进行分类和预测文章的类别。这次的项目的大概流程是:</p>
+<ol>
+<li>Introduction to Cora Dataset: 简单介绍一下Cora论文数据集的构成</li>
+<li>Data Visualization: 对Cora数据集的node representation 和class 进行可视化</li>
+<li>Modeling and training: 搭建和训练MLP, GCN, GAT等模型对node 进行classification以及测试</li>
+<li>Visualize learned node representation: 将学到的node representation进行可视化分析每个类分布的不同</li>
+<li>Assignment: 尝试其他不同的Dataset看一下不同GNN的效果</li>
+<li>Conclusion: 总结一下学到什么</li>
+</ol>
+<h2 id="2-Data-Description"><a href="#2-Data-Description" class="headerlink" title="2. Data Description"></a>2. Data Description</h2><p>这里先来介绍Coras Dataset的内容，Coras Dataset 的解释可以从官网找到: <a href="https://linqs.soe.ucsc.edu/data">https://linqs.soe.ucsc.edu/data</a><br>Coras dataset content:</p>
+<ul>
+<li>Number of nodes: 2708 nodes. 每个node代表一篇论文</li>
+<li>Number of edges/links: 5429条无向的边，如果用有向的边表示就是10556条</li>
+<li>Number of class: 8. 总共有7个类别的论文</li>
+<li>Dimension of node representation: 1433. 字典的大小为1433每个词用0,1 表示文章有没有那个词. 每篇文章的node representation就有1433</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.datasets <span class="keyword">import</span> Planetoid</span><br><span class="line"><span class="keyword">from</span> torch_geometric.transforms <span class="keyword">import</span> NormalizeFeatures</span><br><span class="line"></span><br><span class="line">dataset = Planetoid(root=<span class="string">'./dataset'</span>, name=<span class="string">'Cora'</span>, transform=NormalizeFeatures())</span><br><span class="line"></span><br><span class="line">print()</span><br><span class="line">print(<span class="string">f'Dataset: <span class="subst">&#123;dataset&#125;</span>:'</span>)</span><br><span class="line">print(<span class="string">'======================'</span>)</span><br><span class="line">print(<span class="string">f'Number of graphs: <span class="subst">&#123;len(dataset)&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Number of features: <span class="subst">&#123;dataset.num_features&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Number of classes: <span class="subst">&#123;dataset.num_classes&#125;</span>'</span>)</span><br><span class="line"></span><br><span class="line">data = dataset[<span class="number">0</span>]  <span class="comment"># Get the first graph object.</span></span><br><span class="line"></span><br><span class="line">print()</span><br><span class="line">print(data)</span><br><span class="line">print(<span class="string">'======================'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Gather some statistics about the graph.</span></span><br><span class="line">print(<span class="string">f'Number of nodes: <span class="subst">&#123;data.num_nodes&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Number of edges: <span class="subst">&#123;data.num_edges&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Average node degree: <span class="subst">&#123;data.num_edges / data.num_nodes:<span class="number">.2</span>f&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Number of training nodes: <span class="subst">&#123;data.train_mask.sum()&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Training node label rate: <span class="subst">&#123;int(data.train_mask.sum()) / data.num_nodes:<span class="number">.2</span>f&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Contains isolated nodes: <span class="subst">&#123;data.contains_isolated_nodes()&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Contains self-loops: <span class="subst">&#123;data.contains_self_loops()&#125;</span>'</span>)</span><br><span class="line">print(<span class="string">f'Is undirected: <span class="subst">&#123;data.is_undirected()&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Dataset: Cora():
+======================
+Number of graphs: 1
+Number of features: 1433
+Number of classes: 7
+
+Data(edge_index=[2, 10556], test_mask=[2708], train_mask=[2708], val_mask=[2708], x=[2708, 1433], y=[2708])
+======================
+Number of nodes: 2708
+Number of edges: 10556
+Average node degree: 3.90
+Number of training nodes: 140
+Training node label rate: 0.05
+Contains isolated nodes: False
+Contains self-loops: False
+Is undirected: True
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.train_mask,data.y.unique()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(tensor([ True,  True,  True,  ..., False, False, False]),
+ tensor([0, 1, 2, 3, 4, 5, 6]))
+</code></pre>
+<h2 id="2-Data-Visualization"><a href="#2-Data-Visualization" class="headerlink" title="2. Data Visualization"></a>2. Data Visualization</h2><p>这里简单用TSNE的降维算法把1433 维的node representation降到2维从而来显示每个class的数据的分布, 每种颜色代表一个class。从下面每种颜色的点的分布来看，在学习之前的不同类别的node representation是很难区分开来的，所以很多节点的特征都混在一起</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">visualize</span><span class="params">(h, color,title=<span class="string">""</span>)</span>:</span></span><br><span class="line">    <span class="comment"># convert node data x to TSNE embedding data</span></span><br><span class="line">    z = TSNE(n_components=<span class="number">2</span>).fit_transform(h.detach().cpu().numpy())</span><br><span class="line">    plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">    plt.xticks([])</span><br><span class="line">    plt.yticks([])</span><br><span class="line">    plt.title(title)</span><br><span class="line">    plt.scatter(z[:, <span class="number">0</span>], z[:, <span class="number">1</span>], s=<span class="number">70</span>, c=color, cmap=<span class="string">"Set2"</span>)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.x.shape, data.y.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(torch.Size([2708, 1433]), torch.Size([2708]))
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">visualize(data.x,data.y,<span class="string">"Node Data Clusters"</span>)</span><br></pre></td></tr></table></figure>
+
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/output_7_0.png>
+    
+
+<h2 id="3-用不同GNN对node-embedding进行学习"><a href="#3-用不同GNN对node-embedding进行学习" class="headerlink" title="3. 用不同GNN对node embedding进行学习"></a>3. 用不同GNN对node embedding进行学习</h2><p>这里先简单来设计training, testing 的通用函数, 之后尝试用以下不同的模型进行学习和对比:</p>
+<ul>
+<li>MLP</li>
+<li>GNN</li>
+<li>GAT</li>
+<li>GraphSAGE</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">(model, criterion, optimizer,data, use_mask=True)</span>:</span></span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero_grad()  <span class="comment"># Clear gradients.</span></span><br><span class="line">    out = model(data.x, data.edge_index)  <span class="comment"># Perform a single forward pass.</span></span><br><span class="line">    <span class="keyword">if</span> use_mask:</span><br><span class="line">        loss = criterion(out[data.train_mask], data.y[data.train_mask])  <span class="comment"># Compute the loss solely based on the training nodes.</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        loss = criterion(out, data.y)  <span class="comment"># Compute the loss solely based on the training nodes.</span></span><br><span class="line">    loss.backward()  <span class="comment"># Derive gradients.</span></span><br><span class="line">    optimizer.step()  <span class="comment"># Update parameters based on gradients.</span></span><br><span class="line">    <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(model, data, use_mask=True)</span>:</span></span><br><span class="line">    model.eval()</span><br><span class="line">    out = model(data.x, data.edge_index)</span><br><span class="line">    pred = out.argmax(dim=<span class="number">1</span>)  <span class="comment"># Use the class with highest probability.</span></span><br><span class="line">    <span class="keyword">if</span> use_mask:</span><br><span class="line">        test_correct = pred[data.test_mask] == data.y[data.test_mask]  <span class="comment"># Check against ground-truth labels.</span></span><br><span class="line">        test_acc = int(test_correct.sum()) / int(data.test_mask.sum())  <span class="comment"># Derive ratio of correct predictions.</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        test_correct = pred == data.y <span class="comment"># Check against ground-truth labels.</span></span><br><span class="line">        test_acc = int(test_correct.sum()) / len(data.y)  <span class="comment"># Derive ratio of correct predictions.</span></span><br><span class="line">    <span class="keyword">return</span> test_acc</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-1-MLP"><a href="#3-1-MLP" class="headerlink" title="3.1 MLP"></a>3.1 MLP</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> Linear</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MLP</span><span class="params">(torch.nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channel, classes, hidden_channels,random_seed=<span class="number">12345</span>)</span>:</span></span><br><span class="line">        super(MLP, self).__init__()</span><br><span class="line">        torch.manual_seed(random_seed)</span><br><span class="line">        self.lin1 = Linear(in_channel, hidden_channels)</span><br><span class="line">        self.lin2 = Linear(hidden_channels, classes)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, index)</span>:</span></span><br><span class="line">        x = self.lin1(x)</span><br><span class="line">        x = x.relu()</span><br><span class="line">        x = F.dropout(x, p=<span class="number">0.5</span>, training=self.training)</span><br><span class="line">        x = self.lin2(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">model_mlp = MLP(in_channel = dataset.num_features, classes = dataset.num_classes, hidden_channels=<span class="number">16</span>)</span><br><span class="line">optimizer = torch.optim.Adam(model_mlp.parameters(), lr=<span class="number">0.01</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">print(<span class="string">"Model Strucutre:"</span>)</span><br><span class="line">print(model_mlp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">201</span>):</span><br><span class="line">    loss = train(model_mlp, criterion, optimizer,data)</span><br><span class="line">    <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">        print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">print()</span><br><span class="line">test_acc = test(model_mlp,data)</span><br><span class="line">print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Model Strucutre:
+MLP(
+  (lin1): Linear(in_features=1433, out_features=16, bias=True)
+  (lin2): Linear(in_features=16, out_features=7, bias=True)
+)
+Epoch: 020, Loss: 1.7441
+Epoch: 040, Loss: 1.2543
+Epoch: 060, Loss: 0.8578
+Epoch: 080, Loss: 0.6368
+Epoch: 100, Loss: 0.5350
+Epoch: 120, Loss: 0.4745
+Epoch: 140, Loss: 0.4031
+Epoch: 160, Loss: 0.3782
+Epoch: 180, Loss: 0.4203
+Epoch: 200, Loss: 0.3810
+
+Test Accuracy: 0.5900
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-GCN"><a href="#3-2-GCN" class="headerlink" title="3.2 GCN"></a>3.2 GCN</h3><p>GCN Layer 公式如下:</p>
+<p>$$<br>\mathbf{x}<em>i^{(k)} = \sum</em>{j \in \mathcal{N}(i) \cup { i }} \frac{1}{\sqrt{\deg(i)} \cdot \sqrt{\deg(j)}} \cdot \left( \mathbf{\Theta} \cdot \mathbf{x}_j^{(k-1)} \right),<br>$$</p>
+<p>这里一些函数定义如下：</p>
+<ul>
+<li>$\phi(..)$: message函数GCN一样都是linear projection之后用degree进行normalization</li>
+<li>$\square(..)$ : aggregate 函数用 add</li>
+<li>$\gamma(..)$: update 函数是直接将aggregate后的结果输出</li>
+</ul>
+<p>这里把MLP里面的linear layer换成是GCN layer</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GCNConv</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GCN</span><span class="params">(torch.nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channel,classes, hidden_channels)</span>:</span></span><br><span class="line">        super(GCN, self).__init__()</span><br><span class="line">        torch.manual_seed(<span class="number">12345</span>)</span><br><span class="line">        self.conv1 = GCNConv(in_channel, hidden_channels)</span><br><span class="line">        self.conv2 = GCNConv(hidden_channels, classes)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, edge_index)</span>:</span></span><br><span class="line">        x = self.conv1(x, edge_index)</span><br><span class="line">        x = x.relu()</span><br><span class="line">        x = F.dropout(x, p=<span class="number">0.5</span>, training=self.training)</span><br><span class="line">        x = self.conv2(x, edge_index)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">model_gcn = GCN(in_channel= dataset.num_features, classes= dataset.num_classes, hidden_channels=<span class="number">16</span>)</span><br><span class="line">print(<span class="string">"Model Architecture: "</span>)</span><br><span class="line">print(model_gcn)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">optimizer = torch.optim.Adam(model_gcn.parameters(), lr=<span class="number">0.01</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">201</span>):</span><br><span class="line">    loss = train(model_gcn, criterion, optimizer,data)</span><br><span class="line">    <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">        print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">print()</span><br><span class="line">test_acc = test(model_gcn,data)</span><br><span class="line">print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Model Architecture: 
+GCN(
+  (conv1): GCNConv(1433, 16)
+  (conv2): GCNConv(16, 7)
+)
+Epoch: 020, Loss: 1.7184
+Epoch: 040, Loss: 1.3363
+Epoch: 060, Loss: 1.0066
+Epoch: 080, Loss: 0.7248
+Epoch: 100, Loss: 0.5833
+Epoch: 120, Loss: 0.5064
+Epoch: 140, Loss: 0.4131
+Epoch: 160, Loss: 0.3799
+Epoch: 180, Loss: 0.3186
+Epoch: 200, Loss: 0.3006
+
+Test Accuracy: 0.8140
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-GAT-Graph-Attention-Network"><a href="#3-3-GAT-Graph-Attention-Network" class="headerlink" title="3.3 GAT (Graph Attention Network)"></a>3.3 GAT (Graph Attention Network)</h3><ul>
+<li>paper link: <a href="https://arxiv.org/pdf/1710.10903.pdf">https://arxiv.org/pdf/1710.10903.pdf</a></li>
+<li>Graph Attention Network 的attention公式如下:</li>
+</ul>
+<p>$$<br>\alpha_{i,j} =<br>\frac{<br>\exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}<br>[\mathbf{W}\mathbf{h}_i , \Vert , \mathbf{W}\mathbf{h}<em>j]<br>\right)\right)}<br>{\sum</em>{k \in \mathcal{N}(i) \cup { i }}<br>\exp\left(\mathrm{LeakyReLU}\left(\mathbf{a}^{\top}<br>[\mathbf{W}\mathbf{h}_i , \Vert , \mathbf{W}\mathbf{h}_k]<br>\right)\right)}.<br>$$</p>
+<p>节点信息更新<br>$$<br>\mathbf{h}_ i^{‘} = \sigma(\frac{1}{K} \sum_{k=1}^K\sum_{j \in N(i)} a_{ij}^{k}\mathbf{W}^k\mathbf{h}_{i})<br>$$</p>
+<p>实际上GAT就是在每个节点把邻居的信息聚合时根据邻居节点的node representation和这个节点的node representation的相似度对聚合的信息有侧重地聚合<br>其中每个参数的代表:</p>
+<ul>
+<li>$\mathbf{h}_i$: 节点 i的node representation。这个node representation可以是GNN的某一层的输出</li>
+<li>$\mathbf{W}$: shared linear transformation. 用于每个节点的共享的线性投映矩阵，所有节点都用相同的W进行投映</li>
+<li>$k \in \mathcal{N}(i) \cup { i }$:  第i个节点的邻居节点(包括第i个节点本身)。</li>
+<li>$\Vert$: 把两个向量拼接</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> Linear</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GATConv</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GAT</span><span class="params">(torch.nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channel, classes, hidden_channels, dropout_r = <span class="number">0.2</span>)</span>:</span></span><br><span class="line">        super(GAT, self).__init__()</span><br><span class="line">        torch.manual_seed(<span class="number">12345</span>)</span><br><span class="line">        self.dropout_r = dropout_r</span><br><span class="line">        self.conv1 = GATConv(in_channel, hidden_channels)</span><br><span class="line">        self.conv2 = GATConv(hidden_channels, hidden_channels)</span><br><span class="line">        self.linear = torch.nn.Linear(hidden_channels,classes)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, edge_index)</span>:</span></span><br><span class="line">        x = self.conv1(x, edge_index)</span><br><span class="line">        x = x.relu()</span><br><span class="line">        x = F.dropout(x, p=self.dropout_r, training=self.training)</span><br><span class="line">        x = self.conv2(x, edge_index)</span><br><span class="line">        x = self.linear(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model_gat = GAT(in_channel = dataset.num_features, classes = dataset.num_classes, hidden_channels = <span class="number">16</span>)</span><br><span class="line">optimizer = torch.optim.Adam(model_gat.parameters(), lr=<span class="number">0.01</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">print(<span class="string">"Model Strucutre:"</span>)</span><br><span class="line">print(model_gat)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">201</span>):</span><br><span class="line">    loss = train(model_gat, criterion, optimizer,data)</span><br><span class="line">    <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">        print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">print()</span><br><span class="line">test_acc = test(model_gat,data)</span><br><span class="line">print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Model Strucutre:
+GAT(
+  (conv1): GATConv(1433, 16, heads=1)
+  (conv2): GATConv(16, 16, heads=1)
+  (linear): Linear(in_features=16, out_features=7, bias=True)
+)
+Epoch: 020, Loss: 1.5780
+Epoch: 040, Loss: 0.5588
+Epoch: 060, Loss: 0.1466
+Epoch: 080, Loss: 0.0755
+Epoch: 100, Loss: 0.0585
+Epoch: 120, Loss: 0.0351
+Epoch: 140, Loss: 0.0406
+Epoch: 160, Loss: 0.0292
+Epoch: 180, Loss: 0.0285
+Epoch: 200, Loss: 0.0287
+
+Test Accuracy: 0.7230
+</code></pre>
+<p><strong>对GAT做一点调参，提一下性能</strong></p>
+<ul>
+<li>hidden_channels 用24时比小于16和大于32的时候好</li>
+<li>dropout=0.8时效果也更好，可能GAT里面的attention的机制容易对一部分特征overfitting</li>
+<li>epoch设置300更加长些也效果好点</li>
+<li>这里调了下参数有了**6%**的提升</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">model_gat = GAT(in_channel = dataset.num_features, classes = dataset.num_classes, hidden_channels = <span class="number">24</span>, dropout_r= <span class="number">0.8</span>)</span><br><span class="line">optimizer = torch.optim.Adam(model_gat.parameters(), lr=<span class="number">0.01</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">print(<span class="string">"Model Strucutre:"</span>)</span><br><span class="line">print(model_gat)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">301</span>):</span><br><span class="line">    loss = train(model_gat, criterion, optimizer,data)</span><br><span class="line">    <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">        print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">print()</span><br><span class="line">test_acc = test(model_gat,data)</span><br><span class="line">print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Model Strucutre:
+GAT(
+  (conv1): GATConv(1433, 24, heads=1)
+  (conv2): GATConv(24, 24, heads=1)
+  (linear): Linear(in_features=24, out_features=7, bias=True)
+)
+Epoch: 020, Loss: 1.6420
+Epoch: 040, Loss: 0.7042
+Epoch: 060, Loss: 0.4498
+Epoch: 080, Loss: 0.2709
+Epoch: 100, Loss: 0.2429
+Epoch: 120, Loss: 0.1849
+Epoch: 140, Loss: 0.2643
+Epoch: 160, Loss: 0.1832
+Epoch: 180, Loss: 0.2135
+Epoch: 200, Loss: 0.1697
+Epoch: 220, Loss: 0.1485
+Epoch: 240, Loss: 0.1359
+Epoch: 260, Loss: 0.1606
+Epoch: 280, Loss: 0.1778
+Epoch: 300, Loss: 0.1555
+
+Test Accuracy: 0.7810
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-GraphSAGE-Sample-and-Aggregate-Graph-Embedding-SAGE"><a href="#3-4-GraphSAGE-Sample-and-Aggregate-Graph-Embedding-SAGE" class="headerlink" title="3.4. GraphSAGE (Sample and Aggregate Graph Embedding SAGE)"></a>3.4. GraphSAGE (Sample and Aggregate Graph Embedding SAGE)</h3><ul>
+<li>Paper Link: <a href="https://arxiv.org/pdf/1706.02216.pdf">https://arxiv.org/pdf/1706.02216.pdf</a></li>
+<li>其他GNN的node embedding的学习方法都是假设了图里面所有node都是在训练时已经见到的并且有自己的特征数据作为训练集。 而在训练之后，当这些已经见过的node的特征值改变时，可以用GNN对它进行预测。但是实际问题里面，有可能有些node在训练时完全没有见过的(<strong>但是出现时会和其他已经见过的node存在link</strong>)，因此不能在训练时用这些node的数据进行训练(<strong>这个有点像推荐系统的Embedding里面没有见过的userid或itemid的冷启动情况</strong>)。GraphSAGE就是用来解决这个问题</li>
+<li>GraphSAGE是一种 inductive的representation learning的方法，就是归纳法。它是用于预测之前没有见过的node的embed的ing的特征。它的主要思想是通过学习多个aggregate函数(paper里面提出来mean, LSTM, pooling 三个)，然后这些aggregate函数用neighbor的信息来生成之前没有见过的node的embedding之后再做预测。下面是GraphSAGE的流程图：</li>
+</ul>
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/GraphSAGE-process.png >
+
+
+
+<ul>
+<li><p>GraphSAGE 的node embedding的其中一个生成公式为(还有其他用于生成embedding的aggregate函数公式可以参考原文):<br>$$<br>\mathbf{x}<em>{i}^{‘} = \mathbf{W}</em>{1}x_{i} + \textbf{mean}<em>{j \in N(i)}(\mathbf{x}</em>{j})<br>$$</p>
+</li>
+<li><p>GraphSAGE 的graph-based unsupervised loss function 定义为<br>$$<br>\mathbf{J}<em>{G}(z</em>{u}) = -log(\sigma(\mathbf{z}<em>{u}^{T}\mathbf{z}</em>{v})) - \mathbf{Q} \cdot \mathbf{E}<em>{v</em>{n} \in P_{n}(v)}log(\sigma(-\mathbf{z}<em>{u}^{T}\mathbf{z}</em>{v_{n}}))<br>$$</p>
+</li>
+</ul>
+<p>其中:</p>
+<ul>
+<li><p>$j \in N(i)$ 为第i个节点的第j个neighbor节点</p>
+</li>
+<li><p>$v$ 是和 $u$ 在定长的random walk采样路径出现的节点</p>
+</li>
+<li><p>$Q$ 是负样本的个数， $P_{n}(v)$ 是负采样的分布</p>
+</li>
+<li><p>$z_{u}$是node representation特征</p>
+</li>
+<li><p>这里$\sigma()$里面计算的是节点和random walk采样时同时出现的其他节点的相似度。相似度越大，loss越小</p>
+</li>
+<li><p>GraphSAGE 的计算embedding算法流程如下:</p>
+</li>
+</ul>
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/GraphSAGE-alg.png>
+
+<p>这里GraphSAGE的基本思路就是</p>
+<ul>
+<li>先设定好K (iteration的次数又或者叫search depth搜索的深度)以及初始化没有见过的节点$v$的初始的node embedding</li>
+<li>每次遍历时都找到节点 $v$ 的neighbor的nodes并把他们的信息aggregate得到neighbor信息的聚合的embedding</li>
+<li>把上一层的$v$ 的embedding和新得到的聚合的neighbor node embedding进行拼接和linear transform得到下一层 node $v$的输出，最后生成之前没见过的node $v$ 的embedding</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> Linear</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> SAGEConv</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SAGE</span><span class="params">(torch.nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channel, classes, hidden_channels, dropout_r = <span class="number">0.2</span>)</span>:</span></span><br><span class="line">        super(SAGE, self).__init__()</span><br><span class="line">        torch.manual_seed(<span class="number">12345</span>)</span><br><span class="line">        self.dropout_r = dropout_r</span><br><span class="line">        self.conv1 = SAGEConv(in_channel, hidden_channels,normalize=<span class="literal">True</span>)</span><br><span class="line">        self.conv2 = SAGEConv(hidden_channels, hidden_channels,normalize=<span class="literal">True</span>)</span><br><span class="line">        self.linear = torch.nn.Linear(hidden_channels,classes)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, edge_index)</span>:</span></span><br><span class="line">        x = self.conv1(x, edge_index)</span><br><span class="line">        x = x.relu()</span><br><span class="line">        x = F.dropout(x, p=self.dropout_r, training=self.training)</span><br><span class="line">        x = self.conv2(x, edge_index)</span><br><span class="line">        x = self.linear(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model_sage = SAGE(in_channel = dataset.num_features, classes = dataset.num_classes, hidden_channels = <span class="number">24</span>,dropout_r= <span class="number">0.5</span>)</span><br><span class="line">optimizer = torch.optim.Adam(model_sage.parameters(), lr=<span class="number">0.03</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">print(<span class="string">"Model Strucutre:"</span>)</span><br><span class="line">print(model_sage)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">201</span>):</span><br><span class="line">    loss = train(model_sage, criterion, optimizer,data)</span><br><span class="line">    <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">        print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">print()</span><br><span class="line">test_acc = test(model_sage,data)</span><br><span class="line">print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Model Strucutre:
+SAGE(
+  (conv1): SAGEConv(1433, 24)
+  (conv2): SAGEConv(24, 24)
+  (linear): Linear(in_features=24, out_features=7, bias=True)
+)
+Epoch: 020, Loss: 0.3678
+Epoch: 040, Loss: 0.0956
+Epoch: 060, Loss: 0.0435
+Epoch: 080, Loss: 0.0424
+Epoch: 100, Loss: 0.1066
+Epoch: 120, Loss: 0.0316
+Epoch: 140, Loss: 0.0474
+Epoch: 160, Loss: 0.0640
+Epoch: 180, Loss: 0.1417
+Epoch: 200, Loss: 0.0442
+
+Test Accuracy: 0.7800
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-5-Node-Representation-Cluster-Visualization"><a href="#3-5-Node-Representation-Cluster-Visualization" class="headerlink" title="3.5 Node Representation Cluster Visualization"></a>3.5 Node Representation Cluster Visualization</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">models = &#123;<span class="string">"MLP"</span>:model_mlp, <span class="string">"GCN"</span>:model_gcn,<span class="string">"GAT"</span>:model_gat, <span class="string">"GraphSAGE"</span>:model_sage&#125;</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> models.keys():</span><br><span class="line">    model = models[k]</span><br><span class="line">    out = model(data.x, data.edge_index)</span><br><span class="line">    title = <span class="string">f"Node Representation learned by <span class="subst">&#123;k&#125;</span>"</span></span><br><span class="line">    visualize(out, data.y, title)</span><br></pre></td></tr></table></figure>
+
+
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/output_25_0.png>
+
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/output_25_1.png>    
+
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/output_25_2.png>
+
+<img src=https://raw.githubusercontent.com/wenkangwei/Datawhale-Team-Learning/main/GNN/Task-3-NodeEmbedding/GNN-Task-3-NodeEmbedding/output_25_3.png>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Assignment"><a href="#4-Assignment" class="headerlink" title="4. Assignment"></a>4. Assignment</h2><ul>
+<li>此篇文章涉及的代码可见于<code>codes/learn_node_representation.ipynb</code>，请参照这份代码使用<a href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#convolutional-layers">PyG中不同的图卷积模块</a>在<a href="https://pytorch-geometric.readthedocs.io/en/latest/modules/datasets.html">PyG的不同数据集</a>上实现节点分类或回归任务。</li>
+</ul>
+<h3 id="4-1-Dataset选择"><a href="#4-1-Dataset选择" class="headerlink" title="4.1 Dataset选择"></a>4.1 Dataset选择</h3><ul>
+<li>Pubmed: <a href="https://arxiv.org/abs/1603.08861">https://arxiv.org/abs/1603.08861</a></li>
+<li>Citeseer: <a href="https://arxiv.org/abs/1603.08861">https://arxiv.org/abs/1603.08861</a></li>
+<li>CitationFull： <a href="https://arxiv.org/abs/1707.03815">https://arxiv.org/abs/1707.03815</a></li>
+<li>本来想尝试其他数据，但是其他数据集太大训练起来很慢特征，后期有时间再试试看</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># dataset used by GAT</span></span><br><span class="line"><span class="keyword">from</span> torch_geometric.datasets <span class="keyword">import</span> PPI, Reddit,NELL,QM7b,CitationFull,AMiner</span><br><span class="line">pubmed_dataset = Planetoid(root=<span class="string">'./dataset'</span>, name=<span class="string">'Pubmed'</span>, transform=NormalizeFeatures())</span><br><span class="line">Citeseer_dataset = Planetoid(root=<span class="string">'./dataset'</span>, name=<span class="string">'CITESEER'</span>, transform=NormalizeFeatures())</span><br><span class="line">CitationFull_dataset =CitationFull(root=<span class="string">'./dataset'</span>,name=<span class="string">"DBLP"</span>,transform=NormalizeFeatures())</span><br><span class="line"><span class="comment"># PPI_train = PPI(root='./dataset',  split='train',transform=NormalizeFeatures())</span></span><br><span class="line"><span class="comment"># PPI_test = PPI(root='./dataset',  split='test',transform=NormalizeFeatures())</span></span><br><span class="line"><span class="comment"># PPI_dataset = &#123;'train':PPI_train,"test":PPI_test&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># AMiner_dataset = AMiner(root='./dataset',transform=NormalizeFeatures())</span></span><br><span class="line"><span class="comment">#QM7b_dataset = QM7b(root='./dataset', transform=NormalizeFeatures())</span></span><br><span class="line"><span class="comment"># Reddit_dataset = Reddit(root='./dataset', transform=NormalizeFeatures())</span></span><br><span class="line"><span class="comment"># NELL_dataset = NELL(root='./dataset', transform=NormalizeFeatures())</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>Downloading https://data.dgl.ai/dataset/ppi.zip
+Extracting dataset/ppi.zip
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#mydatasets = &#123;"Pubmed":pubmed_dataset, "Citeseer":Citeseer_dataset, "Reddit":Reddit_dataset,"NELL":NELL_dataset&#125;</span></span><br><span class="line">mydatasets = &#123;<span class="string">"CitationFull"</span>:CitationFull_dataset,<span class="string">"Pubmed"</span>:pubmed_dataset, <span class="string">"Citeseer"</span>:Citeseer_dataset&#125;</span><br><span class="line">df = pd.DataFrame(columns=&#123;<span class="string">"dataset"</span>,<span class="string">"#graphs"</span>,<span class="string">"#features"</span>,<span class="string">"#classes"</span>&#125;)</span><br><span class="line"></span><br><span class="line">dic = &#123;<span class="string">"dataset"</span>:[],<span class="string">"#graphs"</span>:[],<span class="string">"#features"</span>:[],<span class="string">"#classes"</span>:[],<span class="string">"#nodes"</span>:[],<span class="string">"#edges"</span>:[],<span class="string">"Has_isolated_nodes"</span>:[],<span class="string">"undirected"</span>:[]&#125;</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> mydatasets.keys():</span><br><span class="line">    tmp = &#123;k:mydatasets[k]&#125;</span><br><span class="line">    <span class="keyword">if</span> k <span class="keyword">in</span> [<span class="string">"PPI"</span>]:</span><br><span class="line">        tmp = mydatasets[k]</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> tmp.keys():</span><br><span class="line">        dataset = tmp[key]</span><br><span class="line">        print(<span class="string">"dataset: "</span>,key)</span><br><span class="line">        dic[<span class="string">'dataset'</span>].append(key)</span><br><span class="line">        dic[<span class="string">'#graphs'</span>].append(len(dataset))</span><br><span class="line">        dic[<span class="string">'#features'</span>].append(dataset.num_features)</span><br><span class="line">        dic[<span class="string">'#classes'</span>].append(dataset.num_classes)</span><br><span class="line">        data = dataset[<span class="number">0</span>]</span><br><span class="line">        dic[<span class="string">'#nodes'</span>].append(data.num_nodes)</span><br><span class="line">        dic[<span class="string">'#edges'</span>].append(data.num_edges)</span><br><span class="line">        dic[<span class="string">'Has_isolated_nodes'</span>].append(data.contains_isolated_nodes())</span><br><span class="line">        dic[<span class="string">'undirected'</span>].append(data.is_undirected())</span><br><span class="line"></span><br><span class="line">data_stat = pd.DataFrame(dic)</span><br><span class="line">data_stat.T</span><br><span class="line"></span><br><span class="line"><span class="comment"># print()</span></span><br><span class="line"><span class="comment"># print(f'Dataset: &#123;dataset&#125;:')</span></span><br><span class="line"><span class="comment"># print('======================')</span></span><br><span class="line"><span class="comment"># print(f'Number of graphs: &#123;len(dataset)&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Number of features: &#123;dataset.num_features&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Number of classes: &#123;dataset.num_classes&#125;')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># data = dataset[0]  # Get the first graph object.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print()</span></span><br><span class="line"><span class="comment"># print(data)</span></span><br><span class="line"><span class="comment"># print('======================')</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># # Gather some statistics about the graph.</span></span><br><span class="line"><span class="comment"># print(f'Number of nodes: &#123;data.num_nodes&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Number of edges: &#123;data.num_edges&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Average node degree: &#123;data.num_edges / data.num_nodes:.2f&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Number of training nodes: &#123;data.train_mask.sum()&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Training node label rate: &#123;int(data.train_mask.sum()) / data.num_nodes:.2f&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Contains isolated nodes: &#123;data.contains_isolated_nodes()&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Contains self-loops: &#123;data.contains_self_loops()&#125;')</span></span><br><span class="line"><span class="comment"># print(f'Is undirected: &#123;data.is_undirected()&#125;')</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>dataset:  CitationFull
+dataset:  Pubmed
+dataset:  Citeseer
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+<p></style></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>dataset</th>
+      <td>CitationFull</td>
+      <td>Pubmed</td>
+      <td>Citeseer</td>
+    </tr>
+    <tr>
+      <th>#graphs</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>#features</th>
+      <td>1639</td>
+      <td>500</td>
+      <td>3703</td>
+    </tr>
+    <tr>
+      <th>#classes</th>
+      <td>4</td>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>#nodes</th>
+      <td>17716</td>
+      <td>19717</td>
+      <td>3327</td>
+    </tr>
+    <tr>
+      <th>#edges</th>
+      <td>105734</td>
+      <td>88648</td>
+      <td>9104</td>
+    </tr>
+    <tr>
+      <th>Has_isolated_nodes</th>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>undirected</th>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># KarateClub_dataset[0]</span></span><br><span class="line"><span class="comment"># ! du -h ./dataset/</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">models = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_models</span><span class="params">(models, datasets)</span>:</span></span><br><span class="line">    res = &#123;&#125;</span><br><span class="line">    mymodels = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> datasets.keys():</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> [<span class="string">"CitationFull"</span>]:</span><br><span class="line">            dataset = datasets[key]</span><br><span class="line">            testset = datasets[key]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            dataset = datasets[key]</span><br><span class="line">            testset= <span class="literal">None</span></span><br><span class="line">        data = dataset[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> res.keys():</span><br><span class="line">            res[key] = &#123;&#125;</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> models.keys():</span><br><span class="line">            mymodels[key] = &#123;&#125;</span><br><span class="line">            </span><br><span class="line">        model_mlp2 = MLP(in_channel = dataset.num_features, classes = dataset.num_classes,hidden_channels=<span class="number">16</span>)</span><br><span class="line">        model_gcn2 = GCN(in_channel = dataset.num_features, classes = dataset.num_classes,hidden_channels=<span class="number">16</span>)</span><br><span class="line">        model_sage2 = SAGE(in_channel = dataset.num_features, classes = dataset.num_classes,hidden_channels = <span class="number">24</span>,dropout_r= <span class="number">0.5</span>)</span><br><span class="line">        model_gat2 = GAT(in_channel = dataset.num_features, classes = dataset.num_classes,hidden_channels = <span class="number">24</span>, dropout_r= <span class="number">0.8</span>)</span><br><span class="line">        models = &#123;<span class="string">"MLP"</span>:model_mlp2, <span class="string">"GCN"</span>:model_gcn2,<span class="string">"GAT"</span>:model_gat2, <span class="string">"GraphSAGE"</span>:model_sage2&#125;</span><br><span class="line">        mymodels[key] = models</span><br><span class="line">        <span class="keyword">for</span> name, model <span class="keyword">in</span> models.items():</span><br><span class="line">            <span class="keyword">if</span> name <span class="keyword">not</span> <span class="keyword">in</span> res[key].keys():</span><br><span class="line">                res[key][name] =<span class="literal">None</span>    </span><br><span class="line">            print(<span class="string">f"Dataset: <span class="subst">&#123;key&#125;</span>, model: <span class="subst">&#123;name&#125;</span>"</span>)</span><br><span class="line">            optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.03</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line">            criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line">            <span class="comment">#print("Model Strucutre:")</span></span><br><span class="line">            <span class="comment">#print(model)</span></span><br><span class="line">            <span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">201</span>):</span><br><span class="line">                use_test_mask = <span class="literal">True</span> <span class="keyword">if</span> testset== <span class="literal">None</span> <span class="keyword">else</span> <span class="literal">False</span></span><br><span class="line">                loss = train(model, criterion, optimizer,data,use_test_mask)</span><br><span class="line">                <span class="keyword">if</span> epoch%<span class="number">20</span>==<span class="number">0</span>:</span><br><span class="line">                    print(<span class="string">f'Epoch: <span class="subst">&#123;epoch:<span class="number">03</span>d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">            print()</span><br><span class="line">            use_test_mask = <span class="literal">True</span> <span class="keyword">if</span> testset== <span class="literal">None</span> <span class="keyword">else</span> <span class="literal">False</span></span><br><span class="line">            test_acc = test(model,data,use_test_mask)</span><br><span class="line">            print(<span class="string">f'Test Accuracy: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>'</span>)</span><br><span class="line">            res[key][name] = test_acc</span><br><span class="line">    <span class="keyword">return</span> pd.DataFrame(res), mymodels</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test_results, trained_models = train_models(models, mydatasets)</span><br><span class="line">test_results</span><br></pre></td></tr></table></figure>
+
+<pre><code>Dataset: CitationFull, model: MLP
+Epoch: 020, Loss: 0.9961
+Epoch: 040, Loss: 0.8182
+Epoch: 060, Loss: 0.7515
+Epoch: 080, Loss: 0.7192
+Epoch: 100, Loss: 0.6986
+Epoch: 120, Loss: 0.6905
+Epoch: 140, Loss: 0.6799
+Epoch: 160, Loss: 0.6746
+Epoch: 180, Loss: 0.6669
+Epoch: 200, Loss: 0.6673
+
+Test Accuracy: 0.8128
+Dataset: CitationFull, model: GCN
+Epoch: 020, Loss: 0.7686
+Epoch: 040, Loss: 0.5725
+Epoch: 060, Loss: 0.5072
+Epoch: 080, Loss: 0.4807
+Epoch: 100, Loss: 0.4712
+Epoch: 120, Loss: 0.4601
+Epoch: 140, Loss: 0.4548
+Epoch: 160, Loss: 0.4475
+Epoch: 180, Loss: 0.4489
+Epoch: 200, Loss: 0.4439
+
+Test Accuracy: 0.8606
+Dataset: CitationFull, model: GAT
+Epoch: 020, Loss: 0.7240
+Epoch: 040, Loss: 0.5830
+Epoch: 060, Loss: 0.4896
+Epoch: 080, Loss: 0.4724
+Epoch: 100, Loss: 0.4547
+Epoch: 120, Loss: 0.4440
+Epoch: 140, Loss: 0.4313
+Epoch: 160, Loss: 0.4150
+Epoch: 180, Loss: 0.4025
+Epoch: 200, Loss: 0.3877
+
+Test Accuracy: 0.8818
+Dataset: CitationFull, model: GraphSAGE
+Epoch: 020, Loss: 0.4138
+Epoch: 040, Loss: 0.2719
+Epoch: 060, Loss: 0.2323
+Epoch: 080, Loss: 0.2151
+Epoch: 100, Loss: 0.2272
+Epoch: 120, Loss: 0.1943
+Epoch: 140, Loss: 0.2020
+Epoch: 160, Loss: 0.1900
+Epoch: 180, Loss: 0.1968
+Epoch: 200, Loss: 0.2002
+
+Test Accuracy: 0.9690
+Dataset: Pubmed, model: MLP
+Epoch: 020, Loss: 0.4589
+Epoch: 040, Loss: 0.1964
+Epoch: 060, Loss: 0.1649
+Epoch: 080, Loss: 0.1044
+Epoch: 100, Loss: 0.0887
+Epoch: 120, Loss: 0.1578
+Epoch: 140, Loss: 0.1371
+Epoch: 160, Loss: 0.1269
+Epoch: 180, Loss: 0.1296
+Epoch: 200, Loss: 0.1131
+
+Test Accuracy: 0.7280
+Dataset: Pubmed, model: GCN
+Epoch: 020, Loss: 0.5874
+Epoch: 040, Loss: 0.2958
+Epoch: 060, Loss: 0.2396
+Epoch: 080, Loss: 0.1658
+Epoch: 100, Loss: 0.1735
+Epoch: 120, Loss: 0.1848
+Epoch: 140, Loss: 0.1198
+Epoch: 160, Loss: 0.1091
+Epoch: 180, Loss: 0.1549
+Epoch: 200, Loss: 0.1069
+
+Test Accuracy: 0.7930
+Dataset: Pubmed, model: GAT
+Epoch: 020, Loss: 0.3768
+Epoch: 040, Loss: 0.1317
+Epoch: 060, Loss: 0.1555
+Epoch: 080, Loss: 0.2786
+Epoch: 100, Loss: 0.1570
+Epoch: 120, Loss: 0.1774
+Epoch: 140, Loss: 0.0932
+Epoch: 160, Loss: 0.1104
+Epoch: 180, Loss: 0.0623
+Epoch: 200, Loss: 0.0201
+
+Test Accuracy: 0.7140
+Dataset: Pubmed, model: GraphSAGE
+Epoch: 020, Loss: 0.0753
+Epoch: 040, Loss: 0.0226
+Epoch: 060, Loss: 0.0557
+Epoch: 080, Loss: 0.0116
+Epoch: 100, Loss: 0.0086
+Epoch: 120, Loss: 0.0297
+Epoch: 140, Loss: 0.0106
+Epoch: 160, Loss: 0.0835
+Epoch: 180, Loss: 0.0064
+Epoch: 200, Loss: 0.0906
+
+Test Accuracy: 0.7700
+Dataset: Citeseer, model: MLP
+Epoch: 020, Loss: 1.1613
+Epoch: 040, Loss: 0.5621
+Epoch: 060, Loss: 0.4475
+Epoch: 080, Loss: 0.4112
+Epoch: 100, Loss: 0.3795
+Epoch: 120, Loss: 0.3416
+Epoch: 140, Loss: 0.3785
+Epoch: 160, Loss: 0.3341
+Epoch: 180, Loss: 0.3596
+Epoch: 200, Loss: 0.4045
+
+Test Accuracy: 0.5910
+Dataset: Citeseer, model: GCN
+Epoch: 020, Loss: 1.3142
+Epoch: 040, Loss: 0.8198
+Epoch: 060, Loss: 0.5696
+Epoch: 080, Loss: 0.4871
+Epoch: 100, Loss: 0.4850
+Epoch: 120, Loss: 0.4268
+Epoch: 140, Loss: 0.3961
+Epoch: 160, Loss: 0.3845
+Epoch: 180, Loss: 0.3508
+Epoch: 200, Loss: 0.3517
+
+Test Accuracy: 0.7010
+Dataset: Citeseer, model: GAT
+Epoch: 020, Loss: 0.7527
+Epoch: 040, Loss: 0.4082
+Epoch: 060, Loss: 0.4495
+Epoch: 080, Loss: 0.4963
+Epoch: 100, Loss: 0.3861
+Epoch: 120, Loss: 0.2898
+Epoch: 140, Loss: 0.3495
+Epoch: 160, Loss: 0.2082
+Epoch: 180, Loss: 0.2877
+Epoch: 200, Loss: 0.3382
+
+Test Accuracy: 0.6530
+Dataset: Citeseer, model: GraphSAGE
+Epoch: 020, Loss: 0.3369
+Epoch: 040, Loss: 0.1300
+Epoch: 060, Loss: 0.0721
+Epoch: 080, Loss: 0.0956
+Epoch: 100, Loss: 0.1785
+Epoch: 120, Loss: 0.0476
+Epoch: 140, Loss: 0.0424
+Epoch: 160, Loss: 0.0556
+Epoch: 180, Loss: 0.1063
+Epoch: 200, Loss: 0.0645
+
+Test Accuracy: 0.6720
+</code></pre>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th {
+    vertical-align: top;
+}
+
+.dataframe thead th {
+    text-align: right;
+}
+</code></pre>
+<p></style></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CitationFull</th>
+      <th>Pubmed</th>
+      <th>Citeseer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MLP</th>
+      <td>0.812768</td>
+      <td>0.728</td>
+      <td>0.591</td>
+    </tr>
+    <tr>
+      <th>GCN</th>
+      <td>0.860634</td>
+      <td>0.793</td>
+      <td>0.701</td>
+    </tr>
+    <tr>
+      <th>GAT</th>
+      <td>0.881802</td>
+      <td>0.714</td>
+      <td>0.653</td>
+    </tr>
+    <tr>
+      <th>GraphSAGE</th>
+      <td>0.969011</td>
+      <td>0.770</td>
+      <td>0.672</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li>和以往的像图片文本之类的数据不同，图的数据的训练的不同点有下面几个<ul>
+<li>除了要输入节点的数据特征外，还要输入edge作为关联的数据。</li>
+<li>另外GNN在训练时是可以同时更新多个不同node的embedding。</li>
+<li>GNN训练时更加像NLP的训练方法，都是把一部分的node（在NLP里面是word token）mask掉并对这部分内容(node或者link)预测</li>
+<li>另外在node classification里面因为GNN输入是图，输出也是转换后学习后的图(图里的每个node的值代表这个node所属的class)，可以一下子把所有要预测的node进行预测。不过也可以通过mask的形式在图里面采样进行分batch训练</li>
+</ul>
+</li>
+<li>另外在上面实验中可以看到，在相同配置中GCN要把GAT和GraphSAGE好，GAT比较容易overfit，而GraphSAGE训练比较慢因为在训练node embedding时设计到两个循环</li>
+<li>当node embedding训练得好的时候，不同的类的node embedding特征很容易被区别开来，相同类的node的特征会内聚而不同类的特征会远离，这个其实和普通的NN分类器里面提取的特征一样，比较正常。</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li>Datawhale:<a href="https://github.com/datawhalechina/team-learning-nlp/blob/master/GNN/Markdown%E7%89%88%E6%9C%AC/5-%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E8%8A%82%E7%82%B9%E8%A1%A8%E5%BE%81%E5%AD%A6%E4%B9%A0.md">https://github.com/datawhalechina/team-learning-nlp/blob/master/GNN/Markdown%E7%89%88%E6%9C%AC/5-%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E8%8A%82%E7%82%B9%E8%A1%A8%E5%BE%81%E5%AD%A6%E4%B9%A0.md</a> </li>
+<li>知乎 <a href="https://zhuanlan.zhihu.com/p/106706203">https://zhuanlan.zhihu.com/p/106706203</a></li>
+<li>PyG中内置的数据转换方法：<a href="https://pytorch-geometric.readthedocs.io/en/latest/modules/transforms.html#torch-geometric-transforms">torch-geometric-transforms</a></li>
+<li>一个可视化高纬数据的工具：<a href="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html">t-distributed Stochastic Neighbor Embedding</a></li>
+<li>提出GCN的论文：<a href="https://arxiv.org/abs/1609.02907">Semi-supervised Classification with Graph Convolutional Network</a></li>
+<li>GCNConv官方文档：<a href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.GCNConv">torch_geometric.nn.conv.GCNConv</a></li>
+<li>提出GAT的论文： <a href="https://arxiv.org/abs/1710.10903">Graph Attention Networks</a></li>
+</ul>
+</div><div class="article-tags size-small mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/GNN/">GNN</a><a class="link-muted mr-2" rel="tag" href="/tags/Graph/">Graph</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://ppoffice.github.io/hexo-theme-icarus-categorites-Plugins/Share/" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/06/18/GNN-2-MessagePassing/"><span class="level-item">GNN-2-MessagePassing</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread' ,
+            appId: "kvXCKmDNxnA2486N29e5cP7i-MdYXbMMI",
+            appKey: "0Lv5b0SqotzkGHQvD64u4AKo",
+            
+            avatar: "mm",
+            
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "en",
+            
+            highlight: true,
+            
+            
+            
+            
+            
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile is-mobile" href="https://github.com/wenkangwei" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Data-Collection/"><span class="level-start"><span class="level-item">Data Collection</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/"><span class="level-start"><span class="level-item">Data Structure</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/Sorting/"><span class="level-start"><span class="level-item">Sorting</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">7</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Accuracy-Improvement/"><span class="level-start"><span class="level-item">Accuracy Improvement</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/NLP/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Parallel-Computing/"><span class="level-start"><span class="level-item">Parallel Computing</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Programming/"><span class="level-start"><span class="level-item">Programming</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/PySpark/"><span class="level-start"><span class="level-item">PySpark</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Recommendation-System/"><span class="level-start"><span class="level-item">Recommendation System</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Report/"><span class="level-start"><span class="level-item">Report</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Searching/"><span class="level-start"><span class="level-item">Searching</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Searching/Data-Strucure/"><span class="level-start"><span class="level-item">Data Strucure</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Statistic/"><span class="level-start"><span class="level-item">Statistic</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Web/"><span class="level-start"><span class="level-item">Web</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Amdahl-s-Law/"><span class="tag">Amdahl&#039;s Law</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Backpropagation/"><span class="tag">Backpropagation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Bagging/"><span class="tag">Bagging</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BeautifulSoup/"><span class="tag">BeautifulSoup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Binary-Tree/"><span class="tag">Binary Tree</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Blending/"><span class="tag">Blending</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting/"><span class="tag">Boosting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting-Machine/"><span class="tag">Boosting Machine</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BuckSort/"><span class="tag">BuckSort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C++</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Collaborative-Filtering/"><span class="tag">Collaborative Filtering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Confusion-Metric/"><span class="tag">Confusion Metric</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Convolution-Neural-Network/"><span class="tag">Convolution Neural Network</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cross-Validation/"><span class="tag">Cross Validation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/D3-js/"><span class="tag">D3.js</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DCN/"><span class="tag">DCN</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DIN/"><span class="tag">DIN</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Analysis/"><span class="tag">Data Analysis</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Mining/"><span class="tag">Data Mining</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Datawhale-Team-Learning/"><span class="tag">Datawhale Team Learning</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DeepFM/"><span class="tag">DeepFM</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Dropout/"><span class="tag">Dropout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Ensemble-Learning/"><span class="tag">Ensemble Learning</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GNN/"><span class="tag">GNN</span><span class="tag is-grey-lightest">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Graph/"><span class="tag">Graph</span><span class="tag is-grey-lightest">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Holdout/"><span class="tag">Holdout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hypothesis-Test/"><span class="tag">Hypothesis Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Icarus/"><span class="tag">Icarus</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Independence-Test/"><span class="tag">Independence Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/K-Mean-Clustering/"><span class="tag">K-Mean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/KMean-Clustering/"><span class="tag">KMean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/LGBM/"><span class="tag">LGBM</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Markdown/"><span class="tag">Markdown</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Evaluation/"><span class="tag">Model Evaluation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Selection/"><span class="tag">Model Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Natural-Language-Representations/"><span class="tag">Natural Language Representations</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Nature-Language-Processing/"><span class="tag">Nature Language Processing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Negative-Sampling/"><span class="tag">Negative Sampling</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NeuralFM/"><span class="tag">NeuralFM</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/P-value/"><span class="tag">P-value</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Computing/"><span class="tag">Parallel Computing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Speedup/"><span class="tag">Parallel Speedup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PySpark/"><span class="tag">PySpark</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ROC-curve/"><span class="tag">ROC curve</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Recommendation-System/"><span class="tag">Recommendation System</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regression/"><span class="tag">Regression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regular-Expression/"><span class="tag">Regular Expression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Sorting/"><span class="tag">Sorting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Stacking/"><span class="tag">Stacking</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Traversal/"><span class="tag">Traversal</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unsupervised-Learning/"><span class="tag">Unsupervised Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Variable-Selection/"><span class="tag">Variable Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Web-Scrapping/"><span class="tag">Web Scrapping</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep/"><span class="tag">Wide and Deep</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep-Model/"><span class="tag">Wide and Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-Deep-Model/"><span class="tag">Wide&amp;Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-Embedding/"><span class="tag">Word Embedding</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-vector/"><span class="tag">Word vector</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/binary-search/"><span class="tag">binary search</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/bubble-sort/"><span class="tag">bubble sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/commands/"><span class="tag">commands</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/insertion-sort/"><span class="tag">insertion sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/merge-sort/"><span class="tag">merge sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/non-parametric-learning/"><span class="tag">non-parametric learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/quick-sort/"><span class="tag">quick sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/review/"><span class="tag">review</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recent</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2021-06-22T17:08:04.000Z">2021-06-22</time></p><p class="title is-6"><a class="link-muted" href="/2021/06/22/GNN-3-NodeEmbedding/">GNN-3-NodeEmbedding</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Deep-Learning/">Deep Learning</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-06-18T23:00:02.000Z">2021-06-18</time></p><p class="title is-6"><a class="link-muted" href="/2021/06/18/GNN-2-MessagePassing/">GNN-2-MessagePassing</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Deep-Learning/">Deep Learning</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-06-16T03:16:25.000Z">2021-06-15</time></p><p class="title is-6"><a class="link-muted" href="/2021/06/15/GNN-1-Basic/">GNN-1-Basic</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Deep-Learning/">Deep Learning</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-05-20T21:29:11.000Z">2021-05-20</time></p><p class="title is-6"><a class="link-muted" href="/2021/05/20/Recommendation-System-6-DCN/">Recommendation System-6-DCN</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-05-18T07:03:39.000Z">2021-05-18</time></p><p class="title is-6"><a class="link-muted" href="/2021/05/18/ensemble-learning-project-HappinessPrediction/">ensemble-learning-project-HappinessPrediction</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Machine-Learning/">Machine Learning</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2021/06/"><span class="level-start"><span class="level-item">June 2021</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/05/"><span class="level-start"><span class="level-item">May 2021</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/03/"><span class="level-start"><span class="level-item">March 2021</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/02/"><span class="level-start"><span class="level-item">February 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/12/"><span class="level-start"><span class="level-item">December 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/11/"><span class="level-start"><span class="level-item">November 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/10/"><span class="level-start"><span class="level-item">October 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">September 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">August 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/07/"><span class="level-start"><span class="level-item">July 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/06/"><span class="level-start"><span class="level-item">June 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe to Updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button is-primary" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/images/avatar.jpg" alt="Wenkang Wei"></figure><p class="title is-size-4 is-block line-height-inherit">Wenkang Wei</p><p class="is-size-6 is-block">computer engineering| machine learning</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Clemson,SC</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">38</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">18</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">69</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/wenkangwei" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/wenkangwei"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="LinkedIn" href="https://www.linkedin.com/in/wenkang-wei-588811167"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><div class="card widget" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="is-flex" href="#Node-Embedding-and-Node-Prediction"><span class="mr-2">1</span><span>Node Embedding and Node Prediction</span></a><ul class="menu-list"><li><a class="is-flex" href="#1-Introduction"><span class="mr-2">1.1</span><span>1. Introduction</span></a></li><li><a class="is-flex" href="#2-Data-Description"><span class="mr-2">1.2</span><span>2. Data Description</span></a></li><li><a class="is-flex" href="#2-Data-Visualization"><span class="mr-2">1.3</span><span>2. Data Visualization</span></a></li><li><a class="is-flex" href="#3-用不同GNN对node-embedding进行学习"><span class="mr-2">1.4</span><span>3. 用不同GNN对node embedding进行学习</span></a><ul class="menu-list"><li><a class="is-flex" href="#3-1-MLP"><span class="mr-2">1.4.1</span><span>3.1 MLP</span></a></li><li><a class="is-flex" href="#3-2-GCN"><span class="mr-2">1.4.2</span><span>3.2 GCN</span></a></li><li><a class="is-flex" href="#3-3-GAT-Graph-Attention-Network"><span class="mr-2">1.4.3</span><span>3.3 GAT (Graph Attention Network)</span></a></li><li><a class="is-flex" href="#3-4-GraphSAGE-Sample-and-Aggregate-Graph-Embedding-SAGE"><span class="mr-2">1.4.4</span><span>3.4. GraphSAGE (Sample and Aggregate Graph Embedding SAGE)</span></a></li></ul></li><li><a class="is-flex" href="#3-5-Node-Representation-Cluster-Visualization"><span class="mr-2">1.5</span><span>3.5 Node Representation Cluster Visualization</span></a></li><li><a class="is-flex" href="#4-Assignment"><span class="mr-2">1.6</span><span>4. Assignment</span></a><ul class="menu-list"><li><a class="is-flex" href="#4-1-Dataset选择"><span class="mr-2">1.6.1</span><span>4.1 Dataset选择</span></a></li></ul></li><li><a class="is-flex" href="#Conclusion"><span class="mr-2">1.7</span><span>Conclusion</span></a></li><li><a class="is-flex" href="#Reference"><span class="mr-2">1.8</span><span>Reference</span></a></li></ul></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a><p class="size-small"><span>&copy; 2021 Wenkang Wei</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'https://github.com/wenkangwei/wenkangwei.github.io`',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to Top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

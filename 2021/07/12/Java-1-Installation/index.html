@@ -1,85 +1,65 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Distributed Computing Basic Note - 1 - Wenkang&#039;s Blog</title><meta description=""><meta property="og:type" content="article"><meta property="og:title" content="Distributed Computing Basic Note - 1"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:locale" content="en_US"><meta property="article:published_time" content="2020-09-20T19:45:29.000Z"><meta property="article:modified_time" content="2020-09-30T22:14:54.963Z"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="Amdahl&#039;s Law"><meta property="article:tag" content="Parallel Speedup"><meta property="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/20/Distributed-Computing-note-1/"},"headline":"Wenkang's Blog","image":[],"datePublished":"2020-09-20T19:45:29.000Z","dateModified":"2020-09-30T22:14:54.963Z","author":{"@type":"Person","name":"Wenkang Wei"},"description":""}</script><link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/09/20/Distributed-Computing-note-1/"><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-09-20T19:45:29.000Z" title="2020-09-20T19:45:29.000Z">2020-09-20</time><span class="level-item"><a class="link-muted" href="/categories/Parallel-Computing/">Parallel Computing</a></span><span class="level-item">3 minutes read (About 511 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Distributed Computing Basic Note - 1</h1><div class="content"><img src=https://assets-global.website-files.com/5debb9b4f88fbc3f702d579e/5e8e265f5b27697d5ce9bf87_parallel-computing-diagram.png>
-<a id="more"></a>
+<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java-1-Setup - Wenkang&#039;s Blog</title><meta description="Introduction: JavaJava是一门面向对象编程语言（OOD, Object-Oriented Design），不仅吸收了C++语言的各种优点，还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程。 Java Properties"><meta property="og:type" content="article"><meta property="og:title" content="Java-1-Setup"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:description" content="Introduction: JavaJava是一门面向对象编程语言（OOD, Object-Oriented Design），不仅吸收了C++语言的各种优点，还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程。 Java Properties"><meta property="og:locale" content="en_US"><meta property="article:published_time" content="2021-07-13T01:43:40.000Z"><meta property="article:modified_time" content="2021-07-13T02:55:06.500Z"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="Computer engineering"><meta property="article:tag" content=" machine learning"><meta property="article:tag" content=" data science"><meta property="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io%60/2021/07/12/Java-1-Installation/"},"headline":"Wenkang's Blog","image":[],"datePublished":"2021-07-13T01:43:40.000Z","dateModified":"2021-07-13T02:55:06.500Z","author":{"@type":"Person","name":"Wenkang Wei"},"description":"Introduction: JavaJava是一门面向对象编程语言（OOD, Object-Oriented Design），不仅吸收了C++语言的各种优点，还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程。 Java Properties"}</script><link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io%60/2021/07/12/Java-1-Installation/"><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2021-07-13T01:43:40.000Z" title="2021-07-13T01:43:40.000Z">2021-07-12</time><span class="level-item">10 minutes read (About 1513 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">Java-1-Setup</h1><div class="content"><a id="more"></a>
 
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This blog introduces basic types of parallel computing architecture, memory, and basic evaluation metrics of parallel computing.</p>
-<h2 id="Parallel-Computing"><a href="#Parallel-Computing" class="headerlink" title="Parallel Computing"></a>Parallel Computing</h2><ol>
-<li><strong>Features of  Parallel computing</strong></li>
-</ol>
+<h2 id="Introduction-Java"><a href="#Introduction-Java" class="headerlink" title="Introduction: Java"></a>Introduction: Java</h2><p>Java是一门面向对象编程语言（OOD, Object-Oriented Design），不仅吸收了C++语言的各种优点，还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程。</p>
+<h2 id="Java-Properties"><a href="#Java-Properties" class="headerlink" title="Java Properties"></a>Java Properties</h2><p>从互联网到企业平台，Java是应用最广泛的编程语言，原因在于：</p>
 <ul>
-<li><p>Features of Problem:  </p>
-<ul>
-<li>problem task can be broken into discrete pieces of work</li>
-<li>Problem can be solved faster with multiple computing resource than single resource</li>
-</ul>
+<li><p>Java是基于JVM虚拟机的跨平台语言，一次编写，到处运行；</p>
 </li>
-<li><p>Features of Computing resource</p>
-<ul>
-<li>Single computer with multiple processors</li>
-<li>Multiple computers connected in network</li>
-<li>Combine 1,2 </li>
-<li>Special computing component (GPU)</li>
-</ul>
+<li><p>Java程序易于编写，而且有内置垃圾收集，不必考虑内存管理；</p>
 </li>
-<li><p>Execution</p>
-<ul>
-<li>Execute multiple instructions concurrently in time</li>
-</ul>
+<li><p>Java虚拟机拥有工业级的稳定性和高度优化的性能，且经过了长时期的考验；</p>
+</li>
+<li><p>Java拥有最广泛的开源社区支持，各种高质量组件随时可用。</p>
 </li>
 </ul>
-<ol start="2">
-<li><strong>Relationship between Parallel, Distributed, Cluster, Concurrency Computing:</strong><br>$ Cluster Computing \subset Distributed Computing \subset Parallel computing \subset Concurrencty Computing$</li>
-</ol>
-<h2 id="Evaluation-of-Computing-performance"><a href="#Evaluation-of-Computing-performance" class="headerlink" title="Evaluation of Computing performance"></a>Evaluation of Computing performance</h2><h4 id="Amdahl’s-Law"><a href="#Amdahl’s-Law" class="headerlink" title="Amdahl’s Law"></a>Amdahl’s Law</h4><p>Assume:<br><strong>$f_s$</strong>: fraction that the program is not parallelizable (the ratio of series part to whole program)<br>Or called  portion of series in the program<br><strong>p</strong>: Number of processor<br><strong>$t_p$</strong>: runtime of parallelizable operation<br><strong>$t_s$</strong>: runtime of series operation<br><strong>S(p)</strong>: Parallel Speedup<br>Then<br><strong>Amdahl’s Law:</strong>  $t_p = f_s S(p) + \frac{(1-p)f_s}{p} $</p>
-<h4 id="Parallel-Speedup"><a href="#Parallel-Speedup" class="headerlink" title="Parallel Speedup"></a>Parallel Speedup</h4><p><strong>Parallel Speedup:</strong> $S(p) = \frac{t_s}{t_p} = \frac{p}{(p-1)*f+1}$.  Usually Parallel Speedup $S(p) \leq p$</p>
-<p><strong>Limiting Factors affecting Parallel Speedup:</strong></p>
+<p>从上面的特点，我们可以看到java一些特性:</p>
 <ol>
-<li><p>Not parallelizable code (or Series operation runtime): $t_s$. Longer runtime series code takes, larger $f_s$ is and Smaller the Parallel Efficiency is </p>
+<li><p>简单性<br>Java 相对于C, C++而言，除了保留 C/C++相似的语法外， Java也把一些复杂的特性去除掉，比如说C/C++里面的显性指针 和 操作符重载。</p>
 </li>
-<li><p>Communication Overhead: more time is spent on communication, then it also increases $t_s$</p>
+<li><p>面向对象 (OOD)<br>另外Java是面向对象的编程语言，它的程序都是用Class类进行封装的，Java实现的了OOD的特点和概念，比如抽象性(abstraction), 封装性(Encapsulation), 继承性(inheritance) 和多态性(polymorphism)</p>
+</li>
+<li><p><strong>软件可移植性(Portability) 和平台的独立性</strong><br>Java 不像C/C++编译时那样要生成机械码， Java编译时把程序编译成byte code 字节码，而 Java字节码能够不依赖机器平台，Java程序可以在任何实现了Java解释程序和运行系统（run-time system）的系统上运行， 下图就是一个例子， window编写好的 java类可以在带有JRE环境的Linux, Mac 等不同环境运行，不用重新编写</p>
 </li>
 </ol>
-<h4 id="Parallel-Efficiency"><a href="#Parallel-Efficiency" class="headerlink" title="Parallel Efficiency"></a>Parallel Efficiency</h4><p><strong>Parallel Efficiency:</strong> $E = \frac{S(p)}{p} = \frac{1}{(p-1)*f + 1}$<br>Parallel Efficiency measures how efficient the parallelization is.  Higher Efficiency is, more busy each processor is and Faster the operations are executed.</p>
-<p>So we want to increase parallel Efficiency and maximize the ratio between S(p) and p.</p>
-<h4 id="Type-of-Parallel-Speedup"><a href="#Type-of-Parallel-Speedup" class="headerlink" title="Type of Parallel Speedup"></a>Type of Parallel Speedup</h4><ol>
-<li>Linear Speedup (normal case): $S(p) &lt; p$</li>
-<li>Sublinear Speedup: $S(p) =  p$</li>
-<li>Superlinear Speedup: $S(p) &gt; p$</li>
-</ol>
-<p><strong>limiting Factors lead to superlilnear Speedup:</strong></p>
-<ol>
-<li><strong>Poor sequential reference implementation</strong>, leading to $t_s$  very large and series runtime very large</li>
-</ol>
-<p><strong>2. Memory caching:</strong> when memory cache is small, it will increase $t_s$ and lead to lower processing speed such that $t_s &gt;t_p$ and S(p) &gt;p<br>3. <strong>I/O blocking</strong> :  block I/O leads to delay of runtime, $t_s$  will increase</p>
-<h2 id="Types-of-Computers"><a href="#Types-of-Computers" class="headerlink" title="Types of  Computers"></a>Types of  Computers</h2><h4 id="Flynne’s-Taxonomy"><a href="#Flynne’s-Taxonomy" class="headerlink" title="Flynne’s Taxonomy"></a>Flynne’s Taxonomy</h4><p>This taxonomy classifies the computer architecture into four types: </p>
-<ul>
-<li>SISD: Single Instruction Single Datastream</li>
-<li>SIMD: Single Instruction Multiple Datastreams</li>
-<li>MISD: Multiple Instructions Single Datastream</li>
-<li>MIMD: Multiple Instructions Multiple Datastreams</li>
-</ul>
-<img src=/images/MPI/taxonomy.png>
+<img src=https://www.topperskills.com/images/tutorial/java/platform-independent-java-laptop.jpg>
+(图来自 https://www.topperskills.com/tutorials/java/features-properties-java-language.html)
 
-<p>Note:</p>
+<ol start="4">
+<li><p>稳健性Robustness</p>
 <ul>
-<li>SIMD, MISD, MIMD architecture belongs to parallel computer since they satisfy the requirements of feature in parallel computing ( break task into piece, execute multiple(same or different )instrutions concurrently, etc)</li>
+<li><p><strong>Java不支持指针</strong>，它消除重写存储和讹误数据的可能性。Java自动的“无用单元收集”预防存储漏泄和其它有关动态存储分配和解除分配的有害错误。Java解释程序也执行许多运行时的检查，诸如验证所有数组和串访问是否在界限之内。(JVM通过一定机制进行内存自动的回收，也避免像C/C++容易内存的问题)</p>
+</li>
+<li><p><strong>Java中的异常检测</strong>是使得程序更稳健的一个特征。异常是某种类似于错误的异常条件出现的信号。使用try/catch/finally语句，程序员可以找到出错的处理代码，这就简化了出错处理和恢复的任务。</p>
+</li>
+<li><p>Java是一个<strong>强类型语言</strong>，它允许扩展编译时检查潜在类型不匹配问题的功能。<strong>Java要求显式的方法声明，它不支持C风格的隐式声明。</strong>这些严格的要求保证编译程序能捕捉调用错误，这就导致更可靠的程序</p>
+</li>
 </ul>
-<h4 id="Type-of-Memory"><a href="#Type-of-Memory" class="headerlink" title="Type of Memory"></a>Type of Memory</h4><ol>
-<li><strong>Shared Memory</strong><br>Multiple processors share the same memory </li>
-<li><strong>Distributed Memory and Message Passing</strong><br>Multiple processors have its own memory but use message passing method to communicate with each other distributedly across network.</li>
-<li><strong>Hyper-Model</strong><br>Combining Shared memory and distributed Memory together.</li>
+</li>
 </ol>
-<h4 id="Heterogeneous-computing-accelerators"><a href="#Heterogeneous-computing-accelerators" class="headerlink" title="Heterogeneous computing (accelerators)"></a>Heterogeneous computing (accelerators)</h4><ol>
-<li>GPU</li>
-<li>FPGA</li>
+<ol start="5">
+<li><p>High Performance:<br>Java JVM 每次通过 Just In Time compiler (JIT) 来转换相似的byte code到依赖于机器的环境的机器码，从而减少程序的运行时间</p>
+</li>
+<li><p>多线程Multithread<br>Java 提供支持多线程的执行 <strong>也称为轻便过程</strong>，能处理不同任务，使具有线索的程序设计很容易。Java的lang包提供一个Thread类，它支持开始线索、运行线索、停止线索和检查线索状态的方法。(这个C++, Python 之类的语言也支持)。  Java的线索支持也包括一组同步原语。这些原语是基于监督程序和条件变量风范，由C.A.R.Haore开发的广泛使用的同步化方案。<strong>用关键词synchronized，程序员可以说明某些方法在一个类中不能并发地运行。这些方法在监督程序控制之下，确保变量维持在一个一致的状态。</strong></p>
+</li>
 </ol>
-<h2 id="Benchmarking-and-Ranking-supercomputers"><a href="#Benchmarking-and-Ranking-supercomputers" class="headerlink" title="Benchmarking and Ranking supercomputers"></a>Benchmarking and Ranking supercomputers</h2><ol>
-<li>LINPACK (Linear Algebra Package): Dense Matrix Solver</li>
-<li>HPCC: High-Performance Computing Challenge</li>
-<li>SHOC: Scalable Heterogeneous Computing - Non-traditional systems (GPU)</li>
-<li>TestDFSIO - I/O Performance of MapReduce/Hadoop Distributed File System</li>
+<ol start="7">
+<li><p>安全性Security<br>Java的安全性体现在</p>
+<ul>
+<li>存储分配模型里面没有指针， 用户不能直接通过指针直接访问和修改内存</li>
+<li>Java编译程序不处理存储安排决策，所以程序员不能通过查看声明去猜测类的实际存储安排。编译的Java代码中的存储引用在运行时由Java解释程序决定实际存储地址。</li>
+</ul>
+</li>
+<li><p>分布性 Distributed<br>Java设计成支持在网络上应用，它是分布式语言。Java既支持各种层次的网络连接，又以Socket类支持可靠的流<em>（stream）</em>网络连接，所以用户可以产生分布式的客户机和服务器</p>
+</li>
+<li><p>可解释性<br>Java 是高度的解释性语言意味着它不依赖操作系统的运行去把byte code翻译成机器码，也不像传统的编译过程把代码重新”编译-&gt;链接-&gt; 测试 “， 而是有它自己独立的编译器把新类装进环境，, 它是增量式的、轻量级的过程。</p>
+</li>
+<li><p>动态性 dynamic<br>Java语言设计成适应于变化的环境，它是一个动态的语言。例如，<strong>Java中的类是根据需要载入的，甚至有些是通过网络获取的。</strong></p>
+</li>
 </ol>
-</div><div class="article-tags size-small mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Amdahl-s-Law/">Amdahl&#039;s Law</a><a class="link-muted mr-2" rel="tag" href="/tags/Parallel-Speedup/">Parallel Speedup</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://ppoffice.github.io/hexo-theme-icarus-categorites-Plugins/Share/" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2020/09/20/Web-Scrapping/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Web Scrapping and Regular Expression - 1</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/09/05/Data-Structure-BinaryTree/"><span class="level-item">Data Structure 3 - BinaryTree</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><h2 id="Simple-Codes"><a href="#Simple-Codes" class="headerlink" title="Simple Codes"></a>Simple Codes</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://www.topperskills.com/tutorials/java/features-properties-java-language.html">https://www.topperskills.com/tutorials/java/features-properties-java-language.html</a></p>
+<p>[2] Datawhale: <a href="https://github.com/datawhalechina/team-learning-program/blob/master/Java/0.%20Java%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE.md">https://github.com/datawhalechina/team-learning-program/blob/master/Java/0.%20Java%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE.md</a></p>
+</div><div class="sharethis-inline-share-buttons"></div><script src="https://ppoffice.github.io/hexo-theme-icarus-categorites-Plugins/Share/" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/07/09/GNN-8-Conclusion/"><span class="level-item">GNN-8-Conclusion</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
             el: '#valine-thread' ,
             appId: "kvXCKmDNxnA2486N29e5cP7i-MdYXbMMI",
             appKey: "0Lv5b0SqotzkGHQvD64u4AKo",

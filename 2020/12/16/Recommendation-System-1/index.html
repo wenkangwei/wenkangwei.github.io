@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Recommendation-System-1- Collaborative Filtering and Content-based Filtering - Wenkang&#039;s Blog</title><meta description=""><meta property="og:type" content="article"><meta property="og:title" content="Recommendation-System-1- Collaborative Filtering and Content-based Filtering"><meta property="og:url" content="https://github.com/wenkangwei/"><meta property="og:site_name" content="Wenkang&#039;s Blog"><meta property="og:locale" content="en_US"><meta property="article:published_time" content="2020-12-16T00:48:52.000Z"><meta property="article:modified_time" content="2020-12-18T18:54:13.188Z"><meta property="article:author" content="Wenkang Wei"><meta property="article:tag" content="Collaborative Filtering"><meta property="twitter:card" content="summary"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/16/Recommendation-System-1/"},"headline":"Wenkang's Blog","image":[],"datePublished":"2020-12-16T00:48:52.000Z","dateModified":"2020-12-18T18:54:13.188Z","author":{"@type":"Person","name":"Wenkang Wei"},"description":""}</script><link rel="canonical" href="https://github.com/wenkangwei/wenkangwei.github.io%60/2020/12/16/Recommendation-System-1/"><link rel="icon" href="/images/icon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-12-16T00:48:52.000Z" title="2020-12-16T00:48:52.000Z">2020-12-15</time><span class="level-item"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></span><span class="level-item">16 minutes read (About 2331 words)</span><span class="level-item" id="busuanzi_container_page_pv"><i class="far fa-eye"></i>&nbsp;&nbsp;<span id="busuanzi_value_page_pv">0</span> visits</span></div></div><h1 class="title is-3 is-size-4-mobile">Recommendation-System-1- Collaborative Filtering and Content-based Filtering</h1><div class="content"><img src=https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg>
+
+<a id="more"></a>
+
+<h2 id="Introduction-to-Recommendation-system"><a href="#Introduction-to-Recommendation-system" class="headerlink" title="Introduction to Recommendation system"></a>Introduction to Recommendation system</h2><p>In recommendation system, we want to let it give recommendations of items to users based on users’ visit history or other data.<br>if we represent the items and users in a table, it would be something like this:</p>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>-</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>In this table, each row represent a user and column represent an item. The cell with value 1 means that user buys the corresponding item. For example, the cell of user1 - item 1 =1 means user 1 buys item 1.</p>
+<p>Then recommendation system is to predict if the empty cells in the table will become 1 or not. Or predict if that user will buy the item or not. Building such recommendation system can help encourage users to consume items by recommending somethings attracting them and let companies make profits</p>
+<p>Collaborative Filtering is one type of common methods in constructing recommendation system. Its main idea is to find the similarity between users or between items to rank the items and then pick and recommend the top K items to users.<br>In content-based filtering, it utilizes the content features of items and the contents users may like to compute similarity between item and user and make recommendation.</p>
+<p>There are three common ways to do recommendation</p>
+<ul>
+<li><strong>user-based</strong><br>  It first computes similarity between users, then pick top K items that the most similar user like to the current user </li>
+<li><strong>Item-based</strong><br>  It recommends new items to current user based on the similarity between new items and items that user has brought before</li>
+<li><strong>content-based</strong><br>  It computes the similarity between user and item based on the tags/topics the user like and the tags/topics that item contains. Then it recommends the most similar item to the user.</li>
+</ul>
+<h2 id="Cold-Start-Problem"><a href="#Cold-Start-Problem" class="headerlink" title="Cold Start Problem"></a>Cold Start Problem</h2><p>In recommendation system, we also face a problem that when a new user or a new item  comes to the platform, we don’t have enough information (like the preference of new users, tags/contents of new items) about them to make recommendation.</p>
+<p>Hence Cold start problem mainly can be divided into two types:</p>
+<ul>
+<li>Cold start of user:<br>  We don’t have enough information about new users and can not determine the preference of users to do recommendation</li>
+<li>Cold start of item:<br>  We don’t have enough information of new items and don’t know the tags and contents those items may have</li>
+</ul>
+<h2 id="User-based-filtering-similarity-between-users"><a href="#User-based-filtering-similarity-between-users" class="headerlink" title="User-based filtering (similarity between users)"></a>User-based filtering (similarity between users)</h2><p>The main idea in user-based filtering is that we first find the similarity between each two users based on the item vectors of the two users.Then pick the user who is most similar to the current user.</p>
+<p>In the item list of the selected user,  we pick the K top frequent visited items to the current user.</p>
+<h4 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h4><ul>
+<li>Assumption<br>Assume we have a user-item table</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+<th>item 4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>where 1 represent the ratign from the user to the item the user purchase, -  mean the user doesn’t buy the item. </p>
+<p>Denote the $i^{th}$ user and the $j^{th}$ user as ui, uj, respectively and  N(ui), N(uj) are the set of items the $i^{th}$ user purchased and the set of items $j^{th}$ user purchased respectively. |N(ui)| is the number of items the $i^{th}$ user purchased.</p>
+<ul>
+<li><strong>Step 1: Compute Similarity between a pair of users</strong><br>In order to compute the similarity between a pair of users, we need a way to measure the distance between users.<br>One common way is cosine distance, denoted as cos(ui, uj):</li>
+</ul>
+<p>$$<br>cos(ui, uj) = \frac{ |N(ui) \cap N(uj) |}{\sqrt{|N(ui)| \times|N(uj)|} }<br>$$</p>
+<p>where $|N(ui) \cap N(uj)|$ means the size of the intersection set between the set of items purchased by ui and the set of items purchased by uj.</p>
+<p>Example:<br>In the table above, we want to compute cos(u1, u2), then we can see the intersection of the items from u1 and items from u2 is [item1, item3], so $|N(ui) \cap N(uj)|=2$. Both u1 and u2 users purchase 3 items, so $|N(u1)|=|N(u2)|=3$</p>
+<p>Then similarity between user 1 and user 2 is:<br>$$<br>cos(u1, u2) = \frac{ 2}{\sqrt{3 \times 3} }<br>$$</p>
+<p>Based on this, we can compute similarity between every pair of users in table.<br>There are other choices to compute similarity, such as Euclidean distance, dot product, Pearson’s Correlation.</p>
+<ul>
+<li><strong>Step 2: Predict the interest of the $i^{th}$ user, ui, on the $x^{th}$ item, ix</strong></li>
+</ul>
+<p>In this step, we first pick the top K users who are most similar to ui. Then We pick the users who rated the item ix from the K users.<br>Finally we compute the estimated rating of ui on item ix using user similarity and ratings from those users. Estimated rating of ui on item ix is </p>
+<p>$$<br>R(ui, ix) = \sum_{v\in M} { cos(ui, v) \times R(v, ix)}<br>$$</p>
+<p>where M is the intersection between the set of the top K similar users and users who rated the item ix.  The $R(v, ix)$ is the rating of user v on item ix.</p>
+<p>Note that we can also use K-Nearest Neighbor method, rather than cosine similarity to find the top K simiar users as well. In this case, we may use Euclidean distance or other distance to measure similarity.</p>
+<h4 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li><p>Advantages</p>
+<ul>
+<li>Easy to implement</li>
+<li>It is good to explore <strong>group interests</strong> on items, since it measures similarity between users in a group</li>
+<li>Good to use this method when the update of incoming new items is faster than the update of incoming new users<br>(Computing similarity between new user and other existing users is time expensive when there is millions of users. But updating similarity after adding new items is much easy, we just need to update N(ui))</li>
+</ul>
+</li>
+<li><p>Disadvantages</p>
+<ul>
+<li><strong>Sparsity</strong>. The percentage of rating from users is low</li>
+<li>User-based collaborative filtering is also a memory-based mehtod, since it requires memory to store similarity between users. </li>
+<li>when update frequency of user is faster than the update frequency of items, it is time-expensive, especially there are millions of users</li>
+<li><strong>Cold start problem.</strong> When there is no sufficient information about users or item, it is hard to estimate similarity efficiently</li>
+<li>update is slow when there are large amount of users or items</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use"><a href="#When-to-use" class="headerlink" title="When to use"></a>When to use</h4><ul>
+<li>when we want to explore group interests or similarity between users in a group</li>
+<li>The number of users is smaller than the number of items. Or Incoming new users amount is smaller than incoming new items amount.</li>
+</ul>
+<h2 id="Item-based-filtering-similarity-between-items"><a href="#Item-based-filtering-similarity-between-items" class="headerlink" title="Item-based filtering  (similarity between items)"></a>Item-based filtering  (similarity between items)</h2><p>The main idea in Item-based is to compute the similarity between new item and the items purchased by users to predict if users will buy the new item.</p>
+<h4 id="How-it-works-1"><a href="#How-it-works-1" class="headerlink" title="How it works"></a>How it works</h4><p>Using the user-item table above</p>
+<table>
+<thead>
+<tr>
+<th>users\items</th>
+<th>item 1</th>
+<th>item 2</th>
+<th>item 3</th>
+<th>item 4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user 1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>user 3</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>user 4</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Denote the $i^{th}$ item as xi. M(xi) is the set of users who purchased item xi and |M(xi)| is the size of this set</p>
+<ul>
+<li><strong>Step 1: Compute similarity between a pair of items</strong><br>The cosine similarity of item xi and item xj is similarity to the similarity between users: </li>
+</ul>
+<p>$$<br>cos(xi, xj) = \frac{ |M(xi) \cap M(xj) |}{\sqrt{|M(xi)| \times|M(xj)|} }<br>$$</p>
+<p>In this example, $cos(x1, x2) = \frac{ |M(x1) \cap M(x2) |}{\sqrt{|M(x1)| \times|M(x2)|} } = \frac{2}{\sqrt{3\times 2} } $</p>
+<ul>
+<li><strong>Step 2: Predict Rating of user ui on item xi</strong><br>We pick the K items which are most similar to item xi based on computed item similarity. Then find the intersection Q between these K items and the set of items user ui purchased.<br>Then estimated rating of user ui on item xi is</li>
+</ul>
+<p>$$<br>R(ui, xi) = \sum_{y \in Q} { cos(xi, y) \times R(ui, y)}<br>$$</p>
+<p>where Q is the intersection set between K items and the set of items user ui purchased. y is item from Q. $R(ui, y)$ is rating of user ui on item y.</p>
+<h4 id="Properties-1"><a href="#Properties-1" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li>Advantages<ul>
+<li>Item-based Collaborative filtering is good for personalized recommendation, since it is based on similarity of items user purchased, which shows user’s preference information.</li>
+<li>Good to use this method when there are a large amount of users.</li>
+<li>Easy to compute as well</li>
+<li>Good Explainability</li>
+</ul>
+</li>
+<li>Disadvantages<ul>
+<li>It is memory-based model as well. Hence it needs to store information of items, users. If there are millions of items, the computation is expensive</li>
+<li>Cold Start problem. For new item, it is hard for us to compute similarity between items since there is lack of users using the new item</li>
+<li>Sparsity. The number of users using new items could be small and it is hard to compute similarity</li>
+<li>Time complexity is high when there are millions of items and users</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use-1"><a href="#When-to-use-1" class="headerlink" title="When to use"></a>When to use</h4><ul>
+<li>when we want to make personalized recommendations to users</li>
+<li>when the amount of items is not pretty large. Or the update frequency of items is smaller than update frequency of users’ information.</li>
+<li>When we have enough information about items and cold start effect is small.</li>
+</ul>
+<h2 id="Content-based-filtering-based-on-tags-content-of-items"><a href="#Content-based-filtering-based-on-tags-content-of-items" class="headerlink" title="Content-based filtering (based on tags/content of items)"></a>Content-based filtering (based on tags/content of items)</h2><p>Let’s consider that there are some tags/contents in items and users may prefer some tags/contents and hence like the items that contain such tags/contents. </p>
+<p>Based on this setting, we can construct an item vector $v_i$ and an user vector $u_i$. $v_i$ and $u_i$ have the same shape</p>
+<p>Each entry in the vector represents whether this item contains the corresponding tags/contents,  or whether this user like or dislike the corresponding content / tag. </p>
+<p>The user  vector is given by this formula:<br>$$<br>u_i = \frac{1}{n}\sum_i^nu_i - \frac{1}{m}\sum_j^mu_j<br>$$</p>
+<p>where $u_i$ is the item vector that user likes and $u_j$ is the item vector that user dislikes. </p>
+<p>Each entry in user vector is the difference between the level of prefering this contents and the level of disliking this contents. If entry is negative, then user may dislike that content.</p>
+<p>After computing the user vector, we can compute the similarity between user vector and item vectors to see which item is most likely to be purchased by user based on user’s interests.</p>
+<p>The similarity can be computed by dot product similarity:</p>
+<p>$$<br>similarity(ui, vi) = &lt;ui, vi&gt;<br>$$</p>
+<p>where &lt;ui, vi&gt; is dot product of ui, vi.</p>
+<p>Note that for ui, vi, we don’t use normalization here, since when there are large amount of contents but item has only a few contents, the vector will be very sparse. <strong>Normalization in a sparse vector will make the non-zero values pretty small and even close to 0, which make computation difficult and may loss precision.</strong></p>
+<p><strong>Steps in content-based filtering are as follow:</strong></p>
+<ol>
+<li>Compute item-content vectors and user vectors</li>
+<li>Compute similarity between user and items</li>
+<li>Rank items to recommend</li>
+</ol>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a><strong>Example</strong></h3><p>in a item-content table:</p>
+<table>
+<thead>
+<tr>
+<th>item</th>
+<th>tag1</th>
+<th>tag2</th>
+<th>tag3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v4</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>in a user-item table:</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item1</th>
+<th>item2</th>
+<th>item3</th>
+<th>item4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody></table>
+<ol>
+<li>Step1: compute item vectors and user vector<br>in item-content table, 1 represents item vi contains this tag/content, otherwise, it doesnt. In user-item table,  1 indicates this user like this item and -1 means user dislike this item.<br>Hence item vectors are v1 = [1, 0, 1], v2 = [1, 0, 0], v3= [0, 1, 0], v4=[0, 1, 1]<br>Then user vector u1 = $\frac{v1+v2}{2} - \frac{v3+v4}{2}$ = [1, 0, 0.5] - [0, 1, 0.5] = [1, -1, 0]. </li>
+</ol>
+<p>In this case, we can see user1 like tag1 and dislike tag2 and be neutral about tag3.</p>
+<ol start="2">
+<li><p>Step2: compute similarity between user and items<br>Sim(u1, v1) = &lt;u1, v1&gt; = 1 * 1 + 0 * (-1) + 1 * 0 = 1<br>Sim(u1, v2) = &lt;u1, v2&gt; = 1 * 1 + 0 * (-1) + 0 * 0 = 1<br>Sim(u1, v3) = &lt;u1, v3&gt; = 0 * 1 + 1 * (-1) + 0 * 0 = -1<br>Sim(u1, v4) = &lt;u1, v4&gt; = 0 * 1 + 1 * (-1) + 1 * 0 = -1</p>
+</li>
+<li><p>Step3: ranking and recommend<br>user likes v1, v2 and dislikes v3, v4.</p>
+</li>
+</ol>
+<h3 id="Update-of-user-vector"><a href="#Update-of-user-vector" class="headerlink" title="Update of user vector"></a>Update of user vector</h3><p>Since user vector is just the difference between the average of like item vectors and the average of dislike item vectors. When the $k^{th}$ item comes, we can update  either  the like vector or dislike vector to update the user vector.</p>
+<p>Let the average of K1 item vectors that user likes as</p>
+<p>$$<br>u^+_{k-1}= \frac{1}{k1-1}\sum^{k1-1}_iv_i<br>$$</p>
+<p>the average of K2 item vectors that user dislikes as</p>
+<p>$$<br>u^-_{k-1} = \frac{1}{k2-1}\sum^{k2-1}_jv_j<br>$$</p>
+<p>and K1 + K2 = k-1</p>
+<p>user vector for k-1 items is</p>
+<p>$$<br>u_{k-1} = u_{k-1}^+ -u_{k-1}^-<br>$$</p>
+<p>When the $K^{th}$ item comes, if user like this item, then we update like vector</p>
+<p>$$<br>u_{k}^+ = \frac{(k1-1)u_{k-1}^+ + v_k }{k1} , u_{k}^- = u_{k-1}^-<br>$$</p>
+<p>if user dislikes the item, just update dislike vector</p>
+<p>$$<br>u_{k}^- = \frac{(k2-1)u_{k-1}^- + v_k }{k2}  , u_{k}^+ = u_{k-1}^+<br>$$</p>
+<p>This enable us to update the user vector on the fly.</p>
+<h4 id="Properties-2"><a href="#Properties-2" class="headerlink" title="Properties"></a>Properties</h4><ul>
+<li><p>Advantages</p>
+<ul>
+<li>Easy and very fast to compute similarity even when there are large amount of items or users.</li>
+<li>Utilize the content information to explore potential contents that user likes</li>
+<li>Compared with Item-based and user-based method, it is less sensitive to Cold Start problem, since contents of item can be defined easily.</li>
+</ul>
+</li>
+<li><p>Disadvantages</p>
+<ul>
+<li><strong>Sparsity of item vectors</strong>. Item vector could be sparse when there are a lot of contents and content follow long-tail distribution (Note long-tail distribution of feature/item can also lead to the sparsity)</li>
+<li><strong>Very easy to converge to certain scope.</strong> Since content/tag could be long-tail distribution and most of items have similar content, then a small change in the item vector will lead to large change of similarity.<br>For example, a user vector u= [100, 0, 1, -100], due to long-tail distribution of contents, the values between contents are quick different. For item vectors v1 = [1, 0, 0, 0 ] and v2= [0, 0, 1, 0], sim(u1,v1) and sim(u1,v2) would be very different.</li>
+</ul>
+</li>
+</ul>
+<h4 id="When-to-use-2"><a href="#When-to-use-2" class="headerlink" title="When to use"></a>When to use</h4><p>When we have more information about items and want to use those contents in recommendation.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] <a href="https://medium.com/@cfpinela/recommender-systems-user-based-and-item-based-collaborative-filtering-5d5f375a127f">https://medium.com/@cfpinela/recommender-systems-user-based-and-item-based-collaborative-filtering-5d5f375a127f</a></p>
+<p>[2] <a href="https://zh.wikipedia.org/wiki/%E5%8D%94%E5%90%8C%E9%81%8E%E6%BF%BE">https://zh.wikipedia.org/wiki/%E5%8D%94%E5%90%8C%E9%81%8E%E6%BF%BE</a></p>
+<p>[3] <a href="https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg">https://ars.els-cdn.com/content/image/1-s2.0-S1110866515000341-gr3.jpg</a></p>
+<p>[4] <a href="https://towardsdatascience.com/introduction-to-recommender-systems-1-971bd274f421">https://towardsdatascience.com/introduction-to-recommender-systems-1-971bd274f421</a></p>
+</div><div class="article-tags size-small mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Collaborative-Filtering/">Collaborative Filtering</a></div><div class="sharethis-inline-share-buttons"></div><script src="https://ppoffice.github.io/hexo-theme-icarus-categorites-Plugins/Share/" defer></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/02/19/Statistic-Hypothesis-Testing/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Statistic- 1 Hypothesis-Testing</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2020/12/08/report/"><span class="level-item">CPSC 6300 Final Report</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="content" id="valine-thread"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script>new Valine({
+            el: '#valine-thread' ,
+            appId: "kvXCKmDNxnA2486N29e5cP7i-MdYXbMMI",
+            appKey: "0Lv5b0SqotzkGHQvD64u4AKo",
+            
+            avatar: "mm",
+            
+            meta: ["nick","mail","link"],
+            pageSize: 10,
+            lang: "en",
+            
+            highlight: true,
+            
+            
+            
+            
+            
+            requiredFields: [],
+        });</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile is-mobile" href="https://github.com/wenkangwei" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Github</span></span><span class="level-right"><span class="level-item tag">github.com</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Data-Collection/"><span class="level-start"><span class="level-item">Data Collection</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/"><span class="level-start"><span class="level-item">Data Structure</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Data-Structure/Sorting/"><span class="level-start"><span class="level-item">Sorting</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">10</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Icarus-Plugin/"><span class="level-start"><span class="level-item">Icarus Plugin</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">7</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Machine-Learning/Accuracy-Improvement/"><span class="level-start"><span class="level-item">Accuracy Improvement</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/NLP/"><span class="level-start"><span class="level-item">NLP</span></span><span class="level-end"><span class="level-item tag">2</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/NLP/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Parallel-Computing/"><span class="level-start"><span class="level-item">Parallel Computing</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Programming/"><span class="level-start"><span class="level-item">Programming</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/PySpark/"><span class="level-start"><span class="level-item">PySpark</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Recommendation-System/"><span class="level-start"><span class="level-item">Recommendation System</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Report/"><span class="level-start"><span class="level-item">Report</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/SQL/"><span class="level-start"><span class="level-item">SQL</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Searching/"><span class="level-start"><span class="level-item">Searching</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/Searching/Data-Strucure/"><span class="level-start"><span class="level-item">Data Strucure</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/Statistic/"><span class="level-start"><span class="level-item">Statistic</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Web/"><span class="level-start"><span class="level-item">Web</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Amdahl-s-Law/"><span class="tag">Amdahl&#039;s Law</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Backpropagation/"><span class="tag">Backpropagation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Bagging/"><span class="tag">Bagging</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BeautifulSoup/"><span class="tag">BeautifulSoup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Binary-Tree/"><span class="tag">Binary Tree</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Blending/"><span class="tag">Blending</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting/"><span class="tag">Boosting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Boosting-Machine/"><span class="tag">Boosting Machine</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/BuckSort/"><span class="tag">BuckSort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/C/"><span class="tag">C++</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Collaborative-Filtering/"><span class="tag">Collaborative Filtering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Confusion-Metric/"><span class="tag">Confusion Metric</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Convolution-Neural-Network/"><span class="tag">Convolution Neural Network</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Cross-Validation/"><span class="tag">Cross Validation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/D3-js/"><span class="tag">D3.js</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DCN/"><span class="tag">DCN</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DIN/"><span class="tag">DIN</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Analysis/"><span class="tag">Data Analysis</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Data-Mining/"><span class="tag">Data Mining</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Datawhale-Team-Learning/"><span class="tag">Datawhale Team Learning</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/DeepFM/"><span class="tag">DeepFM</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Dropout/"><span class="tag">Dropout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Ensemble-Learning/"><span class="tag">Ensemble Learning</span><span class="tag is-grey-lightest">5</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GATE/"><span class="tag">GATE</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GNN/"><span class="tag">GNN</span><span class="tag is-grey-lightest">8</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Graph/"><span class="tag">Graph</span><span class="tag is-grey-lightest">8</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hexo/"><span class="tag">Hexo</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Holdout/"><span class="tag">Holdout</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Hypothesis-Test/"><span class="tag">Hypothesis Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Icarus/"><span class="tag">Icarus</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Independence-Test/"><span class="tag">Independence Test</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Installation/"><span class="tag">Installation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/JavaScript/"><span class="tag">JavaScript</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/K-Mean-Clustering/"><span class="tag">K-Mean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/KMean-Clustering/"><span class="tag">KMean Clustering</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/LGBM/"><span class="tag">LGBM</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Machine-Learning/"><span class="tag">Machine Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Markdown/"><span class="tag">Markdown</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Evaluation/"><span class="tag">Model Evaluation</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Model-Selection/"><span class="tag">Model Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Natural-Language-Representations/"><span class="tag">Natural Language Representations</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Nature-Language-Processing/"><span class="tag">Nature Language Processing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Negative-Sampling/"><span class="tag">Negative Sampling</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/NeuralFM/"><span class="tag">NeuralFM</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/P-value/"><span class="tag">P-value</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Computing/"><span class="tag">Parallel Computing</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Parallel-Speedup/"><span class="tag">Parallel Speedup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PySpark/"><span class="tag">PySpark</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ROC-curve/"><span class="tag">ROC curve</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Recommendation-System/"><span class="tag">Recommendation System</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regression/"><span class="tag">Regression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Regular-Expression/"><span class="tag">Regular Expression</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Sorting/"><span class="tag">Sorting</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Stacking/"><span class="tag">Stacking</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Traversal/"><span class="tag">Traversal</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Tutorial/"><span class="tag">Tutorial</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Unsupervised-Learning/"><span class="tag">Unsupervised Learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Variable-Selection/"><span class="tag">Variable Selection</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/WSDM/"><span class="tag">WSDM</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Web-Scrapping/"><span class="tag">Web Scrapping</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep/"><span class="tag">Wide and Deep</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-and-Deep-Model/"><span class="tag">Wide and Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Wide-Deep-Model/"><span class="tag">Wide&amp;Deep Model</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-Embedding/"><span class="tag">Word Embedding</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Word-vector/"><span class="tag">Word vector</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/binary-search/"><span class="tag">binary search</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/bubble-sort/"><span class="tag">bubble sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/commands/"><span class="tag">commands</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/insertion-sort/"><span class="tag">insertion sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/merge-sort/"><span class="tag">merge sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/non-parametric-learning/"><span class="tag">non-parametric learning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/quick-sort/"><span class="tag">quick sort</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/review/"><span class="tag">review</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/statistic-analytics-tool/"><span class="tag">statistic analytics tool</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recent</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2021-07-28T14:53:13.000Z">2021-07-28</time></p><p class="title is-6"><a class="link-muted" href="/2021/07/28/SQL-Installation/">SQL-Installation</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/SQL/">SQL</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-07-28T13:53:01.000Z">2021-07-28</time></p><p class="title is-6"><a class="link-muted" href="/2021/07/28/Java-5-OOD/">Java-5-OOD</a></p><p class="is-uppercase"></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-07-19T16:17:20.000Z">2021-07-19</time></p><p class="title is-6"><a class="link-muted" href="/2021/07/20/Java-4-class/">Java-4-class</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Java/">Java</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-07-17T22:38:28.000Z">2021-07-17</time></p><p class="title is-6"><a class="link-muted" href="/2021/07/18/GATE-paper/">Recommendation-System-GATE</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Recommendation-System/">Recommendation System</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2021-07-16T14:41:25.000Z">2021-07-16</time></p><p class="title is-6"><a class="link-muted" href="/2021/07/16/Java-3-Array/">Java-3-Array</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/Java/">Java</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2021/07/"><span class="level-start"><span class="level-item">July 2021</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/06/"><span class="level-start"><span class="level-item">June 2021</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/05/"><span class="level-start"><span class="level-item">May 2021</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/03/"><span class="level-start"><span class="level-item">March 2021</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2021/02/"><span class="level-start"><span class="level-item">February 2021</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/12/"><span class="level-start"><span class="level-item">December 2020</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/11/"><span class="level-start"><span class="level-item">November 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/10/"><span class="level-start"><span class="level-item">October 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">September 2020</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">August 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/07/"><span class="level-start"><span class="level-item">July 2020</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/06/"><span class="level-start"><span class="level-item">June 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe to Updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button is-primary" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="column-right-shadow is-hidden-widescreen"></div></div><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only order-3"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/images/avatar.jpg" alt="Wenkang Wei"></figure><p class="title is-size-4 is-block line-height-inherit">Wenkang Wei</p><p class="is-size-6 is-block">computer engineering| machine learning</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Clemson,SC</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">51</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">21</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">74</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/wenkangwei" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/wenkangwei"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="LinkedIn" href="https://www.linkedin.com/in/wenkang-wei-588811167"><i class="fab fa-linkedin"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a></div></div></div><div class="card widget" id="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="is-flex" href="#Introduction-to-Recommendation-system"><span class="mr-2">1</span><span>Introduction to Recommendation system</span></a></li><li><a class="is-flex" href="#Cold-Start-Problem"><span class="mr-2">2</span><span>Cold Start Problem</span></a></li><li><a class="is-flex" href="#User-based-filtering-similarity-between-users"><span class="mr-2">3</span><span>User-based filtering (similarity between users)</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#How-it-works"><span class="mr-2">3.1.1</span><span>How it works</span></a></li><li><a class="is-flex" href="#Properties"><span class="mr-2">3.1.2</span><span>Properties</span></a></li><li><a class="is-flex" href="#When-to-use"><span class="mr-2">3.1.3</span><span>When to use</span></a></li></ul></ul></li><li><a class="is-flex" href="#Item-based-filtering-similarity-between-items"><span class="mr-2">4</span><span>Item-based filtering  (similarity between items)</span></a><ul class="menu-list"><ul class="menu-list"><li><a class="is-flex" href="#How-it-works-1"><span class="mr-2">4.1.1</span><span>How it works</span></a></li><li><a class="is-flex" href="#Properties-1"><span class="mr-2">4.1.2</span><span>Properties</span></a></li><li><a class="is-flex" href="#When-to-use-1"><span class="mr-2">4.1.3</span><span>When to use</span></a></li></ul></ul></li><li><a class="is-flex" href="#Content-based-filtering-based-on-tags-content-of-items"><span class="mr-2">5</span><span>Content-based filtering (based on tags/content of items)</span></a><ul class="menu-list"><li><a class="is-flex" href="#Example"><span class="mr-2">5.1</span><span>Example</span></a></li><li><a class="is-flex" href="#Update-of-user-vector"><span class="mr-2">5.2</span><span>Update of user vector</span></a><ul class="menu-list"><li><a class="is-flex" href="#Properties-2"><span class="mr-2">5.2.1</span><span>Properties</span></a></li><li><a class="is-flex" href="#When-to-use-2"><span class="mr-2">5.2.2</span><span>When to use</span></a></li></ul></li></ul></li><li><a class="is-flex" href="#Reference"><span class="mr-2">6</span><span>Reference</span></a></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/icon.png" alt="Wenkang&#039;s Blog" height="28"></a><p class="size-small"><span>&copy; 2021 Wenkang Wei</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">Visited by <span id="busuanzi_value_site_uv">0</span> users</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'https://github.com/wenkangwei/wenkangwei.github.io`',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to Top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://s9.cnzz.com/z_stat.php?id=1280124407&amp;web_id=1280124407" async></script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/mhchem.js" defer></script><script>window.addEventListener("load", function() {
+            document.querySelectorAll('[role="article"] > .content').forEach(function(element) {
+                renderMathInElement(element);
+            });
+        });</script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
